@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +39,7 @@ public class Floor implements Runnable {
         return rawData;
     }
 
-    public EventData convertTextEvent(String rawData) {
+    public EventData convertTextEvent(String rawData) throws ParseException {
     	String[] eInfo = rawData.split(" ");
     	DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
     	Date timeStamp = dateFormat.parse(eInfo[0]);
@@ -54,11 +55,11 @@ public class Floor implements Runnable {
     }
     
     public void sendEventToScheduler() {
-    	
+    	scheduler.readFromFloor(floorNum);
     }
 
     public void readFromScheduler() {
-    	
+    	scheduler.writeToFloor(floorNum);
     }
     
 	public void run() {
