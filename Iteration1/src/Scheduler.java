@@ -17,6 +17,7 @@ public class Scheduler {
 	private static List<List> masterFloorEventList = new ArrayList<>();
 	private static List<List> masterElevatorEventList = new ArrayList<>();
 
+	
 	/**
 	 * @param args
 	 */
@@ -33,38 +34,71 @@ public class Scheduler {
 		masterFloorEventList.add(floorEventList);
 		masterElevatorEventList.add(elevatorEventList);
 		
-		//TODO Set-up other threads
-		//Each thread will be given their own synchronized event list to utilize
+		//Each thread is given their own synchronized event list to utilize
+		Floor FloorOne = new Floor(1, floorEventList);
+		Elevator ElevatorOne = new Elevator(1, elevatorEventList);
+		FloorOne.start();
+		ElevatorOne.start();
 		
-		// Floor FloorOne = new Floor(floorEventList);
-		// Elevator ElevatorOne = new Elevator(elevatorEventList);
-		
-		
+		EventData eventReadFromFloor;
+		EventData eventReadFromElevator;
 		while(true) {
-			//TODO Check for events from other threads
+			// TODO in future iterations
 			// for loop reading from each floor  and adding events to master list of floor events
 			// same thing for elevator events
 			// sort list
 			// send most pertinent events to floor/elevator
 			
+			// read floor event -> write event to elevator -> read event back from elevator
+			eventReadFromFloor = readFromFloor(1);
+			if(eventReadFromFloor != null) {
+				System.out.println("Event read from floor.");
+				writeToElevator(1, eventReadFromFloor);
+				System.out.println("Event written to elevator.");
+				//TODO add timeout, or interrupt?
+				while(true) {
+					eventReadFromElevator = readFromElevator(1);
+					if(eventReadFromElevator != null) {
+						System.out.println("Event read from elevator.");
+						break;
+					}
+				}
+				
+			}
+			
 		}
 
 	}
 	
-	private void readFromFloor(Integer floorNumber) {
+	private static EventData readFromFloor(Integer floorNumber) {
 		//read from index of listOfLists
+		// Just one floor for iteration 1
+		if((masterFloorEventList.get(floorNumber-1)).size()>0) {
+			EventData newEvent = (EventData)(masterFloorEventList.get(0)).remove(0);
+			return newEvent;
+		}
+		return null;
 	}
-	private void readFromElevator(Integer elevatorNumber) {
+	
+	private static EventData readFromElevator(Integer elevatorNumber) {
 		//read from index of listOfLists
+		if((masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
+			EventData newEvent = (EventData)(masterElevatorEventList.get(0)).remove(0);
+			return newEvent;
+		}
+		return null;
 	}
-	private void writeToFloor(Integer floorNumber) {
-		//write to idx of...
+	
+	private static void writeToFloor(Integer floorNumber, EventData eventToWrite) {
+		(masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
 	}
-	private void writeToElevator(Integer elevatorNumber) {
-		//write to idx of...
+	
+	private static void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
+		(masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
 	}
 
 	private void sortEventList() {
 		
 	}
+
 }
