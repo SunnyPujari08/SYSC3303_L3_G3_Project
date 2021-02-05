@@ -13,23 +13,23 @@ public class EventData {
 	public boolean upButton; // True=Up, False = Down
 	public boolean downButton;
 	public int carButton;
-	public int destination; // True=Event being sent to scheduler, False=Event being sent from scheduler
+	public EventType eventType;
 	
 	
 	// Constructor for floor events
-	public EventData(Date timestamp, int floorNum, boolean upButton, boolean downButton, int destination) {
+	public EventData(Date timestamp, int floorNum, boolean upButton, boolean downButton, EventType eventType) {
 		this.timestamp = timestamp;
 		this.floorNum = floorNum;
 		this.upButton = upButton;
 		this.downButton = downButton;
-		this.destination = destination;
+		this.eventType = eventType;
 		// this.carButton = -1;
 	}
 	// Constructor for elevator events
-	public EventData(Date timestamp, int floorNum, int carButton, int destination) {
+	public EventData(Date timestamp, int floorNum, int carButton, EventType eventType) {
 		this.timestamp = timestamp;
 		this.floorNum = floorNum;
-		this.destination = destination;
+		this.eventType = eventType;
 		this.carButton = carButton;
 	}
 }
