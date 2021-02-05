@@ -14,14 +14,14 @@ public class Scheduler {
 	private Integer numberOfFloors = 1;
 	private Integer numberOfElevators = 1;
 	// private masterEventList ...
-	private static List<List> masterFloorEventList = new ArrayList<>();
-	private static List<List> masterElevatorEventList = new ArrayList<>();
+	private List<List> masterFloorEventList = new ArrayList<>();
+	private List<List> masterElevatorEventList = new ArrayList<>();
 
 	
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		// TODO Auto-generated method stub
 		
 		// Create empty lists for each floor and each elevator
@@ -50,15 +50,15 @@ public class Scheduler {
 			// send most pertinent events to floor/elevator
 			
 			// read floor event -> write event to elevator -> read event back from elevator
-			eventReadFromFloor = readFromFloor(1);
+			eventReadFromFloor = this.readFromFloor(1);
 			if(eventReadFromFloor != null) {
 				System.out.println("Event read from floor.");
-				writeToElevator(1, eventReadFromFloor);
+				this.writeToElevator(1, eventReadFromFloor);
 				System.out.println("Event written to elevator.");
 				//TODO add timeout, or interrupt?
 				while(true) {
-					eventReadFromElevator = readFromElevator(1);
-					if(eventReadFromElevator != null) {
+					eventReadFromElevator = this.readFromElevator(1);
+					if(eventReadFromElevator != null){
 						System.out.println("Event read from elevator.");
 						break;
 					}
@@ -70,7 +70,7 @@ public class Scheduler {
 
 	}
 	
-	private static EventData readFromFloor(Integer floorNumber) {
+	private EventData readFromFloor(Integer floorNumber) {
 		//read from index of listOfLists
 		// Just one floor for iteration 1
 		if((masterFloorEventList.get(floorNumber-1)).size()>0) {
@@ -80,20 +80,23 @@ public class Scheduler {
 		return null;
 	}
 	
-	private static EventData readFromElevator(Integer elevatorNumber) {
+	private EventData readFromElevator(Integer elevatorNumber) {
 		//read from index of listOfLists
+		// Check that there is an event and that it has been acknowledged
 		if((masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
-			EventData newEvent = (EventData)(masterElevatorEventList.get(0)).remove(0);
-			return newEvent;
+			if(((EventData)(masterElevatorEventList.get(0)).get(0)).eventType == EventType.ACK_FLOOR_BUTTON_PRESSED) {
+				EventData newEvent = (EventData)(masterElevatorEventList.get(0)).remove(0);
+				return newEvent;
+			}
 		}
 		return null;
 	}
 	
-	private static void writeToFloor(Integer floorNumber, EventData eventToWrite) {
+	private void writeToFloor(Integer floorNumber, EventData eventToWrite) {
 		(masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
 	}
 	
-	private static void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
+	private void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
 		(masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
 	}
 
