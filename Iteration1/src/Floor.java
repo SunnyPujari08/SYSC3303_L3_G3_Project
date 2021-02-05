@@ -18,6 +18,7 @@ public class Floor implements Runnable {
 	private static int floorNum;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
+    private int lamp;
     
     public Floor(Scheduler scheduler, int floorNum) {
     	this.scheduler = scheduler;
@@ -54,12 +55,13 @@ public class Floor implements Runnable {
     	return eData;
     }
     
-    public void sendEventToScheduler() {
-    	scheduler.readFromFloor(floorNum);
+    public void sendEventToScheduler(EventData eData) {
+    	scheduler.readFromFloor(floorNum, eData);
     }
 
     public void readFromScheduler() {
-    	scheduler.writeToFloor(floorNum);
+    	EventData update = scheduler.writeToFloor(floorNum);
+    	updateInfo(update);
     }
     
 	public void run() {
@@ -71,6 +73,10 @@ public class Floor implements Runnable {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {}
         }
+	}
+
+	private void updateInfo(EventData update) {
+		lamp = update.floorNum;
 	}
 
 	/**
