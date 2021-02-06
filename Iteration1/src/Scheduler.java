@@ -23,6 +23,7 @@ public class Scheduler {
 	 */
 	public void main(String[] args) {
 		// TODO Auto-generated method stub
+		Thread FloorOne, ElevatorOne;
 		
 		// Create empty lists for each floor and each elevator
 		// TODO write for loop to create lists for multiple floors and elevators
@@ -35,8 +36,8 @@ public class Scheduler {
 		masterElevatorEventList.add(elevatorEventList);
 		
 		//Each thread is given their own synchronized event list to utilize
-		Floor FloorOne = new Floor(1, floorEventList);
-		Elevator ElevatorOne = new Elevator(1, elevatorEventList);
+		FloorOne = new Thread(new Floor(1, floorEventList));
+		ElevatorOne = new Thread(new Elevator(1, elevatorEventList));
 		FloorOne.start();
 		ElevatorOne.start();
 		
@@ -67,7 +68,6 @@ public class Scheduler {
 			}
 			
 		}
-
 	}
 	
 	private EventData readFromFloor(Integer floorNumber) {

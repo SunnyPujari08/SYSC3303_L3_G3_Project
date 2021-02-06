@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -16,13 +17,14 @@ import java.util.Scanner;
 public class Floor implements Runnable {
 	private static Scheduler scheduler;
 	private static int floorNum;
+	private List<EventData> eventList;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
     private int lamp;
     
-    public Floor(Scheduler scheduler, int floorNum) {
-    	this.scheduler = scheduler;
+    public Floor(int floorNum, List<EventData> floorEventList) {
     	this.floorNum = floorNum;
+    	eventList = floorEventList;
     }
 	
     public static String readEventFromTextFile(String filename) {
@@ -51,37 +53,26 @@ public class Floor implements Runnable {
     		DOWN_BUTTON = true;
     	int destination = Integer.parseInt(eInfo[3]);
     	
-    	EventData eData = new EventData(timeStamp, floorNum, UP_BUTTON, DOWN_BUTTON, destination);
+    	EventData eData = new EventData(timeStamp, floorNum, UP_BUTTON, DOWN_BUTTON, EventType.FLOOR_BUTTON_PRESSED);
     	return eData;
     }
-    
+
     public void sendEventToScheduler(EventData eData) {
-    	scheduler.readFromFloor(floorNum, eData);
+
     }
 
     public void readFromScheduler() {
-    	EventData update = scheduler.writeToFloor(floorNum);
-    	updateInfo(update);
+
     }
     
 	public void run() {
         while(true){
-            System.out.println(Thread.currentThread().getName() + " took an event");
-            //scheduler.writeToFloor();
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {}
+			System.out.println(Thread.currentThread().getName()	+ " reads a file");
+			//buffer writing should come here
+			
+			try {
+				Thread.sleep(1000);		//Sleep for 1 second
+			} catch (InterruptedException e) {}
         }
 	}
-
-	private void updateInfo(EventData update) {
-		lamp = update.floorNum;
-	}
-
-	/**
-	public static void main(String[] args) {
-
-	}
-	**/
 }
