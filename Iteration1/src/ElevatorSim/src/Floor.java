@@ -18,6 +18,7 @@ import java.util.Scanner;
 public class Floor implements Runnable {
 	private static Scheduler scheduler;
 	private static int floorNum;
+	private static String filename = "../test.txt";
 	private List<EventData> eventList;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
@@ -59,17 +60,28 @@ public class Floor implements Runnable {
     }
 
     public void sendEventToScheduler(EventData eData) {
-
+    	eventList.add(eData);
     }
 
-    public void readFromScheduler() {
-
+    public EventData readFromScheduler() {
+    	// Check if empty
+    	// Logic if/else checking eventType
+    	// event = eventList.remove(0);
+    	// return event;
     }
     
 	public void run() {
+		EventData currentEvent;
+		String currentLine, prevLine = "";
         while(true){
-			System.out.println(Thread.currentThread().getName()	+ " reads a file");
+			//System.out.println(Thread.currentThread().getName()	+ " reads a file");
 			//buffer writing should come here
+			currentLine = readEventFromTextFile(filename);
+			if(!currentLine.equals(prevLine)) {
+				System.out.println("Line read from text file: " + currentLine);
+				currentEvent = convertTextEvent(currentLine);
+				sendEventToScheduler(currentEvent);
+			}
 			
 			try {
 				Thread.sleep(1000);		//Sleep for 1 second

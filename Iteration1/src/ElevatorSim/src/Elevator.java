@@ -13,12 +13,12 @@ import java.util.List;
 public class Elevator implements Runnable {
 
     private EventData eData;
-    private Scheduler scheduler;
+    //private Scheduler scheduler;
     private int floor;
     private int elevatorID;
     private int currentFloor;
     private int destFloor;
-    List<EventData> eventList;
+    private List<EventData> eventList;
 
 
     public Elevator(int elevatorID, List<EventData> eventList) {
@@ -26,33 +26,47 @@ public class Elevator implements Runnable {
         this.eventList = eventList;
     }
 
-    public void checkWorkFromScheduler(/*int destFloor*/) throws InterruptedException
+    public EventData checkWorkFromScheduler(/*int destFloor*/) throws InterruptedException
     {
+    	
+    	/*
         // Pick up Event
         if (eventList.get(0).upButton == true) {
-            for (int i = 0; i < (eventList.get(0).floorNum - currentFloor); i++) {
+            for (int i = 0; i < ((eventList.get(0).floorNum) - currentFloor); i++) {
                 System.out.print("Currently at Floor: "+ currentFloor + ".");
                 wait(5000); // Waiting to pass a floor
             }
         }
         // Pick up Event
         if (eventList.get(0).downButton == true) {
-            for (int i = 0; i < (currentFloor - eventList.get(0).floorNum); i++) {
+            for (int i = 0; i < (currentFloor - (eventList.get(0).floorNum)); i++) {
                 System.out.print("Currently at Floor: "+ currentFloor + ".");
                 wait(5000); // Waiting to pass a floor
             }
         }
         currentFloor = destFloor;
         // make an EventData here (once the destination floor is reached)
-        /*Date timestamp = new Date(); // not needed
-        eData = new EventData(timestamp, currentFloor, 0, EventType.FLOOR_BUTTON_PRESSED);*/
+        //Date timestamp = new Date(); // not needed
+        eData = new EventData(timestamp, currentFloor, 0, EventType.FLOOR_BUTTON_PRESSED);
+        */
+        
+        // If there are events available
+        if(eventList.size() > 0) {
+        	EventData newEvent = eventList.remove(0);
+        	return newEvent;
+        } else {
+        	return null;
+        }
+        
+        
     }
 
-    public EventData sendWorkDoneToScheduler()
+    public void sendWorkDoneToScheduler(EventData eData)
     {
-        return eData;
+    	eventList.add(eData);
     }
 
+    /*
     // send pressed button to scheduler
     public EventData sendEventToScheduler() {
         //scheduler.readFromElevator(elevatorID);
@@ -63,13 +77,22 @@ public class Elevator implements Runnable {
         EventData data = new EventData(timestamp, currentFloor, 0, EventType.FLOOR_BUTTON_PRESSED);
         return data;
     }
+    */
 
     @Override
     public void run()
     {
         while(true){
             System.out.println(Thread.currentThread().getName() + " took an event");
-            scheduler.readFromElevator(elevatorID);
+            //scheduler.readFromElevator(elevatorID);
+            eData = checkWorkFromScheduler();
+            if(eData != null) {
+            	System.out.println("Event picked up from scheduler.");
+            	if(eData.eventType == EventType.FLOOR_BUTTON_PRESSED) {
+            		eData.eventType = EventType.ACK_FLOOR_BUTTON_PRESSED;
+            		sendWorkDoneToScheduler(eData);
+            	}
+            }
 
             try {
                 Thread.sleep(2000);
