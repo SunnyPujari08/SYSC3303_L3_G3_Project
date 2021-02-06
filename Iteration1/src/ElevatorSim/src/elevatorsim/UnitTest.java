@@ -5,9 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -39,34 +37,77 @@ public class UnitTest extends TestCase {
 
 	/**
 	 * Test if scheduler reading the right format of event from event list
+	 * @throws ParseException 
 	 */
-	public void testSchedulerReading() {
-		Scheduler scheduler = new Scheduler();
+	public void testSchedulerReadingFromFloor() throws ParseException {
+		Scheduler scheduler = new Scheduler(1,1);
+		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
+		Date testTimeStamp = dateFormat.parse("14:05:15.0");
+		int testFloorNum = 1;
+		boolean testUpButton = true;
+		boolean testDownButton = false;
+		EventType testEventType = EventType.FLOOR_BUTTON_PRESSED;
 		
-		//EventData testEvent = scheduler.readFromFloor(1);
+		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
+		scheduler.writeToFloor(1, testWriteEvent);
+		EventData testReadEvent = scheduler.readFromFloor(1);
 		
+		assertEquals(testWriteEvent.timestamp, testReadEvent.timestamp);
+		assertEquals(testWriteEvent.floorNum, testReadEvent.floorNum);
+		assertEquals(testWriteEvent.upButton, testReadEvent.upButton);
+		assertEquals(testWriteEvent.downButton, testReadEvent.downButton);
+		assertEquals(testWriteEvent.eventType, testReadEvent.eventType);
 	}
 	
-	public void testElevatorSendEvent() {
-		ArrayList<EventData> elevatorEventList = new ArrayList<>();
-		//Elevator elevator = new Elevator(1, elevatorEventList);
+	/**
+	 * Test if elevator reading the right event from eventlist
+	 * @throws ParseException
+	 */
+	public void testElevatorReading() throws ParseException {
+		Scheduler scheduler = new Scheduler(1,1);
+		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
+		Date testTimeStamp = dateFormat.parse("14:05:15.0");
+		int testFloorNum = 1;
+		boolean testUpButton = true;
+		boolean testDownButton = false;
+		EventType testEventType = EventType.FLOOR_BUTTON_PRESSED;
 		
+		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType);
+		ArrayList<EventData> elevatorEventList = new ArrayList<>();
+		elevatorEventList.add(testWriteEvent);
+		
+		Elevator elevator = new Elevator(1, elevatorEventList);
+		EventData newElevatorEvent = elevator.checkWorkFromScheduler();
+		
+		assertEquals(testWriteEvent.timestamp, newElevatorEvent.timestamp);
+		assertEquals(testWriteEvent.floorNum, newElevatorEvent.floorNum);
+		assertEquals(testWriteEvent.upButton, newElevatorEvent.upButton);
+		assertEquals(testWriteEvent.downButton, newElevatorEvent.downButton);
+		assertEquals(testWriteEvent.eventType, newElevatorEvent.eventType);
+	}
+	
+	/**
+	 * Test if elevator sending new event to eventlist by changing the eventType of the event received
+	 * @throws ParseException
+	 */
+	public void testSchedulerReadingFromElevator() throws ParseException {
+		Scheduler scheduler = new Scheduler(1,1);
+		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
+		Date testTimeStamp = dateFormat.parse("14:05:15.0");
+		int testFloorNum = 1;
+		boolean testUpButton = true;
+		boolean testDownButton = false;
+		EventType testEventType = EventType.ACK_FLOOR_BUTTON_PRESSED;
+		
+		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
+		scheduler.writeToElevator(1, testWriteEvent);
+		EventData testReadEvent = scheduler.readFromElevator(1);
+		
+		assertEquals(testWriteEvent.timestamp, testReadEvent.timestamp);
+		assertEquals(testWriteEvent.floorNum, testReadEvent.floorNum);
+		assertEquals(testWriteEvent.upButton, testReadEvent.upButton);
+		assertEquals(testWriteEvent.downButton, testReadEvent.downButton);
+		assertEquals(testWriteEvent.eventType, testReadEvent.eventType);
 		
 	}
 }
-/*
-Test 2: test if scheduler reading the right format of event from event list 
-    - can do this by comparing the eventReadFromFloor variable of type Event data with hard coded value 
-        -ex: scheduler eventReadFromFloor.timeStamp == “hard-coded expected time”, etc 
-Test 3: test if elevator reading the right event from eventlist
-    -can do this by comparing the newEvent of type EvenData in the checkWorkFromScheduler()
-    - probably need to declare a test EventData to compare since its a function call 
-        -ex: EventData test;
-            test = elevator.checkWorkFromScheduler();
-            test.timeStamp == “hard-coded expected time”, etc 
-Test 4: test if elevator sending new event to eventlist by changing the eventType of the event received
-    - can do this by testing the eventType of the eventReadFromElevator in scheduler
-        ex:  EventData test;
-            test = scheduler.readFromElevator(1);
-            test.eventType == EventType.ACK_FLOOR_BUTTON_PRESSED;
-*/
