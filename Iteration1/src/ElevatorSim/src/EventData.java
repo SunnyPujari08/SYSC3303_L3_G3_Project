@@ -14,6 +14,7 @@ public class EventData {
 	public boolean upButton; // True=Up, False = Down
 	public boolean downButton;
 	public int carButton;
+	public int destinationFloor;
 	public EventType eventType;
 	
 	
