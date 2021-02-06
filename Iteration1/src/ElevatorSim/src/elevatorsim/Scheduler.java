@@ -20,28 +20,38 @@ public class Scheduler {
 	// private masterEventList ...
 	private List<List> masterFloorEventList = new ArrayList<>();
 	private List<List> masterElevatorEventList = new ArrayList<>();
-
 	
-	// Main function for project
-	public static void main(String[] args) {
-		Scheduler scheduler = new Scheduler();
-		Thread FloorOne, ElevatorOne;
-		
+	public Scheduler(int numberOfFloors, int numberOfElevators) {
+		this.setupLists(numberOfFloors, numberOfElevators);
+		this.setupThreads(numberOfFloors, numberOfElevators);
+	}
+
+	private void setupLists(int numberOfFloors, int numberOfElevators) {
 		// Create empty lists for each floor and each elevator
 		// TODO write for loop to create lists for multiple floors and elevators
 		List<EventData> floorEventList = Collections.synchronizedList(new ArrayList<>());
 		List<EventData> elevatorEventList = Collections.synchronizedList(new ArrayList<>());
-		
 		// Create list of lists for floors and elevators
 		//TODO write for loop to add all lists to respective master lists
-		scheduler.masterFloorEventList.add(floorEventList);
-		scheduler.masterElevatorEventList.add(elevatorEventList);
+		this.masterFloorEventList.add(floorEventList);
+		this.masterElevatorEventList.add(elevatorEventList);
+	}
+	
+	private void setupThreads(int numberOfFloors, int numberOfElevators) {
+		//TODO create specified number of threads in for loop
+		// For now just create one elevator and one floor
 		
+		Thread FloorOne, ElevatorOne;
 		//Each thread is given their own synchronized event list to pass events back and forth
-		FloorOne = new Thread(new Floor(1, floorEventList));
-		ElevatorOne = new Thread(new Elevator(1, elevatorEventList));
+		FloorOne = new Thread(new Floor(1, this.masterFloorEventList.get(0)));
+		ElevatorOne = new Thread(new Elevator(1,this.masterElevatorEventList.get(0)));
 		FloorOne.start();
 		ElevatorOne.start();
+	}
+	
+	// Main function for project
+	public static void main(String[] args) {
+		Scheduler scheduler = new Scheduler(1,1);
 		
 		EventData eventReadFromFloor;
 		EventData eventReadFromElevator;
