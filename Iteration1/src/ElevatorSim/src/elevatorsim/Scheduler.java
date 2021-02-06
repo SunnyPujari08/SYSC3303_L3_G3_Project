@@ -1,4 +1,4 @@
-package elevation;
+package elevatorsim;
 /**
  * 
  */
@@ -22,7 +22,9 @@ public class Scheduler {
 	/**
 	 * @param args
 	 */
-	public void main(String[] args) {
+	public static void main(String[] args) {
+		Scheduler scheduler = new Scheduler();
+		
 		// TODO Auto-generated method stub
 		Thread FloorOne, ElevatorOne;
 		
@@ -33,8 +35,8 @@ public class Scheduler {
 		
 		// Create list of lists for floors and elevators
 		//TODO write for loop to add all lists to respective master lists
-		masterFloorEventList.add(floorEventList);
-		masterElevatorEventList.add(elevatorEventList);
+		scheduler.masterFloorEventList.add(floorEventList);
+		scheduler.masterElevatorEventList.add(elevatorEventList);
 		
 		//Each thread is given their own synchronized event list to utilize
 		FloorOne = new Thread(new Floor(1, floorEventList));
@@ -52,16 +54,16 @@ public class Scheduler {
 			// send most pertinent events to floor/elevator
 			
 			// read floor event -> write event to elevator -> read event back from elevator
-			eventReadFromFloor = this.readFromFloor(1);
+			eventReadFromFloor = scheduler.readFromFloor(1);
 			if(eventReadFromFloor != null) {
-				System.out.println("Event read from floor.");
-				this.writeToElevator(1, eventReadFromFloor);
-				System.out.println("Event written to elevator.");
+				System.out.println("SCHEDULER: Event read from floor.");
+				scheduler.writeToElevator(1, eventReadFromFloor);
+				System.out.println("SCHEDULER: Event written to elevator.");
 				//TODO add timeout, or interrupt?
 				while(true) {
-					eventReadFromElevator = this.readFromElevator(1);
+					eventReadFromElevator = scheduler.readFromElevator(1);
 					if(eventReadFromElevator != null){
-						System.out.println("Event read from elevator.");
+						System.out.println("SCHEDULER: Event read from elevator.");
 						break;
 					}
 				}

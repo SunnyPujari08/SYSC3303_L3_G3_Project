@@ -1,4 +1,4 @@
-package elevation;
+package elevatorsim;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class Elevator implements Runnable {
         this.eventList = eventList;
     }
 
-    public EventData checkWorkFromScheduler(/*int destFloor*/) throws InterruptedException
+    public EventData checkWorkFromScheduler(/*int destFloor*/) //throws InterruptedException
     {
     	
     	/*
@@ -83,11 +83,11 @@ public class Elevator implements Runnable {
     public void run()
     {
         while(true){
-            System.out.println(Thread.currentThread().getName() + " took an event");
+            // System.out.println(Thread.currentThread().getName() + " took an event");
             //scheduler.readFromElevator(elevatorID);
             eData = checkWorkFromScheduler();
             if(eData != null) {
-            	System.out.println("Event picked up from scheduler.");
+            	System.out.println("ELEVATOR: Event picked up from scheduler.");
             	if(eData.eventType == EventType.FLOOR_BUTTON_PRESSED) {
             		eData.eventType = EventType.ACK_FLOOR_BUTTON_PRESSED;
             		sendWorkDoneToScheduler(eData);

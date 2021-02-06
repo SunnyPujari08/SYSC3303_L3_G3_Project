@@ -1,4 +1,4 @@
-package elevation;
+package elevatorsim;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class Floor implements Runnable {
 	private static Scheduler scheduler;
 	private static int floorNum;
-	private static String filename = "../test.txt";
+	private static String filename = "C:\\Users\\Ezra Pierce\\Documents\\3303\\SYSC3303_L3_G3_Project\\Iteration1\\input.txt";
 	private List<EventData> eventList;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
@@ -35,7 +35,7 @@ public class Floor implements Runnable {
         	File file = new File(filename);
             Scanner reader = new Scanner(file);
             rawData = reader.nextLine();
-            System.out.println(rawData);
+            // System.out.println(rawData);
             reader.close();
         } catch (FileNotFoundException e) {
             System.out.println("File does not exist!");
@@ -61,14 +61,17 @@ public class Floor implements Runnable {
 
     public void sendEventToScheduler(EventData eData) {
     	eventList.add(eData);
+    	System.out.println("FLOOR: Event sent to scheduler.");
     }
 
+    /*
     public EventData readFromScheduler() {
     	// Check if empty
     	// Logic if/else checking eventType
     	// event = eventList.remove(0);
     	// return event;
     }
+    */
     
 	public void run() {
 		EventData currentEvent;
@@ -79,8 +82,13 @@ public class Floor implements Runnable {
 			currentLine = readEventFromTextFile(filename);
 			if(!currentLine.equals(prevLine)) {
 				System.out.println("Line read from text file: " + currentLine);
-				currentEvent = convertTextEvent(currentLine);
-				sendEventToScheduler(currentEvent);
+				try {
+					currentEvent = convertTextEvent(currentLine);
+					sendEventToScheduler(currentEvent);
+				} catch (ParseException e) {
+					System.out.println("Error parsing text file.");
+				}
+				prevLine = currentLine;
 			}
 			
 			try {

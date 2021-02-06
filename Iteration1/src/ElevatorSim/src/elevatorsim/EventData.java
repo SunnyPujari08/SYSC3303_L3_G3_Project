@@ -1,4 +1,4 @@
-package elevation;
+package elevatorsim;
 import java.util.Date;
 
 // More event types can be added in further iterations
