@@ -193,7 +193,7 @@
       <tags>categoryTag:Help</tags>
     </sharedElements>
     <sharedElements xsi:type="advanced:Area" xmi:id="_2bBCkGiiEeu8_b_y00W0oQ" elementId="org.eclipse.ui.editorss" selectedElement="_2bBCkWiiEeu8_b_y00W0oQ">
-      <children xsi:type="basic:PartStack" xmi:id="_2bBCkWiiEeu8_b_y00W0oQ" elementId="org.eclipse.e4.primaryDataStack" selectedElement="_7bw_oGiiEeu8_b_y00W0oQ">
+      <children xsi:type="basic:PartStack" xmi:id="_2bBCkWiiEeu8_b_y00W0oQ" elementId="org.eclipse.e4.primaryDataStack" selectedElement="_7pM-sGiiEeu8_b_y00W0oQ">
         <tags>org.eclipse.e4.primaryDataStack</tags>
         <tags>EditorStack</tags>
         <tags>active</tags>
@@ -202,8 +202,6 @@
           <tags>Editor</tags>
           <tags>removeOnHide</tags>
           <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
-          <tags>active</tags>
-          <tags>activeOnClose</tags>
         </children>
         <children xsi:type="basic:Part" xmi:id="_7kp14GiiEeu8_b_y00W0oQ" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="EventData.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
           <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;EventData.java&quot; partName=&quot;EventData.java&quot; title=&quot;EventData.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\Iteration1\src\ElevatorSim\src\elevatorsim\EventData.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/Iteration1/src/ElevatorSim/src/elevatorsim/EventData.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;437&quot; selectionTopPixel=&quot;0&quot;/>&#xD;&#xA;&lt;/editor>"/>
@@ -212,16 +210,18 @@
           <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
         </children>
         <children xsi:type="basic:Part" xmi:id="_7m7t0GiiEeu8_b_y00W0oQ" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Floor.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Floor.java&quot; partName=&quot;Floor.java&quot; title=&quot;Floor.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\Iteration1\src\ElevatorSim\src\elevatorsim\Floor.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/Iteration1/src/ElevatorSim/src/elevatorsim/Floor.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;2179&quot; selectionTopPixel=&quot;713&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Floor.java&quot; partName=&quot;Floor.java&quot; title=&quot;Floor.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\Iteration1\src\ElevatorSim\src\elevatorsim\Floor.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/Iteration1/src/ElevatorSim/src/elevatorsim/Floor.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;2179&quot; selectionTopPixel=&quot;120&quot;/>&#xD;&#xA;&lt;/editor>"/>
           <tags>Editor</tags>
           <tags>removeOnHide</tags>
           <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
         </children>
         <children xsi:type="basic:Part" xmi:id="_7pM-sGiiEeu8_b_y00W0oQ" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Scheduler.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Scheduler.java&quot; partName=&quot;Scheduler.java&quot; title=&quot;Scheduler.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\Iteration1\src\ElevatorSim\src\elevatorsim\Scheduler.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/Iteration1/src/ElevatorSim/src/elevatorsim/Scheduler.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;937&quot; selectionTopPixel=&quot;278&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Scheduler.java&quot; partName=&quot;Scheduler.java&quot; title=&quot;Scheduler.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\Iteration1\src\ElevatorSim\src\elevatorsim\Scheduler.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/Iteration1/src/ElevatorSim/src/elevatorsim/Scheduler.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;4837&quot; selectionTopPixel=&quot;1448&quot;/>&#xD;&#xA;&lt;/editor>"/>
           <tags>Editor</tags>
           <tags>removeOnHide</tags>
           <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
+          <tags>active</tags>
+          <tags>activeOnClose</tags>
         </children>
       </children>
     </sharedElements>
@@ -346,7 +346,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_2TNKYGiiEeu8_b_y00W0oQ" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_tnOGIGisEeuwdOfZJ3bW0A" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_2FMjmGiiEeu8_b_y00W0oQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_bdqUMGi2EeuQoKF7sp9gug" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_2FMjmGiiEeu8_b_y00W0oQ"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_2TNKYWiiEeu8_b_y00W0oQ" elementId="group.edit" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -377,7 +377,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_2TNKaGiiEeu8_b_y00W0oQ" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_tnQiYGisEeuwdOfZJ3bW0A" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_2FL8tWiiEeu8_b_y00W0oQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_bdswcGi2EeuQoKF7sp9gug" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_2FL8tWiiEeu8_b_y00W0oQ"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_2TNxcGiiEeu8_b_y00W0oQ" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -2981,7 +2981,7 @@
   <addons xmi:id="_2Etbd2iiEeu8_b_y00W0oQ" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_2EtbeGiiEeu8_b_y00W0oQ" elementId="org.eclipse.ui.workbench.addon.0" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_2E0JEGiiEeu8_b_y00W0oQ" elementId="SplitterAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.splitteraddon.SplitterAddon"/>
-  <addons xmi:id="_tXrOQWisEeuwdOfZJ3bW0A" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
+  <addons xmi:id="_IYS0IKimEeS11vbz3f9ezw" elementId="org.eclipse.ui.ide.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
   <addons xmi:id="_OuENQESaEeiAQ-my3lrC5g" elementId="org.eclipse.papyrus.infra.ui.fonts.addon.0" contributorURI="platform:/plugin/org.eclipse.papyrus.infra.ui.fonts" contributionURI="bundleclass://org.eclipse.papyrus.infra.ui.fonts/org.eclipse.papyrus.infra.ui.fonts.internal.addon.FontAddon"/>
   <addons xmi:id="_dz0JgGOlEeSMMaPQU2nlzw" elementId="org.eclipse.ui.ide.application.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide.application" contributionURI="bundleclass://org.eclipse.ui.ide.application/org.eclipse.ui.internal.ide.application.addons.ModelCleanupAddon"/>
   <categories xmi:id="_2FEnwGiiEeu8_b_y00W0oQ" elementId="org.eclipse.ui.category.edit" name="Edit"/>
