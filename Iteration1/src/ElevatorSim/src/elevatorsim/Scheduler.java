@@ -1,7 +1,5 @@
 package ElevatorSim.src.elevatorsim;
-/**
- * 
- */
+
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -9,6 +7,11 @@ import java.util.ArrayList;
 /**
  * @author Ezra Pierce
  *
+ * Scheduler class for SYSC3303 group project. L3-G3
+ * 
+ * For iteration 1 this class creates one floor thread and one elevator thread, then
+ * waits for a new event from the Floor. Once an event is read, it is sent to the Elevator.
+ * Then it waits for the event to be returned from the elevator and confirms that it has been acknowledged.
  */
 public class Scheduler {
 	
@@ -19,13 +22,9 @@ public class Scheduler {
 	private List<List> masterElevatorEventList = new ArrayList<>();
 
 	
-	/**
-	 * @param args
-	 */
+	// Main function for project
 	public static void main(String[] args) {
 		Scheduler scheduler = new Scheduler();
-		
-		// TODO Auto-generated method stub
 		Thread FloorOne, ElevatorOne;
 		
 		// Create empty lists for each floor and each elevator
@@ -38,7 +37,7 @@ public class Scheduler {
 		scheduler.masterFloorEventList.add(floorEventList);
 		scheduler.masterElevatorEventList.add(elevatorEventList);
 		
-		//Each thread is given their own synchronized event list to utilize
+		//Each thread is given their own synchronized event list to pass events back and forth
 		FloorOne = new Thread(new Floor(1, floorEventList));
 		ElevatorOne = new Thread(new Elevator(1, elevatorEventList));
 		FloorOne.start();
@@ -46,6 +45,10 @@ public class Scheduler {
 		
 		EventData eventReadFromFloor;
 		EventData eventReadFromElevator;
+		
+		// For iteration 1 the scheduler just reads one event from the floor, writes that same event to the
+		// Elevator which changes the event type to acknowledged and writes it back to the scheduler.
+		// The scheduler then reads the event.
 		while(true) {
 			// TODO in future iterations
 			// for loop reading from each floor  and adding events to master list of floor events
@@ -73,6 +76,14 @@ public class Scheduler {
 		}
 	}
 	
+	/*
+	 * Function reads from list related to specified floor, for Iteration 1 it also checks that the event was acknowledged
+	 * 
+	 * Arguments:
+	 * floorNumber - Specifies which floor to read from
+	 * Returns:
+	 * EventData - Returns one event if one exists or null if none exist
+	 */
 	private EventData readFromFloor(Integer floorNumber) {
 		//read from index of listOfLists
 		// Just one floor for iteration 1
@@ -83,6 +94,14 @@ public class Scheduler {
 		return null;
 	}
 	
+	/*
+	 * Function reads from list related to specified elevator, for Iteration 1 it also checks that the event was acknowledged
+	 * 
+	 * Arguments:
+	 * elevatorNumber - Specifies which elevator to read from
+	 * Returns:
+	 * EventData - Returns one event if one exists and it has been acknowledged by the elevator or null if none exist
+	 */
 	private EventData readFromElevator(Integer elevatorNumber) {
 		//read from index of listOfLists
 		// Check that there is an event and that it has been acknowledged
@@ -95,14 +114,27 @@ public class Scheduler {
 		return null;
 	}
 	
+	/* Function adds eventToWrite to list specified by floorNumber
+	 * NOT USED IN ITERATION 1
+	 * Arguments:
+	 * floorNumber - Specifies which floor to write to
+	 * eventToWrite - Event object to be added to list
+	 */
 	private void writeToFloor(Integer floorNumber, EventData eventToWrite) {
 		(masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
 	}
 	
+	/* Function adds eventToWrite to list specified by elevatorNumber
+	 * 
+	 * Arguments:
+	 * elevatorNumber - Specifies which elevator to write to
+	 * eventToWrite - Event object to be added to list
+	 */
 	private void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
 		(masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
 	}
 
+	// NOT USED IN ITERATION 1
 	private void sortEventList() {
 		
 	}
