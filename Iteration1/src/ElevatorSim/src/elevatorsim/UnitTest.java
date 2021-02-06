@@ -41,10 +41,23 @@ public class UnitTest extends TestCase {
 	 * Test if scheduler reading the right format of event from event list
 	 */
 	public void testSchedulerReading() {
-		Scheduler scheduler = new Scheduler();
+		Scheduler scheduler = new Scheduler(1,1);
+		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
+		Date testTimeStamp = dateFormat.parse("14:05:15.0");
+		int testFloorNum = 1;
+		boolean testUpButton = true;
+		boolean testDownButton = false;
+		EventType testEventType = EventType.FLOOR_BUTTON_PRESSED;
 		
-		//EventData testEvent = scheduler.readFromFloor(1);
+		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
+		scheduler.writeToFloor(1, testWriteEvent);
+		EventData testReadEvent = scheduler.readFromFloor(1);
 		
+		assertEquals(testWriteEvent.timestamp, testReadEvent.timestamp);
+		assertEquals(testWriteEvent.floorNum, testReadEvent.floorNum);
+		assertEquals(testWriteEvent.upButton, testReadEvent.upButton);
+		assertEquals(testWriteEvent.downButton, testReadEvent.downButton);
+		assertEquals(testWriteEvent.eventType, testReadEvent.eventType);
 	}
 	
 	public void testElevatorSendEvent() {

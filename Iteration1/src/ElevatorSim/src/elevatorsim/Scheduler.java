@@ -130,7 +130,7 @@ public class Scheduler {
 	 * floorNumber - Specifies which floor to write to
 	 * eventToWrite - Event object to be added to list
 	 */
-	private void writeToFloor(Integer floorNumber, EventData eventToWrite) {
+	public void writeToFloor(Integer floorNumber, EventData eventToWrite) {
 		(masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
 	}
 	
