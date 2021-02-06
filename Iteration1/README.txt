@@ -10,6 +10,7 @@ to see our test protocols we have in place to try out our new program!
 
 Contents List:
 - Iteration 1 Sequence Diagram.vpd.png
+- Iteration 1 Class Diagram.vpd.png
 - input.txt
 - Elevator.java
 - Floor.java
