@@ -112,7 +112,7 @@ public class Scheduler {
 	 * Returns:
 	 * EventData - Returns one event if one exists and it has been acknowledged by the elevator or null if none exist
 	 */
-	private EventData readFromElevator(Integer elevatorNumber) {
+	public EventData readFromElevator(Integer elevatorNumber) {
 		//read from index of listOfLists
 		// Check that there is an event and that it has been acknowledged
 		if((masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
@@ -140,7 +140,7 @@ public class Scheduler {
 	 * elevatorNumber - Specifies which elevator to write to
 	 * eventToWrite - Event object to be added to list
 	 */
-	private void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
+	public void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
 		(masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
 	}
 
