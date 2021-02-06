@@ -1,11 +1,11 @@
 Hello World!
 
-To whoever reads this,
+To whomever read this,
 
 You have the pleasure of opening and trying out our new elevator program that allows you
 to simulate an elevator, how exciting!!!
 
-To get this all ready, open the package in the above src folder and you will be able
+To get this all ready, open the package in the above "src->ElevatorSim->src->elevatorsim->UnitTest.java" and you will be able
 to see our test protocols we have in place to try out our new program!
 
 Contents List:
@@ -16,7 +16,7 @@ Contents List:
 - Floor.java
 - EventData.java
 - Scheduler.java
-- test.java
+- UnitTest.java
 
 Breakdown of responsibilities:
 Ezra Pierce:
