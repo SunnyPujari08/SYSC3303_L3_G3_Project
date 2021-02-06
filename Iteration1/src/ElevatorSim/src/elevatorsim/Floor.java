@@ -1,4 +1,4 @@
-package elevatorsim;
+package ElevatorSim.src.elevatorsim;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class Floor implements Runnable {
 	private static Scheduler scheduler;
 	private static int floorNum;
-	private static String filename = "C:\\Users\\Ezra Pierce\\Documents\\3303\\SYSC3303_L3_G3_Project\\Iteration1\\input.txt";
+	private static String filename = "input.txt";
 	private List<EventData> eventList;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;

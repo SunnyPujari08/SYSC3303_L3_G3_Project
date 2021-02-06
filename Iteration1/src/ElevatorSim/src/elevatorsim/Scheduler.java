@@ -1,4 +1,4 @@
-package elevatorsim;
+package ElevatorSim.src.elevatorsim;
 /**
  * 
  */

@@ -1,4 +1,4 @@
-package elevatorsim;
+package ElevatorSim.src.elevatorsim;
 import java.util.Date;
 import java.util.List;
 
