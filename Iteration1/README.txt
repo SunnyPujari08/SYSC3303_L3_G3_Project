@@ -16,3 +16,8 @@ Contents List:
 - EventData.java
 - Scheduler.java
 - test.java
+
+Breakdown of responsibilities:
+Ezra Pierce:
+	- Implementation of Scheduler class
+	- Rough draft of UML class diagram
