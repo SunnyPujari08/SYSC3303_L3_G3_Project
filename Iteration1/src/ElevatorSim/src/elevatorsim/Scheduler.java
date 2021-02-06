@@ -94,7 +94,7 @@ public class Scheduler {
 	 * Returns:
 	 * EventData - Returns one event if one exists or null if none exist
 	 */
-	private EventData readFromFloor(Integer floorNumber) {
+	public EventData readFromFloor(Integer floorNumber) {
 		//read from index of listOfLists
 		// Just one floor for iteration 1
 		if((masterFloorEventList.get(floorNumber-1)).size()>0) {
