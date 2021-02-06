@@ -20,15 +20,23 @@ public class Elevator implements Runnable {
     private int destFloor;
     private List<EventData> eventList;
 
-
+    /**
+     * Constructor of the Elevator Class
+     * @param elevatorID The ID of the elevator
+     * @param eventList The list of events recieved
+     */
     public Elevator(int elevatorID, List<EventData> eventList) {
         this.elevatorID = elevatorID;
         this.eventList = eventList;
     }
 
+    /**
+     * checkWorkFromScheduler checks the work sent by the elevator
+     * @return The event that is recieved to perform
+     */
     public EventData checkWorkFromScheduler(/*int destFloor*/) //throws InterruptedException
     {
-    	
+    	//TODO: for future iterations
     	/*
         // Pick up Event
         if (eventList.get(0).upButton == true) {
@@ -61,11 +69,16 @@ public class Elevator implements Runnable {
         
     }
 
+    /**
+     * sendWorkDoneToScheduler sends the completed event to the scheduler
+     * @param eData the EventData to be sent
+     */
     public void sendWorkDoneToScheduler(EventData eData)
     {
     	eventList.add(eData);
     }
 
+    //TODO: for future iterations
     /*
     // send pressed button to scheduler
     public EventData sendEventToScheduler() {
