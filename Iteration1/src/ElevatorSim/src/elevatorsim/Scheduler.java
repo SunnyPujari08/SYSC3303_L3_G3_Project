@@ -115,7 +115,7 @@ public class Scheduler {
 	public EventData readFromElevator(Integer elevatorNumber) {
 		//read from index of listOfLists
 		// Check that there is an event and that it has been acknowledged
-		if((masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
+		if(masterElevatorEventList.size()>0 && (masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
 			if(((EventData)(masterElevatorEventList.get(0)).get(0)).eventType == EventType.ACK_FLOOR_BUTTON_PRESSED) {
 				EventData newEvent = (EventData)(masterElevatorEventList.get(0)).remove(0);
 				return newEvent;
