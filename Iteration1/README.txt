@@ -9,7 +9,6 @@ Members:
 - Jeong Won Kim
 - Cameron Chung
 
-Hello World!
 
 To whomever reads this,
 
