@@ -1,0 +1,6 @@
+-Need to implement a state machine for the elevator and scheduler 
+
+-The Scheduler has a state machine that is idle at first untill it receives a call
+ from the elevator or the floor class
+
+Event List:
