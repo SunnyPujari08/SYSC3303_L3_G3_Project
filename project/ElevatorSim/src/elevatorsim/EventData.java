@@ -1,13 +1,6 @@
 package ElevatorSim.src.elevatorsim;
 import java.util.Date;
 
-// More event types can be added in further iterations
-enum EventType {
-  FLOOR_BUTTON_PRESSED,
-  ACK_FLOOR_BUTTON_PRESSED,
-}
-
-
 public class EventData {
 	public Date timestamp;
 	public int floorNum;

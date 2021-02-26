@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import elevatorsim.elevator.Elevator;
 import junit.framework.TestCase;
 
 public class UnitTest extends TestCase {

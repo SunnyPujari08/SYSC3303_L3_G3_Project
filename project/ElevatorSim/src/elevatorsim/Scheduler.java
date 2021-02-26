@@ -2,6 +2,9 @@ package ElevatorSim.src.elevatorsim;
 
 import java.util.Collections;
 import java.util.List;
+
+import elevatorsim.elevator.Elevator;
+
 import java.util.ArrayList;
 
 /**
@@ -15,18 +18,17 @@ import java.util.ArrayList;
  */
 public class Scheduler {
 	
-	private Integer numberOfFloors = 1;
-	private Integer numberOfElevators = 1;
+
 	// private masterEventList ...
 	private List<List> masterFloorEventList = new ArrayList<>();
 	private List<List> masterElevatorEventList = new ArrayList<>();
 	
-	public Scheduler(int numberOfFloors, int numberOfElevators) {
-		this.setupLists(numberOfFloors, numberOfElevators);
-		this.setupThreads(numberOfFloors, numberOfElevators);
+	public Scheduler() {
+		this.setupLists();
+		this.setupThreads();
 	}
 
-	private void setupLists(int numberOfFloors, int numberOfElevators) {
+	private void setupLists() {
 		// Create empty lists for each floor and each elevator
 		// TODO write for loop to create lists for multiple floors and elevators
 		List<EventData> floorEventList = Collections.synchronizedList(new ArrayList<>());
@@ -37,7 +39,7 @@ public class Scheduler {
 		this.masterElevatorEventList.add(elevatorEventList);
 	}
 	
-	private void setupThreads(int numberOfFloors, int numberOfElevators) {
+	private void setupThreads() {
 		//TODO create specified number of threads in for loop
 		// For now just create one elevator and one floor
 		
@@ -51,7 +53,7 @@ public class Scheduler {
 	
 	// Main function for project
 	public static void main(String[] args) {
-		Scheduler scheduler = new Scheduler(1,1);
+		Scheduler scheduler = new Scheduler();
 		
 		EventData eventReadFromFloor;
 		EventData eventReadFromElevator;
