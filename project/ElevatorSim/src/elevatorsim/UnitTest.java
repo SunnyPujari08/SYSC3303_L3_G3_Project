@@ -1,4 +1,4 @@
-package ElevatorSim.src.elevatorsim;
+package elevatorsim;
 
 
 import java.text.DateFormat;

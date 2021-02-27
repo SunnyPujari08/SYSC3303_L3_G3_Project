@@ -1,4 +1,5 @@
 package ElevatorSim.src.elevatorsim.elevator;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public class Elevator implements Runnable {
     public Elevator(int elevatorID, List<EventData> eventList) {
         this.elevatorID = elevatorID;
         this.eventList = eventList;
+        
         // Create all the different states, each with access to eventList
         stateList = new ArrayList<ElevatorState>(numOfStates);
         stateList.set(Constants.ELEVATOR_STATE_ONE, new ElevatorStateOne(this));
@@ -36,16 +38,16 @@ public class Elevator implements Runnable {
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
     	ElevatorState currentState= stateList.get(startState);
-    	int currentStateID;
+    	int nextStateID;
         while(true){
-        	// Run call will block until state change occurs
-        	currentStateID = currentState.run();
-        	currentState = stateList.get(currentStateID);
-        	// TODO add check state machine exit
+        	// .run() call will block until state change occurs
+        	nextStateID = currentState.run();
+        	if(nextStateID < 0) { break;}
+        	currentState = stateList.get(nextStateID);
         }
+        Constants.formattedPrint("Elevator state machine failed, thread exiting.");
     }
 }
 

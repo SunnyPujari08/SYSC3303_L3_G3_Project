@@ -1,4 +1,4 @@
-package ElevatorSim.src.elevatorsim;
+package elevatorsim;
 
 public enum EventType {
 	  FLOOR_BUTTON_PRESSED,
