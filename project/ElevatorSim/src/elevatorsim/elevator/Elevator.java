@@ -21,6 +21,7 @@ public class Elevator implements Runnable {
     public int elevatorID;
     public int currentFloor;
     public int destFloor;
+    public boolean isDoorOpen = False;
     private int numOfStates = 12;
     public List<EventData> eventList;
     private ArrayList<ElevatorState> stateList;
@@ -48,6 +49,45 @@ public class Elevator implements Runnable {
         	currentState = stateList.get(nextStateID);
         }
         Constants.formattedPrint("Elevator state machine failed, thread exiting.");
+    }
+    
+    public void sendElevatorArrivingAtFloorMovingUp() {
+    	//SendElevatorArrivingAtFloorMovingUp- Elevator arrives at floor moving up
+    	Constants.formattedPrint("This is the action: SendElevatorArrivingAtFloorMovingUp");
+    }
+    
+    public void sendElevatorArrivingAtFloorMovingDown() {
+    	//SendElevatorArrivingAtFloorMovingDown - Elevator arrives at floor moving down
+    	Constants.formattedPrint("This is the action: SendElevatorArrivingAtFloorMovingDown");
+    }
+    
+    public void sendElevatorPickFloor() {
+    	//SendElevatorPickFloor- Elevator button pressed (picking floor)
+    	Constants.formattedPrint("This is the action: SendElevatorPickFloor");
+    }
+    
+    public void openElevatorDoor() {
+    	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
+
+    	isDoorOpen = True;
+    	System.out.println("This is the action: OpenElevatorDoor");
+
+    	Constants.formattedPrint("This is the action: OpenElevatorDoor");
+    }
+    
+    public void closeElevatorDoor() {
+    	//CloseElevatorDoor - Close timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
+
+    	isDoorOpen = False;
+    	System.out.println("This is the action: CloseElevatorDoor");
+
+    	Constants.formattedPrint("This is the action: CloseElevatorDoor");
+
+    }
+
+    public void startElevatorAutoCloseTimer() {
+    	//StartElevatorAutoCloseTimer
+    	Constants.formattedPrint("This is the action: StartElevatorAutoCloseTimer");
     }
 }
 
