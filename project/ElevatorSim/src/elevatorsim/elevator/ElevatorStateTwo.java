@@ -21,7 +21,18 @@ public class ElevatorStateTwo extends ElevatorState {
 	 * the scheduler using the sendEventToScheduler(EventData eD)
 	 */
 	public int handleEvent(EventData event) {
-
+		// Check state machine diagram for what state to go to and what actions to take
+		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_UP) {
+			elevator.sendElevatorArrivingAtFloorMovingUp();
+			return Constants.ELEVATOR_STATE_THREE;
+		} else if(event.eventType == EventType.OPEN_DOOR) {
+			elevator.openElevatorDoor();
+			return Constants.ELEVATOR_STATE_FOUR;
+		}
+		// Will need handle more events eventually
+		
+		// Default to staying in same state
+		return Constants.ELEVATOR_STATE_TWO;
 	}
 	
 	@Override

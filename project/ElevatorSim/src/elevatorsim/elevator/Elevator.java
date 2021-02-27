@@ -49,6 +49,36 @@ public class Elevator implements Runnable {
         }
         Constants.formattedPrint("Elevator state machine failed, thread exiting.");
     }
+    
+    public void sendElevatorArrivingAtFloorMovingUp() {
+    	//SendElevatorArrivingAtFloorMovingUp- Elevator arrives at floor moving up
+    	System.out.println("This is the action: SendElevatorArrivingAtFloorMovingUp");
+    }
+    
+    public void sendElevatorArrivingAtFloorMovingDown() {
+    	//SendElevatorArrivingAtFloorMovingDown - Elevator arrives at floor moving down
+    	System.out.println("This is the action: SendElevatorArrivingAtFloorMovingDown");
+    }
+    
+    public void sendElevatorPickFloor() {
+    	//SendElevatorPickFloor- Elevator button pressed (picking floor)
+    	System.out.println("This is the action: SendElevatorPickFloor");
+    }
+    
+    public void openElevatorDoor() {
+    	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
+    	System.out.println("This is the action: OpenElevatorDoor");
+    }
+    
+    public void closeElevatorDoor() {
+    	//CloseElevatorDoor - Close timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
+    	System.out.println("This is the action: CloseElevatorDoor");
+    }
+
+    public void startElevatorAutoCloseTimer() {
+    	//StartElevatorAutoCloseTimer
+    	System.out.println("This is the action: StartElevatorAutoCloseTimer");
+    }
 }
 
 
