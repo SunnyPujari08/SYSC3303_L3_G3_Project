@@ -1,4 +1,4 @@
-package ElevatorSim.src.elevatorsim.elevator;
+package elevatorsim.elevator;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class ElevatorStateFour extends ElevatorState {
 	public int handleEvent(EventData event) {
 		// Check state machine diagram for what state to go to and what actions to take
 		if(event.eventType == EventType.ELEVATOR_PICK_FLOOR) {
-			elevator.sendElevatorPickFloor();
+			elevator.sendElevatorPickFloor(event.floorNum, event.destinationFloor);
 			return Constants.ELEVATOR_STATE_FIVE;
 		}
 		// Will need handle more events eventually

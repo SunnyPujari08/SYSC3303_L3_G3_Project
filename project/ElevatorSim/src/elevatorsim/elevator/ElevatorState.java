@@ -68,10 +68,7 @@ public abstract class ElevatorState {
         }
     }
     
-    public void sendEventToScheduler(EventData eData)
-    {
-    	elevator.eventList.add(eData);
-    }
+
     
 
     

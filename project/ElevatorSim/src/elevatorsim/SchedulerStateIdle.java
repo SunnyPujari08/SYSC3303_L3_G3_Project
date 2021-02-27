@@ -22,7 +22,7 @@ public class SchedulerStateIdle extends SchedulerState {
 			}
 		}
 		
-		if(event.eventType == EventType.RECEIVE_FLOOR_REQUEST_DOWN || event.eventType == EventType.RECEIVE_FLOOR_REQUEST_UP) {
+		if(event.eventType == EventType.FLOOR_REQUEST) {
 			if(elevator.currentFloor < event.floorNum) {
 				// Move up
 				scheduler.sendUpRequestToElevator(elevator.elevatorID, event.floorNum);

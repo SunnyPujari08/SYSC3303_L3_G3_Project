@@ -33,7 +33,7 @@ public class Constants {
 	
 	
     public static void formattedPrint(String toPrint) {
-    	// TODO add formatted print statement with thread & timestamp
+
     	String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         String threadName = Thread.currentThread().getName();
         System.out.println(threadName + ": " + toPrint + ": " + timeStamp);

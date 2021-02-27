@@ -1,4 +1,4 @@
-package ElevatorSim.src.elevatorsim.elevator;
+package elevatorsim.elevator;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import elevatorsim.EventData;
 import elevatorsim.EventType;
 import elevatorsim.Constants;
 
-public class ElevatorStateSeven extends ElevatorState {
+public class ElevatorStateEleven extends ElevatorState {
 
-	public ElevatorStateSeven(Elevator elevator) {
+	public ElevatorStateEleven(Elevator elevator) {
 		super(elevator);
 	}
 	
