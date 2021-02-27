@@ -21,6 +21,7 @@ public class Elevator implements Runnable {
     public int elevatorID;
     public int currentFloor;
     public int destFloor;
+    public boolean isDoorOpen = False;
     private int numOfStates = 12;
     public List<EventData> eventList;
     private ArrayList<ElevatorState> stateList;
@@ -67,11 +68,13 @@ public class Elevator implements Runnable {
     
     public void openElevatorDoor() {
     	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
+    	isDoorOpen = True;
     	System.out.println("This is the action: OpenElevatorDoor");
     }
     
     public void closeElevatorDoor() {
     	//CloseElevatorDoor - Close timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
+    	isDoorOpen = False;
     	System.out.println("This is the action: CloseElevatorDoor");
     }
 
