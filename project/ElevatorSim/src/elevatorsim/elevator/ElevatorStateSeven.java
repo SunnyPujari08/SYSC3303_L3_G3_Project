@@ -6,9 +6,9 @@ import elevatorsim.EventData;
 import elevatorsim.EventType;
 import elevatorsim.Constants;
 
-public class ElevatorStateThree extends ElevatorState {
+public class ElevatorStateSeven extends ElevatorState {
 
-	public ElevatorStateThree(Elevator elevator) {
+	public ElevatorStateSeven(Elevator elevator) {
 		super(elevator);
 	}
 	
@@ -22,14 +22,17 @@ public class ElevatorStateThree extends ElevatorState {
 	 */
 	public int handleEvent(EventData event) {
 		// Check state machine diagram for what state to go to and what actions to take
-		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_UP) {
-			elevator.openElevatorDoor();
-			return Constants.ELEVATOR_STATE_FOUR;
+		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_DOWN) {
+			elevator.sendElevatorArrivingAtFloorMovingDown();
+			return Constants.ELEVATOR_STATE_EIGHT;
+		} else if (event.eventType == EventType.ELEVATOR_ARR_FLOOR_UP) {
+			elevator.sendElevatorArrivingAtFloorMovingUp();
+			return Constants.ELEVATOR_STATE_ELEVEN;
 		}
 		// Will need handle more events eventually
 		
 		// Default to staying in same state
-		return Constants.ELEVATOR_STATE_THREE;
+		return Constants.ELEVATOR_STATE_SEVEN;
 	}
 	
 	@Override
