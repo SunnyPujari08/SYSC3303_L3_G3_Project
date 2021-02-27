@@ -18,8 +18,8 @@ import java.util.ArrayList;
  */
 public class Scheduler {
 	// private masterEventList ...
-	private List<List> masterFloorEventList = new ArrayList<>();
-	private List<List> masterElevatorEventList = new ArrayList<>();
+	public List<List> masterFloorEventList = new ArrayList<>();
+	public List<List> masterElevatorEventList = new ArrayList<>();
 	private Thread[] floorThreads;
 	private Thread[] elevatorThreads;
 	
@@ -97,23 +97,7 @@ public class Scheduler {
 		}
 	}
 	
-	/*
-	 * Function reads from list related to specified floor, for Iteration 1 it also checks that the event was acknowledged
-	 * 
-	 * Arguments:
-	 * floorNumber - Specifies which floor to read from
-	 * Returns:
-	 * EventData - Returns one event if one exists or null if none exist
-	 */
-	public EventData readFromFloor(Integer floorNumber) {
-		//read from index of listOfLists
-		// Just one floor for iteration 1
-		if((masterFloorEventList.get(floorNumber-1)).size()>0) {
-			EventData newEvent = (EventData)(masterFloorEventList.get(0)).remove(0);
-			return newEvent;
-		}
-		return null;
-	}
+
 	
 	/*
 	 * Function reads from list related to specified elevator, for Iteration 1 it also checks that the event was acknowledged
