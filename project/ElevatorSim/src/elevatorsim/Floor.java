@@ -55,7 +55,7 @@ public class Floor implements Runnable {
     		DOWN_BUTTON = true;
     	int destination = Integer.parseInt(eInfo[3]);
     	
-    	EventData eData = new EventData(timeStamp, floorNum, UP_BUTTON, DOWN_BUTTON, EventType.FLOOR_BUTTON_PRESSED);
+    	EventData eData = new EventData(timeStamp, floorNum, UP_BUTTON, DOWN_BUTTON, EventType.FLOOR_REQUEST);
     	return eData;
     }
 
