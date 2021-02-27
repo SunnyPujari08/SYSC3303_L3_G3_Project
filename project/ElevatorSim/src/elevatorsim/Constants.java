@@ -1,4 +1,7 @@
-package ElevatorSim.src.elevatorsim;
+package elevatorsim;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 // This class contains all global constants
 public class Constants {
@@ -17,4 +20,11 @@ public class Constants {
 	public static Integer ELEVATOR_STATE_TEN = 9;
 	public static Integer ELEVATOR_STATE_ELEVEN = 10;
 	public static Integer ELEVATOR_STATE_TWELVE = 11;
+	
+    public static void formattedPrint(String toPrint) {
+    	// TODO add formatted print statement with thread & timestamp
+    	String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        String threadName = Thread.currentThread().getName();
+        System.out.println(threadName + ": " + toPrint + ": " + timeStamp);
+    }
 }

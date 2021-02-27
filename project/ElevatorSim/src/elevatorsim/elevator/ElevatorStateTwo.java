@@ -1,4 +1,4 @@
-package elevatorsim.elevator;
+package ElevatorSim.src.elevatorsim.elevator;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import elevatorsim.EventData;
 import elevatorsim.EventType;
 import elevatorsim.Constants;
 
-public class ElevatorStateOne extends ElevatorState {
+public class ElevatorStateTwo extends ElevatorState {
 
-	public ElevatorStateOne(Elevator elevator) {
+	public ElevatorStateTwo(Elevator elevator) {
 		super(elevator);
 	}
 	
@@ -22,15 +22,17 @@ public class ElevatorStateOne extends ElevatorState {
 	 */
 	public int handleEvent(EventData event) {
 		// Check state machine diagram for what state to go to and what actions to take
-		if(event.eventType == EventType.RECEIVE_MOVE_REQUEST_UP && elevator.currentFloor != Constants.NUMBER_OF_FLOORS) {
-			return Constants.ELEVATOR_STATE_TWO;
-		} else if(event.eventType == EventType.RECEIVE_MOVE_REQUEST_DOWN && elevator.currentFloor != 1) {
-			return Constants.ELEVATOR_STATE_TWELVE;
+		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_UP) {
+			elevator.sendElevatorArrivingAtFloorMovingUp();
+			return Constants.ELEVATOR_STATE_THREE;
+		} else if(event.eventType == EventType.OPEN_DOOR) {
+			elevator.openElevatorDoor();
+			return Constants.ELEVATOR_STATE_FOUR;
 		}
 		// Will need handle more events eventually
 		
 		// Default to staying in same state
-		return Constants.ELEVATOR_STATE_ONE;
+		return Constants.ELEVATOR_STATE_TWO;
 	}
 	
 	@Override

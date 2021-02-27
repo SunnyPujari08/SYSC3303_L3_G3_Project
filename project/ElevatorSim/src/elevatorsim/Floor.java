@@ -1,4 +1,4 @@
-package ElevatorSim.src.elevatorsim;
+package elevatorsim;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
@@ -35,10 +35,10 @@ public class Floor implements Runnable {
         	File file = new File(filename);
             Scanner reader = new Scanner(file);
             rawData = reader.nextLine();
-            // System.out.println(rawData);
+            // Constants.formattedPrint(rawData);
             reader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File does not exist!");
+            Constants.formattedPrint("File does not exist!");
             e.printStackTrace();
         }
         return rawData;
@@ -61,7 +61,7 @@ public class Floor implements Runnable {
 
     public void sendEventToScheduler(EventData eData) {
     	eventList.add(eData);
-    	System.out.println("FLOOR: Event sent to scheduler.");
+    	Constants.formattedPrint("FLOOR: Event sent to scheduler.");
     }
 
     /*
@@ -77,16 +77,16 @@ public class Floor implements Runnable {
 		EventData currentEvent;
 		String currentLine, prevLine = "";
         while(true){
-			//System.out.println(Thread.currentThread().getName()	+ " reads a file");
+			//Constants.formattedPrint(Thread.currentThread().getName()	+ " reads a file");
 			//buffer writing should come here
 			currentLine = readEventFromTextFile(filename);
 			if(!currentLine.equals(prevLine)) {
-				System.out.println("Line read from text file: " + currentLine);
+				Constants.formattedPrint("Line read from text file: " + currentLine);
 				try {
 					currentEvent = convertTextEvent(currentLine);
 					sendEventToScheduler(currentEvent);
 				} catch (ParseException e) {
-					System.out.println("Error parsing text file.");
+					Constants.formattedPrint("Error parsing text file.");
 				}
 				prevLine = currentLine;
 			}

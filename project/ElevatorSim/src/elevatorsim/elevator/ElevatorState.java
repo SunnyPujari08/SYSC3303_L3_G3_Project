@@ -1,7 +1,9 @@
-package ElevatorSim.src.elevatorsim.elevator;
+package elevatorsim.elevator;
 
 import java.util.List;
 import elevatorsim.EventData;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This is an abstract class for all states in elevator state machine
@@ -57,15 +59,13 @@ public abstract class ElevatorState {
 	
     public EventData checkWorkFromScheduler(/*int destFloor*/) //throws InterruptedException
     {
-        // If there are events available
+        // If there are events available, return the first one
         if(elevator.eventList.size() > 0) {
         	EventData newEvent = elevator.eventList.remove(0);
         	return newEvent;
         } else {
         	return null;
         }
-
-
     }
     
     public void sendEventToScheduler(EventData eData)
@@ -73,9 +73,7 @@ public abstract class ElevatorState {
     	elevator.eventList.add(eData);
     }
     
-    public void formattedPrint(String toPrint) {
-    	// TODO add formatted print statement with thread & timestamp
-    }
+
     
 	private EventData checkForSensorEvents() {
 		// TODO create simulated sensor events

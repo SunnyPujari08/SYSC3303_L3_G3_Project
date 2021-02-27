@@ -1,4 +1,4 @@
-package ElevatorSim.src.elevatorsim;
+package elevatorsim;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,38 +17,53 @@ import java.util.ArrayList;
  * Then it waits for the event to be returned from the elevator and confirms that it has been acknowledged.
  */
 public class Scheduler {
-	
-
 	// private masterEventList ...
 	private List<List> masterFloorEventList = new ArrayList<>();
 	private List<List> masterElevatorEventList = new ArrayList<>();
+	private Thread[] floorThreads;
+	private Thread[] elevatorThreads;
 	
 	public Scheduler() {
-		this.setupLists();
-		this.setupThreads();
+		this.setupFloorLists();
+		this.setupElevatorLists();
+		this.setupElevatorThreads();
+		this.setupFloorThreads();
 	}
 
-	private void setupLists() {
-		// Create empty lists for each floor and each elevator
-		// TODO write for loop to create lists for multiple floors and elevators
-		List<EventData> floorEventList = Collections.synchronizedList(new ArrayList<>());
-		List<EventData> elevatorEventList = Collections.synchronizedList(new ArrayList<>());
-		// Create list of lists for floors and elevators
-		//TODO write for loop to add all lists to respective master lists
-		this.masterFloorEventList.add(floorEventList);
-		this.masterElevatorEventList.add(elevatorEventList);
+	private void setupFloorLists() {
+		for(int i = 0; i <= Constants.NUMBER_OF_FLOORS; i++) {
+			List<EventData> floorEventList = Collections.synchronizedList(new ArrayList<>());
+			this.masterFloorEventList.add(floorEventList);
+		}
 	}
 	
-	private void setupThreads() {
-		//TODO create specified number of threads in for loop
-		// For now just create one elevator and one floor
-		
-		Thread FloorOne, ElevatorOne;
-		//Each thread is given their own synchronized event list to pass events back and forth
-		FloorOne = new Thread(new Floor(1, this.masterFloorEventList.get(0)));
-		ElevatorOne = new Thread(new Elevator(1,this.masterElevatorEventList.get(0)));
-		FloorOne.start();
-		ElevatorOne.start();
+	private void setupElevatorLists() {
+		for(int i = 0; i <= Constants.NUMBER_OF_ELEVATORS; i++) {
+			List<EventData> elevatorEventList = Collections.synchronizedList(new ArrayList<>());
+			this.masterElevatorEventList.add(elevatorEventList);
+		}
+	}
+	
+	private void setupElevatorThreads() {
+		if(this.masterElevatorEventList.size() >= Constants.NUMBER_OF_ELEVATORS) {
+			for(int i = 0; i <= Constants.NUMBER_OF_ELEVATORS; i++) {
+				elevatorThreads[i] = new Thread(new Elevator(i+1, this.masterElevatorEventList.get(i)));
+			}
+			for(int i = 0; i <= Constants.NUMBER_OF_ELEVATORS; i++) {
+				elevatorThreads[i].start();
+			}
+		}
+	}
+	
+	private void setupFloorThreads() {
+		if(this.masterFloorEventList.size() >= Constants.NUMBER_OF_FLOORS) {
+			for(int i = 0; i <= Constants.NUMBER_OF_FLOORS; i++) {
+				floorThreads[i] = new Thread(new Floor(i+1, this.masterFloorEventList.get(i)));
+			}
+			for(int i = 0; i <= Constants.NUMBER_OF_FLOORS; i++) {
+				floorThreads[i].start();
+			}
+		}
 	}
 	
 	// Main function for project
@@ -57,17 +72,13 @@ public class Scheduler {
 		
 		EventData eventReadFromFloor;
 		EventData eventReadFromElevator;
-		
-		// For iteration 1 the scheduler just reads one event from the floor, writes that same event to the
-		// Elevator which changes the event type to acknowledged and writes it back to the scheduler.
-		// The scheduler then reads the event.
+
 		while(true) {
 			// TODO in future iterations
 			// for loop reading from each floor  and adding events to master list of floor events
 			// same thing for elevator events
 			// sort list
 			// send most pertinent events to floor/elevator
-			
 			// read floor event -> write event to elevator -> read event back from elevator
 			eventReadFromFloor = scheduler.readFromFloor(1);
 			if(eventReadFromFloor != null) {
@@ -76,15 +87,13 @@ public class Scheduler {
 				System.out.println("SCHEDULER: Event written to elevator.");
 				//TODO add timeout, or interrupt?
 				while(true) {
-					eventReadFromElevator = scheduler.readFromElevator(1);
+					eventReadFromElevator =    scheduler.readFromElevator(1);
 					if(eventReadFromElevator != null){
 						System.out.println("SCHEDULER: Event read from elevator.");
 						break;
 					}
-				}
-				
+				}                                                                                                                                                                                                                                                                                                                                                                  
 			}
-			
 		}
 	}
 	
