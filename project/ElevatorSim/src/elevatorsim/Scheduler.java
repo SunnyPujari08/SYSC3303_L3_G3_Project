@@ -28,6 +28,8 @@ public class Scheduler {
 		this.setupElevatorLists();
 		this.setupElevatorThreads();
 		this.setupFloorThreads();
+		
+		// TODO initialize states
 	}
 
 	private void setupFloorLists() {
@@ -80,44 +82,17 @@ public class Scheduler {
 			// sort list
 			// send most pertinent events to floor/elevator
 			// read floor event -> write event to elevator -> read event back from elevator
-			eventReadFromFloor = scheduler.readFromFloor(1);
-			if(eventReadFromFloor != null) {
-				System.out.println("SCHEDULER: Event read from floor.");
-				scheduler.writeToElevator(1, eventReadFromFloor);
-				System.out.println("SCHEDULER: Event written to elevator.");
-				//TODO add timeout, or interrupt?
+			
+			// TODO refactor to use states
 				while(true) {
-					eventReadFromElevator =    scheduler.readFromElevator(1);
-					if(eventReadFromElevator != null){
-						System.out.println("SCHEDULER: Event read from elevator.");
 						break;
-					}
 				}                                                                                                                                                                                                                                                                                                                                                                  
-			}
 		}
 	}
 	
 
 	
-	/*
-	 * Function reads from list related to specified elevator, for Iteration 1 it also checks that the event was acknowledged
-	 * 
-	 * Arguments:
-	 * elevatorNumber - Specifies which elevator to read from
-	 * Returns:
-	 * EventData - Returns one event if one exists and it has been acknowledged by the elevator or null if none exist
-	 */
-	public EventData readFromElevator(Integer elevatorNumber) {
-		//read from index of listOfLists
-		// Check that there is an event and that it has been acknowledged
-		if(masterElevatorEventList.size()>0 && (masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
-			if(((EventData)(masterElevatorEventList.get(0)).get(0)).eventType == EventType.ACK_FLOOR_BUTTON_PRESSED) {
-				EventData newEvent = (EventData)(masterElevatorEventList.get(0)).remove(0);
-				return newEvent;
-			}
-		}
-		return null;
-	}
+
 	
 	/* Function adds eventToWrite to list specified by floorNumber
 	 * NOT USED IN ITERATION 1
@@ -138,10 +113,22 @@ public class Scheduler {
 	public void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
 		(masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
 	}
-
-	// NOT USED IN ITERATION 1
-	private void sortEventList() {
-		
+	
+	public void sendUpRequestToElevator(int elevatorID, int floorNum) {
+		// TODO Create event and add it to the elevator's event list
+		Constants.formattedPrint("This is the action: SendUpRequestToElevator");
 	}
+	
+	public void sendDownRequestToElevator(int elevatorID, int floorNum) {
+		// TODO Create event and add it to the elevator's event list
+		Constants.formattedPrint("This is the action: SendDownRequestToElevator");
+	}
+	
+	public void sendResponseToFloor(int floorNum) {
+		// TODO Create event and add it to floor list
+		Constants.formattedPrint("This is the action: SendResponseToFloor");
+	}
+	
+
 
 }

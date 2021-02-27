@@ -38,7 +38,6 @@ public abstract class SchedulerState {
 				done = true;
 			}
 		}
-		
 		exitActions();
 		return nextState;
 	}

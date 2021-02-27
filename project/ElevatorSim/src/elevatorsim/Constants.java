@@ -21,6 +21,17 @@ public class Constants {
 	public static Integer ELEVATOR_STATE_ELEVEN = 10;
 	public static Integer ELEVATOR_STATE_TWELVE = 11;
 	
+	public static Integer SCHEDULER_STATE_IDLE = 0;
+	public static Integer SCHEDULER_STATE_ONE = 1;
+	public static Integer SCHEDULER_STATE_TWO = 2;
+	public static Integer SCHEDULER_STATE_THREE = 3;
+	public static Integer SCHEDULER_STATE_FOUR = 4;
+	public static Integer SCHEDULER_STATE_FIVE = 5;
+	public static Integer SCHEDULER_STATE_SIX = 6;
+	public static Integer SCHEDULER_STATE_SEVEN = 7;
+	public static Integer SCHEDULER_STATE_EIGHT = 8;
+	
+	
     public static void formattedPrint(String toPrint) {
     	// TODO add formatted print statement with thread & timestamp
     	String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());

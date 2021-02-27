@@ -1,4 +1,4 @@
-package ElevatorSim.src.elevatorsim.elevator;
+package elevatorsim.elevator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +21,7 @@ public class Elevator implements Runnable {
     public int elevatorID;
     public int currentFloor;
     public int destFloor;
-    public boolean isDoorOpen = False;
+    public boolean isDoorOpen = false;
     private int numOfStates = 12;
     public List<EventData> eventList;
     private ArrayList<ElevatorState> stateList;
@@ -32,7 +32,8 @@ public class Elevator implements Runnable {
         this.elevatorID = elevatorID;
         this.eventList = eventList;
         
-        // Create all the different states, each with access to eventList
+        
+        // TODO Create all the different states, each with access to eventList
         stateList = new ArrayList<ElevatorState>(numOfStates);
         stateList.set(Constants.ELEVATOR_STATE_ONE, new ElevatorStateOne(this));
         // stateList.set(Constants.ELEVATOR_STATE_TWO, new ElevatorStateTwo(this));
@@ -69,7 +70,7 @@ public class Elevator implements Runnable {
     public void openElevatorDoor() {
     	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
 
-    	isDoorOpen = True;
+    	isDoorOpen = true;
     	System.out.println("This is the action: OpenElevatorDoor");
 
     	Constants.formattedPrint("This is the action: OpenElevatorDoor");
@@ -78,7 +79,7 @@ public class Elevator implements Runnable {
     public void closeElevatorDoor() {
     	//CloseElevatorDoor - Close timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
 
-    	isDoorOpen = False;
+    	isDoorOpen = false;
     	System.out.println("This is the action: CloseElevatorDoor");
 
     	Constants.formattedPrint("This is the action: CloseElevatorDoor");
