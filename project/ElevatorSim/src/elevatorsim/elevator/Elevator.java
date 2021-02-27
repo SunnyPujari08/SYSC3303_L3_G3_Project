@@ -11,7 +11,7 @@ import elevatorsim.EventData;
  * Control System.
  *
  * @author Kashish Saxena - 101107204, Sunjeevani Pujari - 101110032, Ezra Pierce - 100991590
- * @version February 6, 2021
+ * @version February 27, 2021
  */
 
 public class Elevator implements Runnable {
