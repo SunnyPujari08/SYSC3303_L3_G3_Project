@@ -32,7 +32,7 @@ public class Elevator implements Runnable {
     public Elevator(int elevatorID, List<EventData> eventList) {
         this.elevatorID = elevatorID;
         this.eventList = eventList;
-
+        this.setupStateMachine();
     }
     
 
