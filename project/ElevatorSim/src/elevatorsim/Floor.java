@@ -79,6 +79,9 @@ public class Floor implements Runnable {
         while(true){
 			//Constants.formattedPrint(Thread.currentThread().getName()	+ " reads a file");
 			//buffer writing should come here
+        	// Check for external Event in list, remove
+        	// Send to scheduler
+        	
 			currentLine = readEventFromTextFile(filename);
 			if(!currentLine.equals(prevLine)) {
 				Constants.formattedPrint("Line read from text file: " + currentLine);

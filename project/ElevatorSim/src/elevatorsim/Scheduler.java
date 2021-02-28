@@ -50,6 +50,7 @@ public class Scheduler {
 		
 	    SchedulerState currentState= scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
+    	Constants.formattedPrint("Starting Scheduler SM.");
         while(true){
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
@@ -174,7 +175,7 @@ public class Scheduler {
 	}
 	
 	public EventData readFromAllFloors() {
-		for(int i = 1; i <= Constants.NUMBER_OF_FLOORS; i++) {
+		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 			if((masterFloorEventList.get(i)).size()>0) {
 				EventData newEvent = (EventData)(masterFloorEventList.get(i)).remove(0);
 				return newEvent;
@@ -188,13 +189,13 @@ public class Scheduler {
     	stateList = new ArrayList<SchedulerState>(numOfStates);
 		stateList.add(new SchedulerStateIdle(elevator, this));
 		stateList.add(new SchedulerStateOne(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_FIVE, new SchedulerStateFive(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(elevator, this));
-		stateList.set(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_FIVE, new SchedulerStateFive(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(elevator, this));
+		stateList.add(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(elevator, this));
 
 	}
 
