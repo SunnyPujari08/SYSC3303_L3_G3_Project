@@ -30,7 +30,7 @@ Contents List:
 
 Setup Instructions: 
 To get this all ready, open the package in the folder
-"src->ElevatorSim->src->elevatorsim->Scheduler.java", run this program then you'll
+"project->ElevatorSim->src->elevatorsim->Scheduler.java", run this program then you'll
 see how this program runs. If you want to see more you can look through each of
 the other classes we made for this program.
 
