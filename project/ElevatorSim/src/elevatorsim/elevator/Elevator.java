@@ -92,6 +92,23 @@ public class Elevator implements Runnable {
     	this.eventList.add(eData);
     }
     
+    public EventData checkWorkFromScheduler(/*int destFloor*/) //throws InterruptedException
+    {
+        // If there are events available, return the first one
+        if(eventList.size() > 0) {
+        	EventData newEvent = eventList.remove(0);
+        	return newEvent;
+        } else {
+        	return null;
+        }
+    }
+    
+	public EventData checkForSensorEvents() {
+		// TODO create simulated sensor events
+		// Check for sensor events, arriving at floor, button presses etc...
+		return null;
+	}
+    
     
     private void setupStateMachine() {
     	stateList = new ArrayList<ElevatorState>(numOfStates);

@@ -137,12 +137,57 @@ public class Scheduler {
 		}
 	}
 	
+	/*
+	 * Function reads from list related to specified floor, for Iteration 1 it also checks that the event was acknowledged
+	 * 
+	 * Arguments:
+	 * floorNumber - Specifies which floor to read from
+	 * Returns:
+	 * EventData - Returns one event if one exists or null if none exist
+	 */
+	public EventData readFromFloor(Integer floorNumber) {
+		//read from index of listOfLists
+		// Just one floor for iteration 1
+		if((masterFloorEventList.get(floorNumber-1)).size()>0) {
+			EventData newEvent = (EventData)(masterFloorEventList.get(0)).remove(0);
+			return newEvent;
+		}
+		return null;
+	}
+	
+	/*
+	 * Function reads from list related to specified elevator
+	 * 
+	 * Arguments:
+	 * elevatorNumber - Specifies which elevator to read from
+	 * Returns:
+	 * EventData - Returns one event if one exists and it has been acknowledged by the elevator or null if none exist
+	 */
+	public EventData readFromElevator(Integer elevatorNumber) {
+		//read from index of listOfLists
+		// Check that there is an event
+		if(masterElevatorEventList.size()>0 && (masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
+			EventData newEvent = (EventData)(masterElevatorEventList.get(0)).remove(0);
+			return newEvent;
+		}
+		return null;
+	}
+	
+	public EventData readFromAllFloors() {
+		for(int i = 1; i <= Constants.NUMBER_OF_FLOORS; i++) {
+			if((masterFloorEventList.get(i)).size()>0) {
+				EventData newEvent = (EventData)(masterFloorEventList.get(i)).remove(0);
+				return newEvent;
+			}
+		}
+		return null;
+	}
+	
 	private void setupStateMachine(Elevator elevator) {
 		// TODO instantiate all states
     	stateList = new ArrayList<SchedulerState>(numOfStates);
-		stateList.set(Constants.SCHEDULER_STATE_IDLE, new SchedulerStateIdle(elevator, this));
-		/**
-		stateList.set(Constants.SCHEDULER_STATE_ONE, new SchedulerStateOne(elevator, this));
+		stateList.add(new SchedulerStateIdle(elevator, this));
+		stateList.add(new SchedulerStateOne(elevator, this));
 		stateList.set(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(elevator, this));
 		stateList.set(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(elevator, this));
 		stateList.set(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(elevator, this));
@@ -150,7 +195,7 @@ public class Scheduler {
 		stateList.set(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(elevator, this));
 		stateList.set(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(elevator, this));
 		stateList.set(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(elevator, this));
-		**/
+
 	}
 
 

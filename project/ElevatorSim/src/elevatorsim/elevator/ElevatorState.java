@@ -33,13 +33,13 @@ public abstract class ElevatorState {
 		
 		// This loop will continuously check for new events and react accordingly
 		while(!done) {
-			event = this.checkWorkFromScheduler();
+			event = elevator.checkWorkFromScheduler();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				nextState = handleEvent(event);
 				done = true;
 			}
-			event = this.checkForSensorEvents();
+			event = elevator.checkForSensorEvents();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				nextState = handleEvent(event);
@@ -57,25 +57,6 @@ public abstract class ElevatorState {
 	public abstract void exitActions();
 		
 	
-    public EventData checkWorkFromScheduler(/*int destFloor*/) //throws InterruptedException
-    {
-        // If there are events available, return the first one
-        if(elevator.eventList.size() > 0) {
-        	EventData newEvent = elevator.eventList.remove(0);
-        	return newEvent;
-        } else {
-        	return null;
-        }
-    }
-    
 
-    
-
-    
-	private EventData checkForSensorEvents() {
-		// TODO create simulated sensor events
-		// Check for sensor events, arriving at floor, button presses etc...
-		return null;
-	}
 
 }
