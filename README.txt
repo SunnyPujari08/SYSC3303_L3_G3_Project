@@ -59,6 +59,7 @@ Ezra Pierce:
 
 Cameron Chung: 
 	- Implementation of Elevator state machine code
+	- Refactoring the Class and Sequence Diagram
 
 Kashish Saxena
 	- Implementation of the Elevator and Scheduler state machines
