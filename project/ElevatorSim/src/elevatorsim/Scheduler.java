@@ -188,13 +188,13 @@ public class Scheduler {
     	stateList = new ArrayList<SchedulerState>(numOfStates);
 		stateList.add(new SchedulerStateIdle(elevator, this));
 		stateList.add(new SchedulerStateOne(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_FIVE, new SchedulerStateFive(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(elevator, this));
-		stateList.set(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(elevator, this));
-		stateList.set(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_FIVE, new SchedulerStateFive(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(elevator, this));
+		stateList.add(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(elevator, this));
+		stateList.add(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(elevator, this));
 
 	}
 

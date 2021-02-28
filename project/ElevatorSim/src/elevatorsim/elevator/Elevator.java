@@ -32,13 +32,12 @@ public class Elevator implements Runnable {
     public Elevator(int elevatorID, List<EventData> eventList) {
         this.elevatorID = elevatorID;
         this.eventList = eventList;
-        this.setupStateMachine();
+        setupStateMachine();
     }
-    
-
 
     @Override
     public void run() {
+
     	ElevatorState currentState= stateList.get(startState);
     	int nextStateID;
         while(true){
@@ -112,18 +111,18 @@ public class Elevator implements Runnable {
     
     private void setupStateMachine() {
     	stateList = new ArrayList<ElevatorState>(numOfStates);
-        stateList.set(Constants.ELEVATOR_STATE_ONE, new ElevatorStateOne(this));
-        stateList.set(Constants.ELEVATOR_STATE_TWO, new ElevatorStateTwo(this));
-        stateList.set(Constants.ELEVATOR_STATE_THREE, new ElevatorStateThree(this));
-        stateList.set(Constants.ELEVATOR_STATE_FOUR, new ElevatorStateFour(this));
-        stateList.set(Constants.ELEVATOR_STATE_FIVE, new ElevatorStateFive(this));
-        stateList.set(Constants.ELEVATOR_STATE_SIX, new ElevatorStateSix(this));
-        stateList.set(Constants.ELEVATOR_STATE_SEVEN, new ElevatorStateSeven(this));
-        stateList.set(Constants.ELEVATOR_STATE_EIGHT, new ElevatorStateEight(this));
-        stateList.set(Constants.ELEVATOR_STATE_NINE, new ElevatorStateNine(this));
-        stateList.set(Constants.ELEVATOR_STATE_TEN, new ElevatorStateTen(this));
-        stateList.set(Constants.ELEVATOR_STATE_ELEVEN, new ElevatorStateEleven(this));
-        stateList.set(Constants.ELEVATOR_STATE_TWELVE, new ElevatorStateTwelve(this));
+        stateList.add(Constants.ELEVATOR_STATE_ONE, new ElevatorStateOne(this));
+        stateList.add(Constants.ELEVATOR_STATE_TWO, new ElevatorStateTwo(this));
+        stateList.add(Constants.ELEVATOR_STATE_THREE, new ElevatorStateThree(this));
+        stateList.add(Constants.ELEVATOR_STATE_FOUR, new ElevatorStateFour(this));
+        stateList.add(Constants.ELEVATOR_STATE_FIVE, new ElevatorStateFive(this));
+        stateList.add(Constants.ELEVATOR_STATE_SIX, new ElevatorStateSix(this));
+        stateList.add(Constants.ELEVATOR_STATE_SEVEN, new ElevatorStateSeven(this));
+        stateList.add(Constants.ELEVATOR_STATE_EIGHT, new ElevatorStateEight(this));
+        stateList.add(Constants.ELEVATOR_STATE_NINE, new ElevatorStateNine(this));
+        stateList.add(Constants.ELEVATOR_STATE_TEN, new ElevatorStateTen(this));
+        stateList.add(Constants.ELEVATOR_STATE_ELEVEN, new ElevatorStateEleven(this));
+        stateList.add(Constants.ELEVATOR_STATE_TWELVE, new ElevatorStateTwelve(this));
     }
 }
 
