@@ -10,7 +10,7 @@ public class SchedulerStateIdle extends SchedulerState {
 	
 	@Override
 	public int handleEvent(EventData event) {
-		
+		Constants.formattedPrint("S-IDLE picked up an event.");
 		if(event.eventType == EventType.ELEVATOR_PICK_FLOOR) {
 			if(elevator.currentFloor < event.destinationFloor) {
 				// Move up

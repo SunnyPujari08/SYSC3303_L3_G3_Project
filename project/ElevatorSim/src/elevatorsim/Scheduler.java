@@ -50,6 +50,7 @@ public class Scheduler {
 		
 	    SchedulerState currentState= scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
+    	Constants.formattedPrint("Starting Scheduler SM.");
         while(true){
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
@@ -174,7 +175,7 @@ public class Scheduler {
 	}
 	
 	public EventData readFromAllFloors() {
-		for(int i = 1; i <= Constants.NUMBER_OF_FLOORS; i++) {
+		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 			if((masterFloorEventList.get(i)).size()>0) {
 				EventData newEvent = (EventData)(masterFloorEventList.get(i)).remove(0);
 				return newEvent;
