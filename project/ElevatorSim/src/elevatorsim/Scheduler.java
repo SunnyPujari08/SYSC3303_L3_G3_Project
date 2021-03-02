@@ -184,13 +184,11 @@ public class Scheduler {
 		//read from index of listOfLists
 		// Check that there is an event
 			for(int i = 0; i < (this.masterElevatorEventList.get(elevatorNumber-1)).size(); i++){
-				if(this.masterElevatorEventList.size()>0 && (this.masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
-					if(!((EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).get(i)).fromScheduler){
+				if(this.masterElevatorEventList.size()>0 && (this.masterElevatorEventList.get(elevatorNumber-1)).size()>0 && !((EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).get(i)).fromScheduler) {
 						EventData newEvent = (EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).remove(i);
 						return newEvent;
 					}
 			}	
-		}
 		return null;
 	}
 	
