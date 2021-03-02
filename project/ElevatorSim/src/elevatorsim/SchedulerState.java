@@ -28,12 +28,14 @@ public abstract class SchedulerState {
 			event = scheduler.readFromAllFloors();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
+				Constants.formattedPrint("Scheduler picked up event: " + String.valueOf(event.eventType));
 				nextState = handleEvent(event);
 				done = true;
 			}
-			event = scheduler.readFromElevator(elevator.elevatorID);
+			event = scheduler.readFromElevator(this.elevator.elevatorID);
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
+				Constants.formattedPrint("Scheduler picked up event: " + String.valueOf(event.eventType));
 				nextState = handleEvent(event);
 				done = true;
 			}

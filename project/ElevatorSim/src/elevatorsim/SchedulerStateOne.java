@@ -10,8 +10,8 @@ public class SchedulerStateOne extends SchedulerState {
 
 	@Override
 	public int handleEvent(EventData event) {
-		Constants.formattedPrint("S-ONE picked up event.");
 		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_DOWN) {
+			System.out.println("Floornum: " + String.valueOf(event.floorNum));
 			scheduler.sendResponseToFloor(event.floorNum);
 			return Constants.SCHEDULER_STATE_THREE;
 		}

@@ -27,6 +27,7 @@ public class Scheduler {
 	private Elevator[] elevators;
 	private Thread[] floorThreads;
 	private Thread[] elevatorThreads;
+	private Thread buttonSimulator;
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_IDLE;
@@ -39,11 +40,13 @@ public class Scheduler {
 		
 		this.setupFloorLists();
 		this.setupElevatorLists();
+		this.setupButtonSimulator();
 		this.setupElevatorThreads();
 		this.setupFloorThreads();
 		this.setupStateMachine(elevators[0]);
 	}
 	
+
 	// Main function for project
 	public static void main(String[] args) {
 		Scheduler scheduler = new Scheduler();
@@ -54,6 +57,7 @@ public class Scheduler {
         while(true){
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
+        	Constants.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
         	if(nextStateID < 0) { break;}
         	currentState = scheduler.stateList.get(nextStateID);                                                                                                                                                                                                                                                                                                                                                                
 		}
@@ -67,7 +71,8 @@ public class Scheduler {
 	 * eventToWrite - Event object to be added to list
 	 */
 	public void writeToFloor(Integer floorNumber, EventData eventToWrite) {
-		(masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
+		eventToWrite.fromScheduler = true;
+		(this.masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
 	}
 	
 	/* Function adds eventToWrite to list specified by elevatorNumber
@@ -77,7 +82,8 @@ public class Scheduler {
 	 * eventToWrite - Event object to be added to list
 	 */
 	public void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
-		(masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
+		eventToWrite.fromScheduler = true;
+		(this.masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
 	}
 	
 	public void sendUpRequestToElevator(int elevatorID, int destinationFloor) {
@@ -90,7 +96,7 @@ public class Scheduler {
 		// TODO Create event and add it to the elevator's event list
 		EventData reqEvent = new EventData(EventType.MOVE_REQUEST_DOWN, destinationFloor);
 		this.writeToElevator(elevatorID, reqEvent);
-		Constants.formattedPrint("This is the action: SendDownRequestToElevator");
+		Constants.formattedPrint("This is the action: SendDownRequestToElevator: " + String.valueOf(destinationFloor));
 	}
 	
 	public void sendResponseToFloor(int floorNum) {
@@ -102,7 +108,7 @@ public class Scheduler {
 	
 	
 	private void setupFloorLists() {
-		for(int i = 0; i <= Constants.NUMBER_OF_FLOORS; i++) {
+		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 			List<EventData> floorEventList = Collections.synchronizedList(new ArrayList<>());
 			this.masterFloorEventList.add(floorEventList);
 		}
@@ -138,6 +144,12 @@ public class Scheduler {
 		}
 	}
 	
+	private void setupButtonSimulator() {
+		buttonSimulator = new Thread(new buttonSimulator(this.masterFloorEventList, this.masterElevatorEventList));
+		buttonSimulator.start();
+	}
+	
+	
 	/*
 	 * Function reads from list related to specified floor, for Iteration 1 it also checks that the event was acknowledged
 	 * 
@@ -146,12 +158,16 @@ public class Scheduler {
 	 * Returns:
 	 * EventData - Returns one event if one exists or null if none exist
 	 */
-	public EventData readFromFloor(Integer floorNumber) {
+	public synchronized EventData readFromFloor(Integer floorNumber) {
 		//read from index of listOfLists
 		// Just one floor for iteration 1
-		if((masterFloorEventList.get(floorNumber-1)).size()>0) {
-			EventData newEvent = (EventData)(masterFloorEventList.get(0)).remove(0);
-			return newEvent;
+		if((this.masterFloorEventList.get(floorNumber-1)).size()>0) {
+			for(int i = 0; i < (this.masterFloorEventList.get(floorNumber-1)).size(); i++){
+				if(!((EventData)(this.masterFloorEventList.get(0)).get(i)).fromScheduler){
+					EventData newEvent = (EventData)(this.masterFloorEventList.get(0)).remove(i);
+					return newEvent;
+				}
+			}
 		}
 		return null;
 	}
@@ -164,21 +180,30 @@ public class Scheduler {
 	 * Returns:
 	 * EventData - Returns one event if one exists and it has been acknowledged by the elevator or null if none exist
 	 */
-	public EventData readFromElevator(Integer elevatorNumber) {
+	public synchronized EventData readFromElevator(Integer elevatorNumber) {
 		//read from index of listOfLists
 		// Check that there is an event
-		if(masterElevatorEventList.size()>0 && (masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
-			EventData newEvent = (EventData)(masterElevatorEventList.get(0)).remove(0);
-			return newEvent;
+			for(int i = 0; i < (this.masterElevatorEventList.get(elevatorNumber-1)).size(); i++){
+				if(this.masterElevatorEventList.size()>0 && (this.masterElevatorEventList.get(elevatorNumber-1)).size()>0) {
+					if(!((EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).get(i)).fromScheduler){
+						EventData newEvent = (EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).remove(i);
+						return newEvent;
+					}
+			}	
 		}
 		return null;
 	}
 	
-	public EventData readFromAllFloors() {
+	public synchronized EventData readFromAllFloors() {
 		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-			if((masterFloorEventList.get(i)).size()>0) {
-				EventData newEvent = (EventData)(masterFloorEventList.get(i)).remove(0);
-				return newEvent;
+			if((this.masterFloorEventList.get(i)).size()>0) {
+				for(int j = 0; j < (this.masterFloorEventList.get(i)).size(); j++){
+					//System.out.println(String.valueOf(((EventData)(masterFloorEventList.get(i)).get(j)).simulated));
+					if(!((EventData)(this.masterFloorEventList.get(i)).get(j)).fromScheduler){
+						EventData newEvent = (EventData)(this.masterFloorEventList.get(i)).remove(j);
+						return newEvent;
+					}
+				}
 			}
 		}
 		return null;

@@ -23,10 +23,16 @@ public class ElevatorStateTwo extends ElevatorState {
 	public int handleEvent(EventData event) {
 		// Check state machine diagram for what state to go to and what actions to take
 		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_UP) {
+			elevator.currentFloor = event.floorNum;
 			elevator.sendElevatorArrivingAtFloorMovingUp(event.floorNum);
-			return Constants.ELEVATOR_STATE_THREE;
+			if(event.floorNum < elevator.destFloor) {
+				return Constants.ELEVATOR_STATE_TWO;
+			} else {
+				return Constants.ELEVATOR_STATE_FOUR;
+			}
+			
 		} else if(event.eventType == EventType.OPEN_DOOR) {
-			elevator.openElevatorDoor();
+			
 			return Constants.ELEVATOR_STATE_FOUR;
 		}
 		// Will need handle more events eventually
@@ -40,7 +46,8 @@ public class ElevatorStateTwo extends ElevatorState {
 	 * This method should only perform actions that will happen every single time this state is entered
 	 */
 	public void entranceActions() {
-		// Perform all entrance actions
+		// Perform all entrance action
+		elevator.moveUpOneFloor();
 		return;
 	}
 

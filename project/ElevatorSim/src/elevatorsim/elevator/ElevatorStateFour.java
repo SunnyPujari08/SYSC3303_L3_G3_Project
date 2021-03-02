@@ -37,6 +37,7 @@ public class ElevatorStateFour extends ElevatorState {
 	 * This method should only perform actions that will happen every single time this state is entered
 	 */
 	public void entranceActions() {
+		elevator.openElevatorDoor();
 		// Perform all entrance actions
 		return;
 	}

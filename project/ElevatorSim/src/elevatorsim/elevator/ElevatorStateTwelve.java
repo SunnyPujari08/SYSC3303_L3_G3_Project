@@ -22,6 +22,17 @@ public class ElevatorStateTwelve extends ElevatorState {
 	 */
 	public int handleEvent(EventData event) {
 		// Check state machine diagram for what state to go to and what actions to take
+		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_DOWN) {
+			elevator.currentFloor = event.floorNum;
+			elevator.sendElevatorArrivingAtFloorMovingDown(event.floorNum);
+			System.out.println("CF: " + String.valueOf(elevator.currentFloor));
+			System.out.println("DF: " + String.valueOf(elevator.destFloor));
+			if(elevator.currentFloor == elevator.destFloor) {
+				return Constants.ELEVATOR_STATE_FOUR;
+			} else {
+				return Constants.ELEVATOR_STATE_TWELVE;
+			}
+		}
 		if(event.eventType == EventType.OPEN_DOOR) {
 			elevator.openElevatorDoor();
 			return Constants.ELEVATOR_STATE_FOUR;
@@ -29,6 +40,7 @@ public class ElevatorStateTwelve extends ElevatorState {
 		// Will need handle more events eventually
 		
 		// Default to staying in same state
+		System.out.println("e12 default");
 		return Constants.ELEVATOR_STATE_TWELVE;
 	}
 	
@@ -38,7 +50,7 @@ public class ElevatorStateTwelve extends ElevatorState {
 	 */
 	public void entranceActions() {
 		// Perform all entrance actions
-		return;
+		elevator.moveDownOneFloor();
 	}
 
 	@Override

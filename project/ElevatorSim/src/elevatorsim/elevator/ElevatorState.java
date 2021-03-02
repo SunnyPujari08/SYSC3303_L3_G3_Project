@@ -1,6 +1,8 @@
 package elevatorsim.elevator;
 
 import java.util.List;
+
+import elevatorsim.Constants;
 import elevatorsim.EventData;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,12 +38,14 @@ public abstract class ElevatorState {
 			event = elevator.checkWorkFromScheduler();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
+				Constants.formattedPrint("Elevator picked up event: " + String.valueOf(event.eventType));
 				nextState = handleEvent(event);
 				done = true;
 			}
 			event = elevator.checkForSensorEvents();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
+				Constants.formattedPrint("Elevator picked up event: " + String.valueOf(event.eventType));
 				nextState = handleEvent(event);
 				done = true;
 			}

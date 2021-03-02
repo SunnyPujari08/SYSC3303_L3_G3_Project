@@ -10,8 +10,8 @@ public class SchedulerStateThree extends SchedulerState {
 
 	@Override
 	public int handleEvent(EventData event) {
-		Constants.formattedPrint("S-THREE picked up event.");
 		if(event.eventType == EventType.ELEVATOR_PICK_FLOOR) {
+			elevator.destFloor = event.destinationFloor;
 			if(elevator.currentFloor > elevator.destFloor) {
 				scheduler.sendDownRequestToElevator(elevator.elevatorID, elevator.destFloor);
 				return Constants.SCHEDULER_STATE_FIVE;

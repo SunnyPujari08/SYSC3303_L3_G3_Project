@@ -16,9 +16,9 @@ import java.util.Scanner;
  *
  */
 public class Floor implements Runnable {
-	private static Scheduler scheduler;
-	private static int floorNum;
-	private static String filename = "input.txt";
+	private Scheduler scheduler;
+	private int floorNum;
+	//private static String filename = "input.txt";
 	private List<EventData> eventList;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
@@ -26,7 +26,7 @@ public class Floor implements Runnable {
     
     public Floor(int floorNum, List<EventData> floorEventList) {
     	this.floorNum = floorNum;
-    	eventList = floorEventList;
+    	this.eventList = floorEventList;
     }
 	
     public static String readEventFromTextFile(String filename) {
@@ -60,8 +60,23 @@ public class Floor implements Runnable {
     }
 
     public void sendEventToScheduler(EventData eData) {
-    	eventList.add(eData);
+    	eData.fromScheduler = false;
+		eData.floorNum = this.floorNum;
+    	this.eventList.add(eData);
     	Constants.formattedPrint("FLOOR: Event sent to scheduler.");
+    }
+    
+    public synchronized EventData checkForEvents(){
+        // If there are events available, return the first one
+	        if(this.eventList.size() > 0) {
+	        	for(int i = 0; i < this.eventList.size(); i++) {
+	        		if(this.eventList.get(i).fromScheduler) {
+	        			EventData newEvent = this.eventList.remove(i);
+	    	        	return newEvent;
+	        		}
+	        	}
+	        } 
+	   return null;
     }
 
     /*
@@ -74,29 +89,19 @@ public class Floor implements Runnable {
     */
     
 	public void run() {
-		EventData currentEvent;
-		String currentLine, prevLine = "";
+		EventData event;
         while(true){
-			//Constants.formattedPrint(Thread.currentThread().getName()	+ " reads a file");
-			//buffer writing should come here
-        	// Check for external Event in list, remove
-        	// Send to scheduler
-        	
-			currentLine = readEventFromTextFile(filename);
-			if(!currentLine.equals(prevLine)) {
-				Constants.formattedPrint("Line read from text file: " + currentLine);
-				try {
-					currentEvent = convertTextEvent(currentLine);
-					sendEventToScheduler(currentEvent);
-				} catch (ParseException e) {
-					Constants.formattedPrint("Error parsing text file.");
-				}
-				prevLine = currentLine;
-			}
-			
-			try {
-				Thread.sleep(1000);		//Sleep for 1 second
-			} catch (InterruptedException e) {}
+        	event = this.checkForEvents();
+        	if(event != null) {
+        		// Should only add button presses to event list
+        		if(event.fromScheduler) {
+        			event.fromScheduler = false;
+        			if(event.eventType == EventType.FLOOR_REQUEST || event.eventType == EventType.FLOOR_REQUEST_UP || event.eventType == EventType.FLOOR_REQUEST_DOWN) {
+        				event.eventType = EventType.FLOOR_REQUEST;
+        				this.sendEventToScheduler(event);
+        			}
+        		}
+        	}
         }
 	}
 }

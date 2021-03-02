@@ -2,6 +2,8 @@ package elevatorsim;
 
 public enum EventType {
 	  FLOOR_REQUEST,
+	  FLOOR_REQUEST_UP,
+	  FLOOR_REQUEST_DOWN,
 	  MOVE_REQUEST_UP,
 	  MOVE_REQUEST_DOWN,
 	  ELEVATOR_ARR_FLOOR_UP,

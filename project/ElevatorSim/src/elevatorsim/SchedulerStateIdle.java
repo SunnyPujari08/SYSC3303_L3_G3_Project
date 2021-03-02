@@ -10,7 +10,6 @@ public class SchedulerStateIdle extends SchedulerState {
 	
 	@Override
 	public int handleEvent(EventData event) {
-		Constants.formattedPrint("S-IDLE picked up an event.");
 		if(event.eventType == EventType.ELEVATOR_PICK_FLOOR) {
 			if(elevator.currentFloor < event.destinationFloor) {
 				// Move up
@@ -26,8 +25,10 @@ public class SchedulerStateIdle extends SchedulerState {
 			if(elevator.currentFloor < event.floorNum) {
 				// Move up
 				scheduler.sendUpRequestToElevator(elevator.elevatorID, event.floorNum);
+				
 				return Constants.SCHEDULER_STATE_TWO;
 			} else {
+				System.out.println("here" + String.valueOf(event.floorNum));
 				scheduler.sendDownRequestToElevator(elevator.elevatorID, event.floorNum);
 				return Constants.SCHEDULER_STATE_ONE;
 			}
