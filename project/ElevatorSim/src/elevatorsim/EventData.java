@@ -56,11 +56,9 @@ public class EventData {
 	}
 	
 	// Constructor for floor events
-	public EventData(Date timestamp, int floorNum, boolean upButton, boolean downButton, EventType eventType, int destinationFloor) {
+	public EventData(Date timestamp, int floorNum, EventType eventType, int destinationFloor) {
 		this.timestamp = timestamp;
 		this.floorNum = floorNum;
-		this.upButton = upButton;
-		this.downButton = downButton;
 		this.eventType = eventType;
 		this.destinationFloor = destinationFloor;
 		this.fromScheduler = false;

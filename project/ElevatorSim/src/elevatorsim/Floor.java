@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -28,15 +29,14 @@ public class Floor implements Runnable {
 	
 	private Scheduler scheduler;
 	private int floorNum;
-	//private static String filename = "input.txt";
+	private final static String FILENAME = "events.txt";
 	private List<EventData> eventList;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
     private int lamp;
     
-    public Floor(int floorNum, List<EventData> floorEventList) {
+    public Floor(int floorNum) {
     	this.floorNum = floorNum;
-    	this.eventList = floorEventList;
     	try {
 			networkSocket = new DatagramSocket();
 		} catch (SocketException e) {
@@ -44,17 +44,20 @@ public class Floor implements Runnable {
 		}
     }
 	
-    public static String[] readEventFromTextFile(String filename) {
-    	String[] rawData;
-    	int i = 0;
+    public String readEventFromTextFile(String filename) {
+    	String rawData = "";
         try {
         	File file = new File(filename);
             Scanner reader = new Scanner(file);
-            while (reader.hasNextLine() & i< 100) {
-            	rawData[i]= reader.nextLine();
-            	i++;
+            while (reader.hasNextLine()) {
+            	String next = reader.nextLine();
+            	String[] eInfo = next.split(" ");
+            	int floor = Integer.parseInt(eInfo[1]);
+            	if (floor == floorNum) {
+            		rawData += next;
+            		rawData += ";";
+            	}
             }
-            // Constants.formattedPrint(rawData);
             reader.close();
         } catch (FileNotFoundException e) {
             Constants.formattedPrint("File does not exist!");
@@ -63,45 +66,27 @@ public class Floor implements Runnable {
         return rawData;
     }
 
-    public EventData[] convertTextEvent(String[] rawData) throws ParseException {
-    	EventData[] eData = new EventData[rawData.length]; 
-    	for (int i = 0; i < rawData.length;i++) {
-    		String[] eInfo = rawData[i].split(" ");
+    public static EventData[] convertTextEvent(String rawData) throws ParseException {
+    	String[] eString = rawData.split(";");
+    	
+    	EventData[] eData = new EventData[eString.length]; 
+    	for (int i = 0; i < eString.length; i++) {
+    		String[] eInfo = eString[i].split(" ");
     		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
         	Date timeStamp = dateFormat.parse(eInfo[0]);
+        	EventType eType = null;
         	int floorNum = Integer.parseInt(eInfo[1]);
         	if (eInfo[2].equals("Up"))
-        		UP_BUTTON = true;
-        	if (eInfo[2].equals("Down"))
-        		DOWN_BUTTON = true;
+        		eType = EventType.FLOOR_REQUEST_UP;
+        	else if (eInfo[2].equals("Down"))
+        		eType = EventType.FLOOR_REQUEST_DOWN;
         	int destination = Integer.parseInt(eInfo[3]);
-        	
-        	eData[i] = new EventData(timeStamp, floorNum, UP_BUTTON, DOWN_BUTTON, EventType.FLOOR_REQUEST);
+        	eData[i] = new EventData(timeStamp, floorNum, eType, destination);
     	}
     	
     	return eData;
     }
-
-    public void sendEventToScheduler(EventData eData) {
-    	eData.fromScheduler = false;
-		eData.floorNum = this.floorNum;
-    	this.eventList.add(eData);
-    	Constants.formattedPrint("FLOOR: Event sent to scheduler.");
-    }
     
-    public synchronized EventData checkForEvents(){
-        // If there are events available, return the first one
-	        if(this.eventList.size() > 0) {
-	        	for(int i = 0; i < this.eventList.size(); i++) {
-	        		if(this.eventList.get(i).fromScheduler) {
-	        			EventData newEvent = this.eventList.remove(i);
-	    	        	return newEvent;
-	        		}
-	        	}
-	        } 
-	   return null;
-    }
-
     /*
     public EventData readFromScheduler() {
     	// Check if empty
@@ -161,28 +146,14 @@ public class Floor implements Runnable {
 		int len = p.getLength();
 		String dataString = new String(p.getData(), 0, len);
 		
-		System.out.println("From host: " + p.getAddress());
-		System.out.println("Host port: " + p.getPort());
-		System.out.println("Length: " + len);
-		System.out.println("Data in bytes: " + p.getData());
-		System.out.println("Data in string: " + dataString);
-		System.out.println();
+		Constants.formattedPrint("Data in string: " + dataString);
     }
     
 	public void run() {
-		EventData event;
-        while(true){
-        	event = this.checkForEvents();
-        	if(event != null) {
-        		// Should only add button presses to event list
-        		if(event.fromScheduler) {
-        			event.fromScheduler = false;
-        			if(event.eventType == EventType.FLOOR_REQUEST || event.eventType == EventType.FLOOR_REQUEST_UP || event.eventType == EventType.FLOOR_REQUEST_DOWN) {
-        				event.eventType = EventType.FLOOR_REQUEST;
-        				this.sendEventToScheduler(event);
-        			}
-        		}
-        	}
-        }
+		String rawData = readEventFromTextFile(FILENAME);
+		if (rawData.length() > 0)
+			formPacket(rawData);
+		while (packetOut != null)
+			rpc_send();
 	}
 }

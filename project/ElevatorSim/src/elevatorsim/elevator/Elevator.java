@@ -6,6 +6,9 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,12 +37,12 @@ public class Elevator implements Runnable {
     public int destFloor;
     public boolean isDoorOpen = false;
     private int numOfStates = 12;
-    public List<EventData> eventList;
+    public List<EventData> eventList = new ArrayList<EventData>();;
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
 
 
-    public Elevator(int elevatorID, List<EventData> eventList) {
+    public Elevator(int elevatorID) {
     	try {
 			networkSocket = new DatagramSocket();
 		} catch (SocketException e) {
@@ -47,17 +50,18 @@ public class Elevator implements Runnable {
 		}
     	
         this.elevatorID = elevatorID;
-        this.eventList = eventList;
         this.currentFloor = 2;
         setupStateMachine();
     }
 
     @Override
     public void run() {
-
     	ElevatorState currentState= stateList.get(startState);
     	int nextStateID;
         while(true){
+        	formPacket(String.valueOf(elevatorID));
+        	rpc_send();
+        	
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
         	Constants.formattedPrint("Elevator moving to state " + String.valueOf(nextStateID + 1));
@@ -212,9 +216,24 @@ public class Elevator implements Runnable {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
+		System.out.println("HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
-		Floor.printPacketInfo(packetIn);
+		
+		int len = packetIn.getLength();
+		String dataString = new String(packetIn.getData(), 0, len);
+		addEvents(dataString);
+    }
+    
+    private void addEvents(String rawData) {
+    	String[] eString = rawData.split(";");
+    	
+    	EventData[] eData = new EventData[eString.length]; 
+    	for (int i = 0; i < eString.length; i++) {
+    		String[] eInfo = eString[i].split(" ");
+    		
+        	int floorNum = Integer.parseInt(eInfo[1]);
+        	eventList.add(new EventData(EventType.ELEVATOR_PICK_FLOOR, floorNum, true));
+    	}
     }
 }
 

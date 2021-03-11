@@ -7,7 +7,6 @@ import java.util.List;
 import elevatorsim.elevator.Elevator;
 import elevatorsim.elevator.ElevatorState;
 import elevatorsim.elevator.ElevatorStateOne;
-import src.Client;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -15,6 +14,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +30,7 @@ public class Scheduler {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
 	private DatagramPacket receivePacket, replyPacket;
 	private DatagramSocket receiveSocket, replySocket;	// Socket for receiving and replying
-	
+
 	// private masterEventList ...
 	public List<List> masterFloorEventList = new ArrayList<>();
 	public List<List> masterElevatorEventList = new ArrayList<>();
@@ -42,6 +42,7 @@ public class Scheduler {
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_IDLE;
+	private List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
 	
 	public Scheduler() {
 		floors = new Floor[Constants.NUMBER_OF_FLOORS];
@@ -59,7 +60,7 @@ public class Scheduler {
 		
 		this.setupFloorLists();
 		this.setupElevatorLists();
-		this.setupButtonSimulator();
+		//this.setupButtonSimulator();
 		this.setupElevatorThreads();
 		this.setupFloorThreads();
 		this.setupStateMachine(elevators[0]);
@@ -67,20 +68,37 @@ public class Scheduler {
 	
 
 	// Main function for project
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		Scheduler scheduler = new Scheduler();
 		
 	    SchedulerState currentState= scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
     	Constants.formattedPrint("Starting Scheduler SM.");
         while(true){
+        	int receivePort = scheduler.receive();
+        	int len = scheduler.receivePacket.getLength();
+        	String dataString = new String(scheduler.receivePacket.getData(), 0, len);
+        	// this is when message is from an elevator
+        	try {
+        		int i = Integer.parseInt(dataString);
+        		if (scheduler.rawEvents.size() > 0) {
+            		scheduler.formReplyPacket(scheduler.rawEvents.remove(0), receivePort);
+            		scheduler.reply();
+        		}
+        	// this is when message is from a floor
+        	} catch (NumberFormatException e) {
+        		scheduler.formReplyPacket("Data received from scheduler", receivePort);
+            	scheduler.reply();
+            	scheduler.rawEvents.add(dataString);
+        	}
+        	
         	// .run() call will block until state change occurs
-        	nextStateID = currentState.run();
-        	Constants.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
-        	if(nextStateID < 0) { break;}
-        	currentState = scheduler.stateList.get(nextStateID);                                                                                                                                                                                                                                                                                                                                                                
+        	//nextStateID = currentState.run();
+        	//Constants.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
+        	//if(nextStateID < 0) { break;}
+        	//currentState = scheduler.stateList.get(nextStateID);                                                                                                                                                                                                                                                                                                                                                                
 		}
-		Constants.formattedPrint("Scheduler state machine failed, thread exiting.");
+		//Constants.formattedPrint("Scheduler state machine failed, thread exiting.");
 	}
 	
 	/* Function adds eventToWrite to list specified by floorNumber
@@ -143,7 +161,7 @@ public class Scheduler {
 	private void setupElevatorThreads() {
 		if(this.masterElevatorEventList.size() >= Constants.NUMBER_OF_ELEVATORS) {
 			for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
-				elevators[i] = new Elevator(i+1, this.masterElevatorEventList.get(i));
+				elevators[i] = new Elevator(i+1);
 				elevatorThreads[i] = new Thread(elevators[i]);
 			}
 			for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
@@ -155,7 +173,7 @@ public class Scheduler {
 	private void setupFloorThreads() {
 		if(this.masterFloorEventList.size() >= Constants.NUMBER_OF_FLOORS) {
 			for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-				floorThreads[i] = new Thread(new Floor(i+1, this.masterFloorEventList.get(i)));
+				floorThreads[i] = new Thread(new Floor(i+1));
 			}
 			for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 				floorThreads[i].start();
