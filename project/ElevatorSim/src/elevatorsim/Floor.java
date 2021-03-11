@@ -18,7 +18,7 @@ import java.util.Scanner;
 /**
  * This class represent a floor thread
  * 
- * @author Jeong Won Kim
+ * @author Jeong Won Kim, Sunjeevani Pujari - 101110032
  *
  */
 public class Floor implements Runnable {
@@ -44,12 +44,16 @@ public class Floor implements Runnable {
 		}
     }
 	
-    public static String readEventFromTextFile(String filename) {
-    	String rawData = "";
+    public static String[] readEventFromTextFile(String filename) {
+    	String[] rawData;
+    	int i = 0;
         try {
         	File file = new File(filename);
             Scanner reader = new Scanner(file);
-            rawData = reader.nextLine();
+            while (reader.hasNextLine() & i< 100) {
+            	rawData[i]= reader.nextLine();
+            	i++;
+            }
             // Constants.formattedPrint(rawData);
             reader.close();
         } catch (FileNotFoundException e) {
@@ -59,18 +63,22 @@ public class Floor implements Runnable {
         return rawData;
     }
 
-    public EventData convertTextEvent(String rawData) throws ParseException {
-    	String[] eInfo = rawData.split(" ");
-    	DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
-    	Date timeStamp = dateFormat.parse(eInfo[0]);
-    	int floorNum = Integer.parseInt(eInfo[1]);
-    	if (eInfo[2].equals("Up"))
-    		UP_BUTTON = true;
-    	if (eInfo[2].equals("Down"))
-    		DOWN_BUTTON = true;
-    	int destination = Integer.parseInt(eInfo[3]);
+    public EventData[] convertTextEvent(String[] rawData) throws ParseException {
+    	EventData[] eData = new EventData[rawData.length]; 
+    	for (int i = 0; i < rawData.length;i++) {
+    		String[] eInfo = rawData[i].split(" ");
+    		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
+        	Date timeStamp = dateFormat.parse(eInfo[0]);
+        	int floorNum = Integer.parseInt(eInfo[1]);
+        	if (eInfo[2].equals("Up"))
+        		UP_BUTTON = true;
+        	if (eInfo[2].equals("Down"))
+        		DOWN_BUTTON = true;
+        	int destination = Integer.parseInt(eInfo[3]);
+        	
+        	eData[i] = new EventData(timeStamp, floorNum, UP_BUTTON, DOWN_BUTTON, EventType.FLOOR_REQUEST);
+    	}
     	
-    	EventData eData = new EventData(timeStamp, floorNum, UP_BUTTON, DOWN_BUTTON, EventType.FLOOR_REQUEST);
     	return eData;
     }
 
