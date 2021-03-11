@@ -7,7 +7,14 @@ import java.util.List;
 import elevatorsim.elevator.Elevator;
 import elevatorsim.elevator.ElevatorState;
 import elevatorsim.elevator.ElevatorStateOne;
+import src.Client;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -20,6 +27,10 @@ import java.util.ArrayList;
  * Then it waits for the event to be returned from the elevator and confirms that it has been acknowledged.
  */
 public class Scheduler {
+	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
+	private DatagramPacket receivePacket, replyPacket;
+	private DatagramSocket receiveSocket, replySocket;	// Socket for receiving and replying
+	
 	// private masterEventList ...
 	public List<List> masterFloorEventList = new ArrayList<>();
 	public List<List> masterElevatorEventList = new ArrayList<>();
@@ -37,6 +48,14 @@ public class Scheduler {
 		elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
 		floorThreads = new Thread[Constants.NUMBER_OF_FLOORS];
 		elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
+		
+		try {
+			receiveSocket = new DatagramSocket(101);
+			replySocket = new DatagramSocket();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		this.setupFloorLists();
 		this.setupElevatorLists();
@@ -222,5 +241,48 @@ public class Scheduler {
 
 	}
 
-
+    /**
+     * Below: UDP functions===================================================================
+     */
+	
+	private synchronized int receive() {
+		byte receivedData[] = new byte[MAX_MESSAGE_LEN];
+		receivePacket = new DatagramPacket(receivedData, receivedData.length);
+		System.out.println("Scheduler: Waiting for Packet...\n");
+		
+		try {
+			System.out.println("Waiting...");		// Waiting until packet comes
+			receiveSocket.receive(receivePacket);
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Scheduler: Packet received.");
+		Floor.printPacketInfo(receivePacket);
+		return receivePacket.getPort();
+	}
+	
+	private void formReplyPacket(String data, int replyPort) {
+		byte[] msg = data.getBytes();
+		try {
+			replyPacket = new DatagramPacket(msg, msg.length, InetAddress.getLocalHost(), replyPort);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	private synchronized void reply() {
+		System.out.println("Scheduler: delivering reply packet");
+		Floor.printPacketInfo(replyPacket);
+		
+		try {
+			replySocket.send(replyPacket);
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Scheduler: reply packet delivered.\n");
+	}
 }

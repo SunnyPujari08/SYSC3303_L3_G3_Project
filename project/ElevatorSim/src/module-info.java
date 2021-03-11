@@ -1,2 +1,3 @@
 module ElevatorSim {
+	requires junit;
 }

@@ -1,5 +1,11 @@
 package elevatorsim.elevator;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +13,7 @@ import java.util.List;
 import elevatorsim.Constants;
 import elevatorsim.EventData;
 import elevatorsim.EventType;
+import elevatorsim.Floor;
 
 /**
  * The Elevator class represents an Elevator in the Elevator
@@ -17,6 +24,9 @@ import elevatorsim.EventType;
  */
 
 public class Elevator implements Runnable {
+	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
+	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
+	private DatagramSocket networkSocket;
 
     private EventData eData;
     public int elevatorID;
@@ -30,6 +40,12 @@ public class Elevator implements Runnable {
 
 
     public Elevator(int elevatorID, List<EventData> eventList) {
+    	try {
+			networkSocket = new DatagramSocket();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+    	
         this.elevatorID = elevatorID;
         this.eventList = eventList;
         this.currentFloor = 2;
@@ -154,6 +170,51 @@ public class Elevator implements Runnable {
         stateList.add(Constants.ELEVATOR_STATE_TEN, new ElevatorStateTen(this));
         stateList.add(Constants.ELEVATOR_STATE_ELEVEN, new ElevatorStateEleven(this));
         stateList.add(Constants.ELEVATOR_STATE_TWELVE, new ElevatorStateTwelve(this));
+    }
+    
+    /**
+     * Below: UDP functions===================================================================
+     */
+    
+    private void formPacket(String info) {
+    	byte[] data = info.getBytes();
+    	try {
+			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 101);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    private void rpc_send() {
+    	// Send a packet
+		System.out.println("Elevator" + elevatorID + ": Sending packet to Scheduler...");
+		Floor.printPacketInfo(packetOut);
+		
+		try {
+			networkSocket.send(packetOut);
+			packetOut = null;
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Elevator" + elevatorID + ": Packet sent.\n");
+		
+		// Receive a reply packet
+		byte data[] = new byte[MAX_MESSAGE_LEN];
+		packetIn = new DatagramPacket(data, data.length);
+		System.out.println("Elevator" + elevatorID + ": Waiting for response from Scheduler.");
+		
+		try {
+			System.out.println("Waiting...");		// Waiting until packet comes
+			networkSocket.receive(packetIn);
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
+		Floor.printPacketInfo(packetIn);
     }
 }
 

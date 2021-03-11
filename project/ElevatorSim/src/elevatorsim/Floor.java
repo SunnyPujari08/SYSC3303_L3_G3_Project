@@ -1,6 +1,12 @@
 package elevatorsim;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +22,10 @@ import java.util.Scanner;
  *
  */
 public class Floor implements Runnable {
+	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
+	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
+	private DatagramSocket networkSocket;
+	
 	private Scheduler scheduler;
 	private int floorNum;
 	//private static String filename = "input.txt";
@@ -27,6 +37,11 @@ public class Floor implements Runnable {
     public Floor(int floorNum, List<EventData> floorEventList) {
     	this.floorNum = floorNum;
     	this.eventList = floorEventList;
+    	try {
+			networkSocket = new DatagramSocket();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
     }
 	
     public static String readEventFromTextFile(String filename) {
@@ -87,6 +102,64 @@ public class Floor implements Runnable {
     	// return event;
     }
     */
+    
+    
+    /**
+     * Below: UDP functions===================================================================
+     */
+    
+    private void formPacket(String info) {
+    	byte[] data = info.getBytes();
+    	try {
+			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 101);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    private void rpc_send() {
+    	// Send a packet
+		System.out.println("Floor" + floorNum + ": Sending packet to Scheduler...");
+		printPacketInfo(packetOut);
+		
+		try {
+			networkSocket.send(packetOut);
+			packetOut = null;
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Floor" + floorNum + ": Packet sent.\n");
+		
+		// Receive a reply packet
+		byte data[] = new byte[MAX_MESSAGE_LEN];
+		packetIn = new DatagramPacket(data, data.length);
+		System.out.println("Floor" + floorNum + ": Waiting for response from Scheduler.");
+		
+		try {
+			System.out.println("Waiting...");		// Waiting until packet comes
+			networkSocket.receive(packetIn);
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Floor" + floorNum + ": Packet received.\n");
+		printPacketInfo(packetIn);
+    }
+    
+    public static void printPacketInfo(DatagramPacket p) {
+		int len = p.getLength();
+		String dataString = new String(p.getData(), 0, len);
+		
+		System.out.println("From host: " + p.getAddress());
+		System.out.println("Host port: " + p.getPort());
+		System.out.println("Length: " + len);
+		System.out.println("Data in bytes: " + p.getData());
+		System.out.println("Data in string: " + dataString);
+		System.out.println();
+    }
     
 	public void run() {
 		EventData event;
