@@ -34,6 +34,15 @@ To get this all ready, open the package in the folder
 see how this program runs. If you want to see more you can look through each of
 the other classes we made for this program.
 
+Simulating Button Presses:
+Once the program starts running, you can simulate button presses by sending commands. The Command format is E/F x x. The first argument is either E or F, 
+denoting if the button press is happening on a floor or in an elevator. The second argument is the ID. For floors this is simply the floor #, for elevators it is the ID. The third argument is either a number(If it's being pressed in an elevator) or up/down (If it's being pressed on a floor)>
+EX:
+F 1 up // Up button pressed on floor 1
+E 1 3 // Floor 3 picked in elevator 1
+F 2 down // Down button pressed on floor 2
+E 1 1 // Floor 1 picked in elevator 1
+
 Note: The implementation of our state machines is complete, all states added with the handlers for the events shown in the diagrams.
 Currently our program does not have a way of simulating external events (button presses etc.). With this limitation, we haven't yet
 been able to run through all states in our system. Currently our system reacts to one button press by triggering the

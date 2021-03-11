@@ -102,7 +102,7 @@ public class Elevator implements Runnable {
         if(this.eventList.size() > 0) {
         	// for loop to check for any events from scheduler
         	for(int i = 0; i < this.eventList.size(); i++) {
-        		if(this.eventList.get(i).fromScheduler) {
+        		if(this.eventList.size() > 0 && this.eventList.get(i).fromScheduler) {
         			EventData newEvent = this.eventList.remove(i);
                 	return newEvent;
         		}

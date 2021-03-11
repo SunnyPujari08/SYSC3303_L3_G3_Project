@@ -5,7 +5,7 @@ import java.util.Date;
 
 // This class contains all global constants
 public class Constants {
-	public static Integer NUMBER_OF_FLOORS = 2;
+	public static Integer NUMBER_OF_FLOORS = 5;
 	public static Integer NUMBER_OF_ELEVATORS = 1;
 	
 	public static Integer ELEVATOR_STATE_ONE = 0;
