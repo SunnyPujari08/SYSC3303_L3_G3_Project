@@ -10,10 +10,15 @@ public class SchedulerStateOne extends SchedulerState {
 
 	@Override
 	public int handleEvent(EventData event) {
-		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_DOWN) {
-			System.out.println("Floornum: " + String.valueOf(event.floorNum));
-			scheduler.sendResponseToFloor(event.floorNum);
-			return Constants.SCHEDULER_STATE_THREE;
+		scheduler.currentTripEvent = event;
+		if(event.eventType == EventType.FLOOR_REQUEST || event.eventType == EventType.FLOOR_REQUEST_UP ||event.eventType == EventType.FLOOR_REQUEST_DOWN) {
+			Constants.formattedPrint("Scheduler got FR.");
+			// scheduler.sendResponseToFloor(event.floorNum);
+			if(scheduler.elevators[0].currentFloor < event.floorNum)
+				scheduler.sendUpRequestToElevator(0, event.floorNum);
+			else
+				scheduler.sendDownRequestToElevator(0, event.floorNum);
+			return Constants.SCHEDULER_STATE_TWO;
 		}
 		
 		return Constants.SCHEDULER_STATE_ONE;

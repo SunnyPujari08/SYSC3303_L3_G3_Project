@@ -22,12 +22,10 @@ public class ElevatorStateOne extends ElevatorState {
 	 */
 	public int handleEvent(EventData event) {
 		// Check state machine diagram for what state to go to and what actions to take
-		if(event.eventType == EventType.MOVE_REQUEST_UP && elevator.currentFloor != Constants.NUMBER_OF_FLOORS) {
-			elevator.destFloor = event.destinationFloor;
+		if(event.eventType == EventType.MOVE_REQUEST_DOWN && elevator.currentFloor != 1) {
+			return Constants.ELEVATOR_STATE_FOUR;
+		} else if (event.eventType == EventType.MOVE_REQUEST_UP && elevator.currentFloor != Constants.NUMBER_OF_FLOORS) {
 			return Constants.ELEVATOR_STATE_TWO;
-		} else if(event.eventType == EventType.MOVE_REQUEST_DOWN && elevator.currentFloor != 1) {
-			elevator.destFloor = event.destinationFloor;
-			return Constants.ELEVATOR_STATE_TWELVE;
 		}
 		// Will need handle more events eventually
 		
@@ -49,6 +47,7 @@ public class ElevatorStateOne extends ElevatorState {
 	 * This method should only perform actions that will happen every single time this state is exited.
 	 */
 	public void exitActions() {
+		Constants.formattedPrint("Elevator closing door.");
 		return;
 	}
 	

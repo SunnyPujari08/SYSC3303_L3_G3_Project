@@ -73,14 +73,12 @@ public class Elevator implements Runnable {
     
     public void sendElevatorArrivingAtFloorMovingUp(int floorNum) {
     	EventData newEvent = new EventData(floorNum, EventType.ELEVATOR_ARR_FLOOR_UP);
-    	newEvent.fromScheduler = false;
     	sendEventToScheduler(newEvent);
     	Constants.formattedPrint("This is the action: SendElevatorArrivingAtFloorMovingUp");
     }
     
     public void sendElevatorArrivingAtFloorMovingDown(int floorNum) {
     	EventData newEvent = new EventData(floorNum, EventType.ELEVATOR_ARR_FLOOR_DOWN);
-    	newEvent.fromScheduler = false;
     	sendEventToScheduler(newEvent);
     	Constants.formattedPrint("This is the action: SendElevatorArrivingAtFloorMovingDown");
     }
@@ -113,21 +111,34 @@ public class Elevator implements Runnable {
     }
     
     public void sendEventToScheduler(EventData eData){
-    	this.eventList.add(eData);
+    	
+    	// Convert event to string
+    	// Send over UDP to scheduler
+    	
+    	
+    	//this.eventList.add(eData);
     }
     
     public synchronized EventData checkWorkFromScheduler(/*int destFloor*/) //throws InterruptedException
     {
-        // If there are events available, return the first one
-        if(this.eventList.size() > 0) {
-        	// for loop to check for any events from scheduler
-        	for(int i = 0; i < this.eventList.size(); i++) {
-        		if(this.eventList.size() > 0 && this.eventList.get(i).fromScheduler) {
-        			EventData newEvent = this.eventList.remove(i);
-                	return newEvent;
-        		}
-        	}
-        } 
+    	
+    	//Check for any new packets from scheduler
+    	// Convert string event to EventData
+    	// return event, return null if there are no new packets
+    	
+    	
+    	
+    	
+//        // If there are events available, return the first one
+//        if(this.eventList.size() > 0) {
+//        	// for loop to check for any events from scheduler
+//        	for(int i = 0; i < this.eventList.size(); i++) {
+//        		if(this.eventList.size() > 0 && this.eventList.get(i).fromScheduler) {
+//        			EventData newEvent = this.eventList.remove(i);
+//                	return newEvent;
+//        		}
+//        	}
+//        } 
         return null;
     }
     
@@ -141,8 +152,8 @@ public class Elevator implements Runnable {
 		if(this.currentFloor < Constants.NUMBER_OF_FLOORS) {
 			this.currentFloor++;
 			Constants.formattedPrint("Elevator moving up one floor. Now at: " + String.valueOf(this.currentFloor));
-			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_UP, true);
-			this.sendEventToScheduler(event);
+			//EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_UP, true);
+			//this.sendEventToScheduler(event);
 		} else {
 			Constants.formattedPrint("Elevator can't move up one floor. Still at: " + String.valueOf(this.currentFloor));
 		}
@@ -152,8 +163,8 @@ public class Elevator implements Runnable {
 		if(this.currentFloor > 1) {
 			this.currentFloor--;
 			Constants.formattedPrint("Elevator moving down one floor. Now at: " + String.valueOf(this.currentFloor));
-			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_DOWN, true);
-			this.sendEventToScheduler(event);
+			//EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_DOWN, true);
+			//this.sendEventToScheduler(event);
 		} else {
 			Constants.formattedPrint("Elevator can't move down one floor. Still at: " + String.valueOf(this.currentFloor));
 		}
@@ -166,14 +177,6 @@ public class Elevator implements Runnable {
         stateList.add(Constants.ELEVATOR_STATE_TWO, new ElevatorStateTwo(this));
         stateList.add(Constants.ELEVATOR_STATE_THREE, new ElevatorStateThree(this));
         stateList.add(Constants.ELEVATOR_STATE_FOUR, new ElevatorStateFour(this));
-        stateList.add(Constants.ELEVATOR_STATE_FIVE, new ElevatorStateFive(this));
-        stateList.add(Constants.ELEVATOR_STATE_SIX, new ElevatorStateSix(this));
-        stateList.add(Constants.ELEVATOR_STATE_SEVEN, new ElevatorStateSeven(this));
-        stateList.add(Constants.ELEVATOR_STATE_EIGHT, new ElevatorStateEight(this));
-        stateList.add(Constants.ELEVATOR_STATE_NINE, new ElevatorStateNine(this));
-        stateList.add(Constants.ELEVATOR_STATE_TEN, new ElevatorStateTen(this));
-        stateList.add(Constants.ELEVATOR_STATE_ELEVEN, new ElevatorStateEleven(this));
-        stateList.add(Constants.ELEVATOR_STATE_TWELVE, new ElevatorStateTwelve(this));
     }
     
     /**

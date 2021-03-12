@@ -16,6 +16,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Ezra Pierce
@@ -35,14 +36,18 @@ public class Scheduler {
 	public List<List> masterFloorEventList = new ArrayList<>();
 	public List<List> masterElevatorEventList = new ArrayList<>();
 	private Floor[] floors;
-	private Elevator[] elevators;
+	public Elevator[] elevators;
 	private Thread[] floorThreads;
 	private Thread[] elevatorThreads;
 	private Thread buttonSimulator;
+	private long startTimeInSeconds;
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
-	private int startState = Constants.SCHEDULER_STATE_IDLE;
+	private int startState = Constants.SCHEDULER_STATE_ONE;
 	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
+	private List<String> futureEvents = new ArrayList<>();
+	private List<String> currentEvents = new ArrayList<>();
+	public EventData currentTripEvent;
 	
 	public Scheduler() {
 		floors = new Floor[Constants.NUMBER_OF_FLOORS];
@@ -75,9 +80,10 @@ public class Scheduler {
     	int nextStateID;
     	Constants.formattedPrint("Starting Scheduler SM.");
     	scheduler.readOverUDP(); 
-    	String[] eventStrings = scheduler.parseEvents();
+    	scheduler.futureEvents = scheduler.parseEvents();
+    	scheduler.startTimeInSeconds = System.currentTimeMillis()/1000;
         while(true){
-
+        	
         	
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
@@ -99,17 +105,25 @@ public class Scheduler {
 		// Send over UDP
 	}
 	
-	/* Function adds eventToWrite to list specified by elevatorNumber
+	/* Function converts eventToWrite into String,
+	 * Sends it over UDP to elevator w/ elevatorNumber
 	 * 
 	 * Arguments:
 	 * elevatorNumber - Specifies which elevator to write to
 	 * eventToWrite - Event object to be added to list
 	 */
 	public void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
-		eventToWrite.fromScheduler = true;
-		(this.masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
-		// Send over UDP
+		// Convert to string
+		// Send over UDP To elevator
+		
+		
+		
+		
+		
+		//(this.masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
 	}
+	
+
 	
 	public void sendUpRequestToElevator(int elevatorID, int destinationFloor) {
 		EventData reqEvent = new EventData(EventType.MOVE_REQUEST_UP, destinationFloor);
@@ -208,12 +222,20 @@ public class Scheduler {
 	public synchronized EventData readFromElevator(Integer elevatorNumber) {
 		//read from index of listOfLists
 		// Check that there is an event
-			for(int i = 0; i < (this.masterElevatorEventList.get(elevatorNumber-1)).size(); i++){
-				if(this.masterElevatorEventList.size()>0 && (this.masterElevatorEventList.get(elevatorNumber-1)).size()>0 && !((EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).get(i)).fromScheduler) {
-						EventData newEvent = (EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).remove(i);
-						return newEvent;
-					}
-			}	
+//			for(int i = 0; i < (this.masterElevatorEventList.get(elevatorNumber-1)).size(); i++){
+//				if(this.masterElevatorEventList.size()>0 && (this.masterElevatorEventList.get(elevatorNumber-1)).size()>0) { //&& !((EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).get(i)).fromScheduler) {
+//						EventData newEvent = (EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).remove(i);
+//						return newEvent;
+//					}
+//			}	
+		
+		
+		// Needs to be redone with UDP
+		// Read one packet from elevator
+		// Parse string into an EventData object
+		// Return event
+		// Return null if there are no packets
+		
 		return null;
 	}
 	
@@ -221,11 +243,10 @@ public class Scheduler {
 		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 			if((this.masterFloorEventList.get(i)).size()>0) {
 				for(int j = 0; j < (this.masterFloorEventList.get(i)).size(); j++){
-					//System.out.println(String.valueOf(((EventData)(masterFloorEventList.get(i)).get(j)).simulated));
-					if(!((EventData)(this.masterFloorEventList.get(i)).get(j)).fromScheduler){
+					//if(!((EventData)(this.masterFloorEventList.get(i)).get(j)).fromScheduler){
 						EventData newEvent = (EventData)(this.masterFloorEventList.get(i)).remove(j);
 						return newEvent;
-					}
+					//}
 				}
 			}
 		}
@@ -247,25 +268,39 @@ public class Scheduler {
 
 	}
 	
-	private void addEvents(String rawData) {
-    	String[] eString = rawData.split(";");
-    	
-    	EventData[] eData = new EventData[eString.length]; 
-    	for (int i = 0; i < eString.length; i++) {
-    		String[] eInfo = eString[i].split(" ");
-    		
-        	int floorNum = Integer.parseInt(eInfo[1]);
-        	eventList.add(new EventData(EventType.ELEVATOR_PICK_FLOOR, floorNum, true));
-    	}
-    }
+//	private void addEvents(String rawData) {
+//    	String[] eString = rawData.split(";");
+//    	
+//    	EventData[] eData = new EventData[eString.length]; 
+//    	for (int i = 0; i < eString.length; i++) {
+//    		String[] eInfo = eString[i].split(" ");
+//    		
+//        	int floorNum = Integer.parseInt(eInfo[1]);
+//        	eventList.add(new EventData(EventType.ELEVATOR_PICK_FLOOR, floorNum, true));
+//    	}
+//    }
 	
-	public String[] parseEvents() {
+	public void populateEvents() {
+		String eventString;
+		String[] eventStringArgs;
+		long currentTimeInSeconds = System.currentTimeMillis()/1000;
+		for(int i = 0; i < this.futureEvents.size(); i++) {
+			eventString = this.futureEvents.get(i);
+			eventStringArgs = eventString.split(" ");
+			if(eventStringArgs.length>0 && Integer.parseInt(eventStringArgs[0]) <= (currentTimeInSeconds-this.startTimeInSeconds)) {
+				// add to corresponding list
+				EventData event = new EventData(EventType.FLOOR_REQUEST, Integer.parseInt(eventStringArgs[1]), Integer.parseInt(eventStringArgs[3]));
+				this.masterFloorEventList.get(Integer.parseInt(eventStringArgs[1])).add(event);
+			}
+		}
+	}
+	
+	public List<String> parseEvents() {
 		if(this.rawEvents.size() > 0) {
-			String[] eventStrings = this.rawEvents.get(0).split(";");
+			List<String> eventStrings = new ArrayList<String>(Arrays.asList(this.rawEvents.get(0).split(";")));
 			return eventStrings;
 		}
 		return null;
-		
 	}
 
     /**

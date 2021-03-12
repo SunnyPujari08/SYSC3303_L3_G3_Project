@@ -27,7 +27,8 @@ public abstract class SchedulerState {
 		while(!done) {
 			// Parse a packet and add to corresponding list
 			scheduler.populateEvents();
-		
+			
+			// Read from current events & react
 			event = scheduler.readFromAllFloors();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
@@ -42,6 +43,7 @@ public abstract class SchedulerState {
 				nextState = handleEvent(event);
 				done = true;
 			}
+		}
 		exitActions();
 		return nextState;
 	}
@@ -50,10 +52,6 @@ public abstract class SchedulerState {
 	public abstract int handleEvent(EventData event);
 	public abstract void entranceActions();
 	public abstract void exitActions();
-	
-	
-	
-
 	
 
 }

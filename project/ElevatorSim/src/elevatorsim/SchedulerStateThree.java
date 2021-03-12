@@ -10,16 +10,9 @@ public class SchedulerStateThree extends SchedulerState {
 
 	@Override
 	public int handleEvent(EventData event) {
-		if(event.eventType == EventType.ELEVATOR_PICK_FLOOR) {
-			elevator.destFloor = event.destinationFloor;
-			if(elevator.currentFloor > elevator.destFloor) {
-				scheduler.sendDownRequestToElevator(elevator.elevatorID, elevator.destFloor);
-				return Constants.SCHEDULER_STATE_FIVE;
-			}
-			else if(elevator.currentFloor < elevator.destFloor) {
-				scheduler.sendUpRequestToElevator(elevator.elevatorID, elevator.destFloor);
-				return Constants.SCHEDULER_STATE_SIX;
-			}
+		if((event.eventType == EventType.ELEVATOR_ARR_FLOOR_UP || event.eventType == EventType.ELEVATOR_ARR_FLOOR_DOWN) && event.floorNum == scheduler.currentTripEvent.destinationFloor){
+			Constants.formattedPrint("Trip done.");
+			return Constants.SCHEDULER_STATE_ONE;
 		}
 		
 		return Constants.SCHEDULER_STATE_THREE;
@@ -27,7 +20,10 @@ public class SchedulerStateThree extends SchedulerState {
 
 	@Override
 	public void entranceActions() {
-		// TODO Auto-generated method stub
+		if(scheduler.elevators[0].currentFloor < scheduler.currentTripEvent.destinationFloor)
+			scheduler.sendUpRequestToElevator(0, scheduler.currentTripEvent.destinationFloor);
+		else
+			scheduler.sendDownRequestToElevator(0, scheduler.currentTripEvent.destinationFloor);
 
 	}
 
