@@ -219,6 +219,7 @@ public class Elevator implements Runnable {
 		System.out.println("HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
 		
+		// if len>0
 		int len = packetIn.getLength();
 		String dataString = new String(packetIn.getData(), 0, len);
 		addEvents(dataString);

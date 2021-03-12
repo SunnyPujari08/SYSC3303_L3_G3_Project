@@ -155,5 +155,6 @@ public class Floor implements Runnable {
 			formPacket(rawData);
 		while (packetOut != null)
 			rpc_send();
+		// Maybe wait for reply?
 	}
 }

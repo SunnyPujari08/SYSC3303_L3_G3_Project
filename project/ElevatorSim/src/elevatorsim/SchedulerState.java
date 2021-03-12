@@ -25,6 +25,9 @@ public abstract class SchedulerState {
 		
 		// This loop will continuously check for new events and react accordingly
 		while(!done) {
+			// Parse a packet and add to corresponding list
+			scheduler.populateEvents();
+		
 			event = scheduler.readFromAllFloors();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
@@ -39,7 +42,6 @@ public abstract class SchedulerState {
 				nextState = handleEvent(event);
 				done = true;
 			}
-		}
 		exitActions();
 		return nextState;
 	}

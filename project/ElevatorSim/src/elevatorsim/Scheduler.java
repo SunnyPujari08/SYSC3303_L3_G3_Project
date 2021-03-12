@@ -42,7 +42,7 @@ public class Scheduler {
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_IDLE;
-	private List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
+	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
 	
 	public Scheduler() {
 		floors = new Floor[Constants.NUMBER_OF_FLOORS];
@@ -74,35 +74,21 @@ public class Scheduler {
 	    SchedulerState currentState= scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
     	Constants.formattedPrint("Starting Scheduler SM.");
+    	scheduler.readOverUDP(); 
+    	String[] eventStrings = scheduler.parseEvents();
         while(true){
-        	int receivePort = scheduler.receive();
-        	int len = scheduler.receivePacket.getLength();
-        	String dataString = new String(scheduler.receivePacket.getData(), 0, len);
-        	// this is when message is from an elevator
-        	try {
-        		int i = Integer.parseInt(dataString);
-        		if (scheduler.rawEvents.size() > 0) {
-            		scheduler.formReplyPacket(scheduler.rawEvents.remove(0), receivePort);
-            		scheduler.reply();
-        		}
-        	// this is when message is from a floor
-        	} catch (NumberFormatException e) {
-        		scheduler.formReplyPacket("Data received from scheduler", receivePort);
-            	scheduler.reply();
-            	scheduler.rawEvents.add(dataString);
-        	}
+
         	
         	// .run() call will block until state change occurs
-        	//nextStateID = currentState.run();
-        	//Constants.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
-        	//if(nextStateID < 0) { break;}
-        	//currentState = scheduler.stateList.get(nextStateID);                                                                                                                                                                                                                                                                                                                                                                
+        	nextStateID = currentState.run();
+        	Constants.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
+        	if(nextStateID < 0) { break;}
+        	currentState = scheduler.stateList.get(nextStateID);                                                                                                                                                                                                                                                                                                                                                                
 		}
 		//Constants.formattedPrint("Scheduler state machine failed, thread exiting.");
 	}
 	
 	/* Function adds eventToWrite to list specified by floorNumber
-	 * NOT USED IN ITERATION 1
 	 * Arguments:
 	 * floorNumber - Specifies which floor to write to
 	 * eventToWrite - Event object to be added to list
@@ -110,6 +96,7 @@ public class Scheduler {
 	public void writeToFloor(Integer floorNumber, EventData eventToWrite) {
 		eventToWrite.fromScheduler = true;
 		(this.masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
+		// Send over UDP
 	}
 	
 	/* Function adds eventToWrite to list specified by elevatorNumber
@@ -121,6 +108,7 @@ public class Scheduler {
 	public void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
 		eventToWrite.fromScheduler = true;
 		(this.masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
+		// Send over UDP
 	}
 	
 	public void sendUpRequestToElevator(int elevatorID, int destinationFloor) {
@@ -258,10 +246,49 @@ public class Scheduler {
 		stateList.add(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(elevator, this));
 
 	}
+	
+	private void addEvents(String rawData) {
+    	String[] eString = rawData.split(";");
+    	
+    	EventData[] eData = new EventData[eString.length]; 
+    	for (int i = 0; i < eString.length; i++) {
+    		String[] eInfo = eString[i].split(" ");
+    		
+        	int floorNum = Integer.parseInt(eInfo[1]);
+        	eventList.add(new EventData(EventType.ELEVATOR_PICK_FLOOR, floorNum, true));
+    	}
+    }
+	
+	public String[] parseEvents() {
+		if(this.rawEvents.size() > 0) {
+			String[] eventStrings = this.rawEvents.get(0).split(";");
+			return eventStrings;
+		}
+		return null;
+		
+	}
 
     /**
      * Below: UDP functions===================================================================
      */
+	public void readOverUDP() {
+		int receivePort = this.receive();
+		int len = this.receivePacket.getLength();
+		String dataString = new String(this.receivePacket.getData(), 0, len);
+		// this is when message is from an elevator
+		try {
+			int i = Integer.parseInt(dataString);
+			if (this.rawEvents.size() > 0) {
+	    		this.formReplyPacket(this.rawEvents.remove(0), receivePort);
+	    		this.reply();
+			}
+		// this is when message is from a floor
+		} catch (NumberFormatException e) {
+			this.formReplyPacket("Data received from floor", receivePort);
+	    	this.reply();
+	    	this.rawEvents.add(dataString);
+		}
+	}
 	
 	private synchronized int receive() {
 		byte receivedData[] = new byte[MAX_MESSAGE_LEN];
