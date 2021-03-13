@@ -40,6 +40,7 @@ public class Elevator implements Runnable {
     public List<EventData> eventList = new ArrayList<EventData>();;
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
+    private ElevatorState currentState;
 
 
     public Elevator(int elevatorID) {
@@ -60,7 +61,7 @@ public class Elevator implements Runnable {
 
     @Override
     public void run() {
-    	ElevatorState currentState= stateList.get(startState);
+    	currentState= stateList.get(startState);
     	int nextStateID;
         while(true){
         	formPacket(String.valueOf(elevatorID));
@@ -181,6 +182,18 @@ public class Elevator implements Runnable {
         stateList.add(Constants.ELEVATOR_STATE_TWO, new ElevatorStateTwo(this));
         stateList.add(Constants.ELEVATOR_STATE_THREE, new ElevatorStateThree(this));
         stateList.add(Constants.ELEVATOR_STATE_FOUR, new ElevatorStateFour(this));
+    }
+    
+    public int startState() {
+    	return(startState);
+    }
+    
+    public ElevatorState ElevatorState() {
+    	return(currentState);
+    }
+    
+    public ArrayList<ElevatorState> stateList(){
+    	return(stateList);
     }
     
     /**

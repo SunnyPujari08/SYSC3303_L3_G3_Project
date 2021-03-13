@@ -153,11 +153,10 @@ public class UnitTest extends TestCase {
 		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
 		scheduler.writeToFloor(1, testWriteEvent);
 		
-		assertEquals(scheduler.startState, 1);
-		assertNotNull(scheduler.stateList);
+		assertEquals(scheduler.startState(), 1);
+		assertNotNull(scheduler.stateList());
 		
-		Elevator.run();
-		assertEquals(currentState, 4);
+		assertEquals(scheduler.SchedulerState(), 4);
 	}
 	
 	public void testFloorSchedulerMessaging() {

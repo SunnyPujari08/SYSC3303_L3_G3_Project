@@ -46,6 +46,7 @@ public class Scheduler {
 	private List<String> futureEvents;
 	private List<String> currentEvents = new ArrayList<>();
 	public EventData currentTripEvent;
+	private SchedulerState currentState;
 	
 	public Scheduler() {
 		floors = new Floor[Constants.NUMBER_OF_FLOORS];
@@ -280,6 +281,18 @@ public class Scheduler {
 		}
 		return null;
 	}
+	
+	public int startState() {
+    	return(startState);
+    }
+	
+	public SchedulerState SchedulerState() {
+    	return(currentState);
+    }
+    
+    public ArrayList<SchedulerState> stateList(){
+    	return(stateList);
+    }
 
     /**
      * Below: UDP functions===================================================================
