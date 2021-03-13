@@ -4,8 +4,8 @@ import elevatorsim.elevator.Elevator;
 
 public class SchedulerStateIdle extends SchedulerState {
 
-	public SchedulerStateIdle(Elevator elevator, Scheduler scheduler) {
-		super(elevator, scheduler);
+	public SchedulerStateIdle(Scheduler scheduler) {
+		super(scheduler);
 	}
 	
 	@Override
