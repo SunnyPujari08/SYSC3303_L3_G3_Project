@@ -65,6 +65,10 @@ public class Scheduler {
 		this.setupStateMachine();
 	}
 	
+    public void closeSocket() {
+    	receiveSocket.close();
+    	replySocket.close();
+    }
 
 	// Main function for project
 	public static void main(String[] args) throws ParseException {
