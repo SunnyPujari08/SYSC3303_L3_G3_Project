@@ -239,6 +239,18 @@ public class Elevator implements Runnable {
         	eventList.add(new EventData(EventType.ELEVATOR_PICK_FLOOR, floorNum, true));
     	}
     }
+    
+	public static void main(String args[]) {
+		Thread[] elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
+		Elevator[] elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
+		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
+			elevators[i] = new Elevator(i+1);
+			elevatorThreads[i] = new Thread(elevators[i]);
+		}
+		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
+			elevatorThreads[i].start();
+		}
+	}
 }
 
 

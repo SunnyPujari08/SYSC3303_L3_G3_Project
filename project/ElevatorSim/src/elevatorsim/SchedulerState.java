@@ -6,8 +6,7 @@ public abstract class SchedulerState {
 	public Elevator elevator;
 	public Scheduler scheduler;
 	
-    public SchedulerState(Elevator elevator, Scheduler scheduler) {
-        this.elevator = elevator;
+    public SchedulerState(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
 	
@@ -36,7 +35,7 @@ public abstract class SchedulerState {
 				nextState = handleEvent(event);
 				done = true;
 			}
-			event = scheduler.readFromElevator(this.elevator.elevatorID);
+			event = scheduler.readFromElevator(0);
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				Constants.formattedPrint("Scheduler picked up event: " + String.valueOf(event.eventType));

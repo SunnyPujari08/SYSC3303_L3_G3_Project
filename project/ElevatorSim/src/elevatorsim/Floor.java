@@ -87,16 +87,6 @@ public class Floor implements Runnable {
     	return eData;
     }
     
-    /*
-    public EventData readFromScheduler() {
-    	// Check if empty
-    	// Logic if/else checking eventType
-    	// event = eventList.remove(0);
-    	// return event;
-    }
-    */
-    
-    
     /**
      * Below: UDP functions===================================================================
      */
@@ -156,5 +146,15 @@ public class Floor implements Runnable {
 		while (packetOut != null)
 			rpc_send();
 		// Maybe wait for reply?
+	}
+	
+	public static void main(String args[]) {
+		Thread[] floorThreads = new Thread[Constants.NUMBER_OF_FLOORS];
+		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
+			floorThreads[i] = new Thread(new Floor(i+1), "Floor" + i);
+		}
+		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
+			floorThreads[i].start();
+		}
 	}
 }
