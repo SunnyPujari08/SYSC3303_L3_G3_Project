@@ -18,9 +18,9 @@ public class UnitTest extends TestCase {
 	 * @throws ParseException
 	 */
 	public void testDataConversion() throws ParseException {
-		String testInputFile = "input.txt";
+		String testInputFile = "test_input.rtf";
 		ArrayList<EventData> floorEventList = new ArrayList<>();
-		Floor floor = new Floor(1, floorEventList);
+		Floor floor = new Floor(1);
 		
 		//Test time stamp
 		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
@@ -77,7 +77,7 @@ public class UnitTest extends TestCase {
 		ArrayList<EventData> elevatorEventList = new ArrayList<>();
 		elevatorEventList.add(testWriteEvent);
 		
-		Elevator elevator = new Elevator(1, elevatorEventList);
+		Elevator elevator = new Elevator(1);
 		EventData newElevatorEvent = elevator.checkWorkFromScheduler();
 		
 		assertEquals(testWriteEvent.timestamp, newElevatorEvent.timestamp);
@@ -119,7 +119,7 @@ public class UnitTest extends TestCase {
 	//udp test (message between scheduler and elevator
 	
 	//Elevator State Machine test
-	public void testElevatorStateMachine() throws Parse Exception {
+	public void testElevatorStateMachine() throws ParseException {
 		Scheduler scheduler = new Scheduler();
 		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
 		Date testTimeStamp = dateFormat.parse("14:05:15.0");
@@ -133,16 +133,15 @@ public class UnitTest extends TestCase {
 		elevatorEventList.add(testWriteEvent);
 		
 		Elevator elevator = new Elevator(1);
-		EventData newElevatorEvent = elevator.checkWorkFromScheduler();
 		
-		assertEquals(startState, 1);
-		assertNotNull(stateList);
+		assertEquals(elevator.startState(), 1);
+		assertNotNull(elevator.stateList());
 		
-		Elevator.run();
-		assertEquals(currentState, 4);
+		elevator.run();
+		assertEquals(elevator.ElevatorState(), 4);
 	}
 	
-	public void testSchedulerStateMachine() throws Parse Exception {
+	public void testSchedulerStateMachine() throws ParseException {
 		Scheduler scheduler = new Scheduler();
 		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
 		Date testTimeStamp = dateFormat.parse("14:05:15.0");
@@ -154,8 +153,8 @@ public class UnitTest extends TestCase {
 		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
 		scheduler.writeToFloor(1, testWriteEvent);
 		
-		assertEquals(startState, 1);
-		assertNotNull(stateList);
+		assertEquals(scheduler.startState, 1);
+		assertNotNull(scheduler.stateList);
 		
 		Elevator.run();
 		assertEquals(currentState, 4);
