@@ -43,7 +43,7 @@ public class Scheduler {
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_ONE;
 	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
-	private List<String> futureEvents = new ArrayList<>();
+	private List<String> futureEvents;
 	private List<String> currentEvents = new ArrayList<>();
 	public EventData currentTripEvent;
 	
@@ -70,7 +70,7 @@ public class Scheduler {
 	public static void main(String[] args) throws ParseException {
 		Scheduler scheduler = new Scheduler();
 		
-	    SchedulerState currentState= scheduler.stateList.get(scheduler.startState);
+	    SchedulerState currentState = scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
     	Constants.formattedPrint("Starting Scheduler SM.");
     	scheduler.readOverUDP(); 
@@ -256,13 +256,15 @@ public class Scheduler {
 		String eventString;
 		String[] eventStringArgs;
 		long currentTimeInSeconds = System.currentTimeMillis()/1000;
-		for(int i = 0; i < this.futureEvents.size(); i++) {
-			eventString = this.futureEvents.get(i);
-			eventStringArgs = eventString.split(" ");
-			if(eventStringArgs.length>0 && Integer.parseInt(eventStringArgs[0]) <= (currentTimeInSeconds-this.startTimeInSeconds)) {
-				// add to corresponding list
-				EventData event = new EventData(EventType.FLOOR_REQUEST, Integer.parseInt(eventStringArgs[1]), Integer.parseInt(eventStringArgs[3]));
-				this.masterFloorEventList.get(Integer.parseInt(eventStringArgs[1])).add(event);
+		if (futureEvents != null) {
+			for(int i = 0; i < this.futureEvents.size(); i++) {
+				eventString = this.futureEvents.get(i);
+				eventStringArgs = eventString.split(" ");
+				if(eventStringArgs.length>0 && Integer.parseInt(eventStringArgs[0]) <= (currentTimeInSeconds-this.startTimeInSeconds)) {
+					// add to corresponding list
+					EventData event = new EventData(EventType.FLOOR_REQUEST, Integer.parseInt(eventStringArgs[1]), Integer.parseInt(eventStringArgs[3]));
+					this.masterFloorEventList.get(Integer.parseInt(eventStringArgs[1])).add(event);
+				}
 			}
 		}
 	}
