@@ -37,12 +37,14 @@ public class Scheduler {
 	public List<List> masterElevatorEventList = new ArrayList<>();
 	private Floor[] floors;
 	public Elevator[] elevators;
+
 	private Thread[] floorThreads;
 	private Thread[] elevatorThreads;
 	private boolean elevatorReadReq = false;
 	public int elevatorCurrentFloor = 1, elevatorDestinationFloor = 1;
 	//public int[] elevatorsCurrentFloors, elevatorsDestinationFloors = 1; TODO make it work with multiple elevators
 	private long startTimeInMilliSeconds;
+
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_ONE;
@@ -51,12 +53,11 @@ public class Scheduler {
 	private List<String> currentEvents = new ArrayList<>();
 	private List<String> sendQueueForElevator = new ArrayList<>();
 	public EventData currentTripEvent;
+	private SchedulerState currentState;
 	
 	public Scheduler() {
 		floors = new Floor[Constants.NUMBER_OF_FLOORS];
 		elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
-		floorThreads = new Thread[Constants.NUMBER_OF_FLOORS];
-		elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
 		
 		try {
 			receiveSocket = new DatagramSocket(Constants.UDP_PORT_NUMBER);
@@ -68,17 +69,22 @@ public class Scheduler {
 		
 		this.setupFloorLists();
 		this.setupElevatorLists();
-		this.setupElevatorThreads();
-		this.setupFloorThreads();
-		this.setupStateMachine(elevators[0]);
+
+		//this.setupButtonSimulator();
+		this.setupStateMachine();
+
 	}
 	
+    public void closeSocket() {
+    	receiveSocket.close();
+    	replySocket.close();
+    }
 
 	// Main function for project
 	public static void main(String[] args) throws ParseException {
 		Scheduler scheduler = new Scheduler();
 		
-	    SchedulerState currentState= scheduler.stateList.get(scheduler.startState);
+	    SchedulerState currentState = scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
     	Constants.formattedPrint("Starting Scheduler SM.");
     	scheduler.startTimeInMilliSeconds = System.currentTimeMillis();
@@ -159,30 +165,6 @@ public class Scheduler {
 		}
 	}
 	
-	private void setupElevatorThreads() {
-		if(this.masterElevatorEventList.size() >= Constants.NUMBER_OF_ELEVATORS) {
-			for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
-				elevators[i] = new Elevator(i+1);
-				elevatorThreads[i] = new Thread(elevators[i]);
-			}
-			for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
-				elevatorThreads[i].start();
-			}
-		}
-	}
-	
-	private void setupFloorThreads() {
-		if(this.masterFloorEventList.size() >= Constants.NUMBER_OF_FLOORS) {
-			for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-				floorThreads[i] = new Thread(new Floor(i+1));
-			}
-			for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-				floorThreads[i].start();
-			}
-		}
-	}
-	
-
 	
 	/*
 	 * Function reads from list related to specified floor, for Iteration 1 it also checks that the event was acknowledged
@@ -241,9 +223,10 @@ public class Scheduler {
 		return null;
 	}
 	
-	private void setupStateMachine(Elevator elevator) {
+	private void setupStateMachine() {
 		// TODO instantiate all states
     	stateList = new ArrayList<SchedulerState>(numOfStates);
+
 		stateList.add(new SchedulerStateIdle(this, 0));
 		stateList.add(new SchedulerStateOne(this, 0));
 		stateList.add(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(this, 0));
@@ -253,6 +236,7 @@ public class Scheduler {
 //		stateList.add(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(this));
 //		stateList.add(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(this));
 //		stateList.add(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(this));
+
 
 	}
 	
@@ -269,8 +253,6 @@ public class Scheduler {
 //    }
 	
 	public void populateEvents() {
-		// NOT GETTING ADDED TOWHATEVER THIS IS READING FROM???
-		Constants.formattedPrint("populating...");
 		
 		String eventString;
 		String[] eventStringArgs;
@@ -278,8 +260,6 @@ public class Scheduler {
 		long currentTimeInMilliSeconds = System.currentTimeMillis();
 		Constants.formattedPrint("time: "+ String.valueOf(currentTimeInMilliSeconds-this.startTimeInMilliSeconds));
 		for(int i = 0; i < this.futureEvents.size(); i++) {
-			Constants.formattedPrint("MMMMMMMMMM."+ this.futureEvents.get(i));
-			Constants.formattedPrint("NNNNNNNNNN"+ this.futureEvents.size());
 			eventString = this.futureEvents.get(i);
 			eventStringArgs = eventString.split(" ");
 			eventTime = Long.parseLong(eventStringArgs[0]);
@@ -289,6 +269,7 @@ public class Scheduler {
 				this.futureEvents.remove(i);
 				EventData event = new EventData(EventType.FLOOR_REQUEST, Integer.parseInt(eventStringArgs[1]), Integer.parseInt(eventStringArgs[3]));
 				this.masterFloorEventList.get(Integer.parseInt(eventStringArgs[1])).add(event);
+
 			}
 		}
 	}
@@ -306,6 +287,7 @@ public class Scheduler {
 		return null;
 	}
 	
+
 	public EventData readFromFloorTextFile() {
 		List<String> eventStrings;
 		EventData newEvent;
@@ -318,6 +300,19 @@ public class Scheduler {
     	}
     	return newEvent;
 	}
+
+	public int startState() {
+    	return(startState);
+    }
+	
+	public SchedulerState SchedulerState() {
+    	return(currentState);
+    }
+    
+    public ArrayList<SchedulerState> stateList(){
+    	return(stateList);
+    }
+
 
     /**
      * Below: UDP functions===================================================================

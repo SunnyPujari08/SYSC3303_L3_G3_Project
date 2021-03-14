@@ -43,6 +43,10 @@ public class Floor implements Runnable {
 			e.printStackTrace();
 		}
     }
+    
+    public void closeSocket() {
+    	networkSocket.close();
+    }
 	
     public String readEventFromTextFile(String filename) {
     	String rawData = "";
@@ -87,21 +91,11 @@ public class Floor implements Runnable {
     	return eData;
     }
     
-    /*
-    public EventData readFromScheduler() {
-    	// Check if empty
-    	// Logic if/else checking eventType
-    	// event = eventList.remove(0);
-    	// return event;
-    }
-    */
-    
-    
     /**
      * Below: UDP functions===================================================================
      */
     
-    private void formPacket(String info) {
+    public void formPacket(String info) {
     	byte[] data = info.getBytes();
     	try {
 			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
@@ -142,6 +136,42 @@ public class Floor implements Runnable {
 		printPacketInfo(packetIn);
     }
     
+    public void send() {
+    	// Send a packet
+		System.out.println("Floor" + floorNum + ": Sending packet to Scheduler...");
+		printPacketInfo(packetOut);
+		
+		try {
+			networkSocket.send(packetOut);
+			packetOut = null;
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Floor" + floorNum + ": Packet sent.\n");
+    }
+    
+    public String recv() {
+		// Receive a reply packet
+		byte data[] = new byte[MAX_MESSAGE_LEN];
+		packetIn = new DatagramPacket(data, data.length);
+		System.out.println("Floor" + floorNum + ": Waiting for response from Scheduler.");
+		
+		try {
+			System.out.println("Waiting...");		// Waiting until packet comes
+			networkSocket.receive(packetIn);
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Floor" + floorNum + ": Packet received.\n");
+		printPacketInfo(packetIn);
+		int len = packetIn.getLength();
+		return new String(packetIn.getData(), 0, len);
+    }
+    
     public static void printPacketInfo(DatagramPacket p) {
 		int len = p.getLength();
 		String dataString = new String(p.getData(), 0, len);
@@ -156,5 +186,15 @@ public class Floor implements Runnable {
 		while (packetOut != null)
 			rpc_send();
 		// Maybe wait for reply?
+	}
+	
+	public static void main(String args[]) {
+		Thread[] floorThreads = new Thread[Constants.NUMBER_OF_FLOORS];
+		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
+			floorThreads[i] = new Thread(new Floor(i+1), "Floor" + i);
+		}
+		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
+			floorThreads[i].start();
+		}
 	}
 }

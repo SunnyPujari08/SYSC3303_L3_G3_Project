@@ -6,7 +6,9 @@ public abstract class SchedulerState {
 	public Scheduler scheduler;
 	public int elevatorID;
 	
+
     public SchedulerState(Scheduler scheduler, int elevatorID) {
+
         this.scheduler = scheduler;
         this.elevatorID = elevatorID;
     }
@@ -40,6 +42,7 @@ public abstract class SchedulerState {
 			
 			event = scheduler.readFromFloorTextFile();
 //			//event = scheduler.readFromElevator(this.elevatorID);
+
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				Constants.formattedPrint("Scheduler picked up event: " + String.valueOf(event.eventType));

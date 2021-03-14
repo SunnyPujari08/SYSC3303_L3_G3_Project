@@ -41,6 +41,7 @@ public class Elevator implements Runnable {
     public List<EventData> eventList = new ArrayList<EventData>();;
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
+    private ElevatorState currentState;
 
 
     public Elevator(int elevatorID) {
@@ -54,10 +55,14 @@ public class Elevator implements Runnable {
         this.currentFloor = 1;
         setupStateMachine();
     }
+    
+    public void closeSocket() {
+    	networkSocket.close();
+    }
 
     @Override
     public void run() {
-    	ElevatorState currentState= stateList.get(startState);
+    	currentState= stateList.get(startState);
     	int nextStateID;
         while(true){
         	//formPacket(String.valueOf(elevatorID));
@@ -175,17 +180,64 @@ public class Elevator implements Runnable {
         stateList.add(Constants.ELEVATOR_STATE_FOUR, new ElevatorStateFour(this));
     }
     
+    public int startState() {
+    	return(startState);
+    }
+    
+    public ElevatorState ElevatorState() {
+    	return(currentState);
+    }
+    
+    public ArrayList<ElevatorState> stateList(){
+    	return(stateList);
+    }
+    
     /**
      * Below: UDP functions===================================================================
      */
     
-    private void formPacket(String info) {
+    public void formPacket(String info) {
     	byte[] data = info.getBytes();
     	try {
 			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+    }
+    
+
+    public void send() {
+    	// Send a packet
+		System.out.println("Elevator" + elevatorID + ": Sending packet to Scheduler...");
+		
+		try {
+			networkSocket.send(packetOut);
+			packetOut = null;
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Elevator" + elevatorID + ": Packet sent.\n");
+    }
+    
+    public String recv() {
+		// Receive a reply packet
+		byte data[] = new byte[MAX_MESSAGE_LEN];
+		packetIn = new DatagramPacket(data, data.length);
+		System.out.println("Elevator" + elevatorID + ": Waiting for response from Scheduler.");
+		
+		try {
+			System.out.println("Waiting...");		// Waiting until packet comes
+			networkSocket.receive(packetIn);
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
+		int len = packetIn.getLength();
+		return new String(packetIn.getData(), 0, len);
     }
     
     private String rpc_send() {
@@ -216,7 +268,9 @@ public class Elevator implements Runnable {
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
+
 		} 
+
 		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
 		
 		// if len>0
@@ -236,6 +290,18 @@ public class Elevator implements Runnable {
         	eventList.add(new EventData(EventType.ELEVATOR_PICK_FLOOR, floorNum, true));
     	}
     }
+    
+	public static void main(String args[]) {
+		Thread[] elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
+		Elevator[] elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
+		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
+			elevators[i] = new Elevator(i+1);
+			elevatorThreads[i] = new Thread(elevators[i]);
+		}
+		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
+			elevatorThreads[i].start();
+		}
+	}
 }
 
 
