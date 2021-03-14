@@ -1,4 +1,0 @@
-INDEX VERSION 1.131+C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\.metadata\.plugins\org.eclipse.jdt.core
-2067049299.index
-3665706913.index
-3695903138.index
