@@ -104,7 +104,7 @@ public class Floor implements Runnable {
     private void formPacket(String info) {
     	byte[] data = info.getBytes();
     	try {
-			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 101);
+			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

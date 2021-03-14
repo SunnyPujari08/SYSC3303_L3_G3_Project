@@ -3,12 +3,12 @@ package elevatorsim;
 import elevatorsim.elevator.Elevator;
 
 public abstract class SchedulerState {
-	public Elevator elevator;
 	public Scheduler scheduler;
+	public int elevatorID;
 	
-    public SchedulerState(Elevator elevator, Scheduler scheduler) {
-        this.elevator = elevator;
+    public SchedulerState(Scheduler scheduler, int elevatorID) {
         this.scheduler = scheduler;
+        this.elevatorID = elevatorID;
     }
 	
 	/*
@@ -25,10 +25,11 @@ public abstract class SchedulerState {
 		
 		// This loop will continuously check for new events and react accordingly
 		while(!done) {
-			// Parse a packet and add to corresponding list
+			
+
+			
 			scheduler.populateEvents();
 			
-			// Read from current events & react
 			event = scheduler.readFromAllFloors();
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
@@ -36,7 +37,9 @@ public abstract class SchedulerState {
 				nextState = handleEvent(event);
 				done = true;
 			}
-			event = scheduler.readFromElevator(this.elevator.elevatorID);
+			
+			event = scheduler.readFromFloorTextFile();
+//			//event = scheduler.readFromElevator(this.elevatorID);
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				Constants.formattedPrint("Scheduler picked up event: " + String.valueOf(event.eventType));

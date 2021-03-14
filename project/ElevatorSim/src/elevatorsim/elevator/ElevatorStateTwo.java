@@ -28,12 +28,12 @@ public class ElevatorStateTwo extends ElevatorState {
 			if(event.floorNum < elevator.destFloor) {
 				return Constants.ELEVATOR_STATE_TWO;
 			} else {
-				return Constants.ELEVATOR_STATE_FOUR;
+				return Constants.ELEVATOR_STATE_THREE;
 			}
 			
 		} else if(event.eventType == EventType.OPEN_DOOR) {
 			
-			return Constants.ELEVATOR_STATE_FOUR;
+			return Constants.ELEVATOR_STATE_THREE;
 		}
 		// Will need handle more events eventually
 		
@@ -48,6 +48,7 @@ public class ElevatorStateTwo extends ElevatorState {
 	public void entranceActions() {
 		// Perform all entrance action
 		elevator.moveUpOneFloor();
+		
 		return;
 	}
 

@@ -4,8 +4,8 @@ import elevatorsim.elevator.Elevator;
 
 public class SchedulerStateOne extends SchedulerState {
 
-	public SchedulerStateOne(Elevator elevator, Scheduler scheduler) {
-		super(elevator, scheduler);
+	public SchedulerStateOne(Scheduler scheduler, int elevatorID) {
+		super(scheduler, elevatorID);
 	}
 
 	@Override
@@ -14,7 +14,7 @@ public class SchedulerStateOne extends SchedulerState {
 		if(event.eventType == EventType.FLOOR_REQUEST || event.eventType == EventType.FLOOR_REQUEST_UP ||event.eventType == EventType.FLOOR_REQUEST_DOWN) {
 			Constants.formattedPrint("Scheduler got FR.");
 			// scheduler.sendResponseToFloor(event.floorNum);
-			if(scheduler.elevators[0].currentFloor < event.floorNum)
+			if(scheduler.elevatorCurrentFloor < event.floorNum)
 				scheduler.sendUpRequestToElevator(0, event.floorNum);
 			else
 				scheduler.sendDownRequestToElevator(0, event.floorNum);

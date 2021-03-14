@@ -39,14 +39,17 @@ public class Scheduler {
 	public Elevator[] elevators;
 	private Thread[] floorThreads;
 	private Thread[] elevatorThreads;
-	private Thread buttonSimulator;
-	private long startTimeInSeconds;
+	private boolean elevatorReadReq = false;
+	public int elevatorCurrentFloor = 1, elevatorDestinationFloor = 1;
+	//public int[] elevatorsCurrentFloors, elevatorsDestinationFloors = 1; TODO make it work with multiple elevators
+	private long startTimeInMilliSeconds;
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_ONE;
 	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
 	private List<String> futureEvents = new ArrayList<>();
 	private List<String> currentEvents = new ArrayList<>();
+	private List<String> sendQueueForElevator = new ArrayList<>();
 	public EventData currentTripEvent;
 	
 	public Scheduler() {
@@ -56,7 +59,7 @@ public class Scheduler {
 		elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
 		
 		try {
-			receiveSocket = new DatagramSocket(101);
+			receiveSocket = new DatagramSocket(Constants.UDP_PORT_NUMBER);
 			replySocket = new DatagramSocket();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -65,7 +68,6 @@ public class Scheduler {
 		
 		this.setupFloorLists();
 		this.setupElevatorLists();
-		//this.setupButtonSimulator();
 		this.setupElevatorThreads();
 		this.setupFloorThreads();
 		this.setupStateMachine(elevators[0]);
@@ -79,11 +81,9 @@ public class Scheduler {
 	    SchedulerState currentState= scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
     	Constants.formattedPrint("Starting Scheduler SM.");
-    	scheduler.readOverUDP(); 
-    	scheduler.futureEvents = scheduler.parseEvents();
-    	scheduler.startTimeInSeconds = System.currentTimeMillis()/1000;
+    	scheduler.startTimeInMilliSeconds = System.currentTimeMillis();
+    	Constants.formattedPrint("Start: "+ String.valueOf(scheduler.startTimeInMilliSeconds));
         while(true){
-        	
         	
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
@@ -115,13 +115,12 @@ public class Scheduler {
 	public void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
 		// Convert to string
 		// Send over UDP To elevator
-		
-		
-		
-		
-		
-		//(this.masterElevatorEventList.get(elevatorNumber-1)).add(eventToWrite);
+		String eventString = EventData.convertEventToString(eventToWrite);
+		// Add string to a list
+		this.sendQueueForElevator.add(eventString);
 	}
+	
+	
 	
 
 	
@@ -183,11 +182,7 @@ public class Scheduler {
 		}
 	}
 	
-	private void setupButtonSimulator() {
-		buttonSimulator = new Thread(new buttonSimulator(this.masterFloorEventList, this.masterElevatorEventList));
-		buttonSimulator.start();
-	}
-	
+
 	
 	/*
 	 * Function reads from list related to specified floor, for Iteration 1 it also checks that the event was acknowledged
@@ -219,23 +214,16 @@ public class Scheduler {
 	 * Returns:
 	 * EventData - Returns one event if one exists and it has been acknowledged by the elevator or null if none exist
 	 */
-	public synchronized EventData readFromElevator(Integer elevatorNumber) {
-		//read from index of listOfLists
-		// Check that there is an event
-//			for(int i = 0; i < (this.masterElevatorEventList.get(elevatorNumber-1)).size(); i++){
-//				if(this.masterElevatorEventList.size()>0 && (this.masterElevatorEventList.get(elevatorNumber-1)).size()>0) { //&& !((EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).get(i)).fromScheduler) {
-//						EventData newEvent = (EventData)(this.masterElevatorEventList.get(elevatorNumber-1)).remove(i);
-//						return newEvent;
-//					}
-//			}	
-		
-		
-		// Needs to be redone with UDP
-		// Read one packet from elevator
-		// Parse string into an EventData object
-		// Return event
-		// Return null if there are no packets
-		
+	public synchronized EventData readFromElevator( String dataString) {
+		Constants.formattedPrint("Reading event from elevator...");
+//		int port = this.receive();
+//		String packetMsg = new String(this.receivePacket.getData());
+	
+		EventData newEvent = EventData.convertStringToEvent(dataString);
+		if(newEvent != null) {
+			return newEvent;
+		}
+	
 		return null;
 	}
 	
@@ -256,15 +244,15 @@ public class Scheduler {
 	private void setupStateMachine(Elevator elevator) {
 		// TODO instantiate all states
     	stateList = new ArrayList<SchedulerState>(numOfStates);
-		stateList.add(new SchedulerStateIdle(elevator, this));
-		stateList.add(new SchedulerStateOne(elevator, this));
-		stateList.add(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(elevator, this));
-		stateList.add(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(elevator, this));
-		stateList.add(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(elevator, this));
-		stateList.add(Constants.SCHEDULER_STATE_FIVE, new SchedulerStateFive(elevator, this));
-		stateList.add(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(elevator, this));
-		stateList.add(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(elevator, this));
-		stateList.add(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(elevator, this));
+		stateList.add(new SchedulerStateIdle(this, 0));
+		stateList.add(new SchedulerStateOne(this, 0));
+		stateList.add(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(this, 0));
+		stateList.add(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(this, 0));
+		stateList.add(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(this, 0));
+//		stateList.add(Constants.SCHEDULER_STATE_FIVE, new SchedulerStateFive(this));
+//		stateList.add(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(this));
+//		stateList.add(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(this));
+//		stateList.add(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(this));
 
 	}
 	
@@ -281,14 +269,24 @@ public class Scheduler {
 //    }
 	
 	public void populateEvents() {
+		// NOT GETTING ADDED TOWHATEVER THIS IS READING FROM???
+		Constants.formattedPrint("populating...");
+		
 		String eventString;
 		String[] eventStringArgs;
-		long currentTimeInSeconds = System.currentTimeMillis()/1000;
+		long eventTime;
+		long currentTimeInMilliSeconds = System.currentTimeMillis();
+		Constants.formattedPrint("time: "+ String.valueOf(currentTimeInMilliSeconds-this.startTimeInMilliSeconds));
 		for(int i = 0; i < this.futureEvents.size(); i++) {
+			Constants.formattedPrint("MMMMMMMMMM."+ this.futureEvents.get(i));
+			Constants.formattedPrint("NNNNNNNNNN"+ this.futureEvents.size());
 			eventString = this.futureEvents.get(i);
 			eventStringArgs = eventString.split(" ");
-			if(eventStringArgs.length>0 && Integer.parseInt(eventStringArgs[0]) <= (currentTimeInSeconds-this.startTimeInSeconds)) {
+			eventTime = Long.parseLong(eventStringArgs[0]);
+			if((eventStringArgs.length>0 && ((1000*eventTime) <= (currentTimeInMilliSeconds-this.startTimeInMilliSeconds)))) {
 				// add to corresponding list
+				Constants.formattedPrint("Event entered");
+				this.futureEvents.remove(i);
 				EventData event = new EventData(EventType.FLOOR_REQUEST, Integer.parseInt(eventStringArgs[1]), Integer.parseInt(eventStringArgs[3]));
 				this.masterFloorEventList.get(Integer.parseInt(eventStringArgs[1])).add(event);
 			}
@@ -296,33 +294,66 @@ public class Scheduler {
 	}
 	
 	public List<String> parseEvents() {
+		List<String> eventStrings = new ArrayList<String>();
 		if(this.rawEvents.size() > 0) {
-			List<String> eventStrings = new ArrayList<String>(Arrays.asList(this.rawEvents.get(0).split(";")));
+			for(int i =0; i< this.rawEvents.size(); i++) {
+				Constants.formattedPrint("JKASFF" + this.rawEvents.get(i));
+				eventStrings.addAll(Arrays.asList(this.rawEvents.remove(i).split(";")));
+			}
+
 			return eventStrings;
 		}
 		return null;
+	}
+	
+	public EventData readFromFloorTextFile() {
+		List<String> eventStrings;
+		EventData newEvent;
+    	newEvent = this.readOverUDP(); // TODO: I think this only reads from first floor right now, should read until all floors have sent their events
+    	if(newEvent == null) {
+	    	eventStrings = this.parseEvents();
+	    	if(eventStrings != null && (eventStrings.size()>0))
+	    		this.futureEvents = eventStrings;
+	    	return null;
+    	}
+    	return newEvent;
 	}
 
     /**
      * Below: UDP functions===================================================================
      */
-	public void readOverUDP() {
+	public EventData readOverUDP() {
 		int receivePort = this.receive();
 		int len = this.receivePacket.getLength();
 		String dataString = new String(this.receivePacket.getData(), 0, len);
 		// this is when message is from an elevator
-		try {
-			int i = Integer.parseInt(dataString);
-			if (this.rawEvents.size() > 0) {
-	    		this.formReplyPacket(this.rawEvents.remove(0), receivePort);
-	    		this.reply();
+		if(dataString.startsWith("Read")|| this.elevatorReadReq) {
+			this.elevatorReadReq = false;
+			if(this.sendQueueForElevator.size()>0) {
+				this.formReplyPacket(this.sendQueueForElevator.remove(0), receivePort);
+				this.reply();
 			}
+			//return null;
+		}
+		if(dataString.contains("_")) { // Underscore means event
+			System.out.println("HERE2");
+			return this.readFromElevator(dataString);
+		}
+//		try {
+//			int i = Integer.parseInt(dataString);
+//			if (this.rawEvents.size() > 0) {
+//	    		this.formReplyPacket(this.rawEvents.remove(0), receivePort);
+//	    		this.reply();
+//			}
 		// this is when message is from a floor
-		} catch (NumberFormatException e) {
+		//} catch (NumberFormatException e) {
+		if(!dataString.startsWith("Read")) {
 			this.formReplyPacket("Data received from floor", receivePort);
 	    	this.reply();
 	    	this.rawEvents.add(dataString);
 		}
+		//}
+    	return null;
 	}
 	
 	private synchronized int receive() {
@@ -339,6 +370,8 @@ public class Scheduler {
 		}
 		
 		System.out.println("Scheduler: Packet received.");
+		if(new String(receivePacket.getData()).startsWith("Read-Ele"))
+			this.elevatorReadReq = true;
 		Floor.printPacketInfo(receivePacket);
 		return receivePacket.getPort();
 	}

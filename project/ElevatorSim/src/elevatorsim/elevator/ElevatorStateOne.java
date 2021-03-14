@@ -22,9 +22,9 @@ public class ElevatorStateOne extends ElevatorState {
 	 */
 	public int handleEvent(EventData event) {
 		// Check state machine diagram for what state to go to and what actions to take
-		if(event.eventType == EventType.MOVE_REQUEST_DOWN && elevator.currentFloor != 1) {
+		if(event.eventType == EventType.MOVE_REQUEST_DOWN) { // && elevator.currentFloor != 1) {
 			return Constants.ELEVATOR_STATE_FOUR;
-		} else if (event.eventType == EventType.MOVE_REQUEST_UP && elevator.currentFloor != Constants.NUMBER_OF_FLOORS) {
+		} else if (event.eventType == EventType.MOVE_REQUEST_UP) { // && elevator.currentFloor != Constants.NUMBER_OF_FLOORS) {
 			return Constants.ELEVATOR_STATE_TWO;
 		}
 		// Will need handle more events eventually

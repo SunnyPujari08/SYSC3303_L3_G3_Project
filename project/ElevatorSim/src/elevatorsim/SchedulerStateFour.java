@@ -4,19 +4,20 @@ import elevatorsim.elevator.Elevator;
 
 public class SchedulerStateFour extends SchedulerState {
 
-	public SchedulerStateFour(Elevator elevator, Scheduler scheduler) {
-		super(elevator, scheduler);
+	public SchedulerStateFour(Scheduler scheduler, int elevatorID) {
+		super(scheduler, elevatorID);
 	}
 
 	@Override
 	public int handleEvent(EventData event) {
 		if(event.eventType == EventType.ELEVATOR_PICK_FLOOR) {
-			if(elevator.currentFloor > elevator.destFloor) {
-				scheduler.sendDownRequestToElevator(elevator.elevatorID, elevator.destFloor);
+			int destFloor = scheduler.currentTripEvent.destinationFloor;
+			if(scheduler.elevatorCurrentFloor > destFloor) {
+				scheduler.sendDownRequestToElevator(this.elevatorID, destFloor);
 				return Constants.SCHEDULER_STATE_FIVE;
 			}
-			else if(elevator.currentFloor < elevator.destFloor) {
-				scheduler.sendUpRequestToElevator(elevator.elevatorID, elevator.destFloor);
+			else if(scheduler.elevatorCurrentFloor < destFloor) {
+				scheduler.sendUpRequestToElevator(this.elevatorID, destFloor);
 				return Constants.SCHEDULER_STATE_SIX;
 			}
 		}

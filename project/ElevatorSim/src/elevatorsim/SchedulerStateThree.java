@@ -4,13 +4,14 @@ import elevatorsim.elevator.Elevator;
 
 public class SchedulerStateThree extends SchedulerState {
 
-	public SchedulerStateThree(Elevator elevator, Scheduler scheduler) {
-		super(elevator, scheduler);
+	public SchedulerStateThree(Scheduler scheduler, int elevatorID) {
+		super(scheduler, elevatorID);
 	}
 
 	@Override
 	public int handleEvent(EventData event) {
 		if((event.eventType == EventType.ELEVATOR_ARR_FLOOR_UP || event.eventType == EventType.ELEVATOR_ARR_FLOOR_DOWN) && event.floorNum == scheduler.currentTripEvent.destinationFloor){
+			scheduler.elevatorCurrentFloor = event.floorNum;
 			Constants.formattedPrint("Trip done.");
 			return Constants.SCHEDULER_STATE_ONE;
 		}
@@ -20,7 +21,7 @@ public class SchedulerStateThree extends SchedulerState {
 
 	@Override
 	public void entranceActions() {
-		if(scheduler.elevators[0].currentFloor < scheduler.currentTripEvent.destinationFloor)
+		if(scheduler.elevatorCurrentFloor < scheduler.currentTripEvent.destinationFloor)
 			scheduler.sendUpRequestToElevator(0, scheduler.currentTripEvent.destinationFloor);
 		else
 			scheduler.sendDownRequestToElevator(0, scheduler.currentTripEvent.destinationFloor);

@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -50,7 +51,7 @@ public class Elevator implements Runnable {
 		}
     	
         this.elevatorID = elevatorID;
-        this.currentFloor = 2;
+        this.currentFloor = 1;
         setupStateMachine();
     }
 
@@ -59,8 +60,8 @@ public class Elevator implements Runnable {
     	ElevatorState currentState= stateList.get(startState);
     	int nextStateID;
         while(true){
-        	formPacket(String.valueOf(elevatorID));
-        	rpc_send();
+        	//formPacket(String.valueOf(elevatorID));
+        	//rpc_send();
         	
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
@@ -114,45 +115,40 @@ public class Elevator implements Runnable {
     	
     	// Convert event to string
     	// Send over UDP to scheduler
-    	
-    	
-    	//this.eventList.add(eData);
+    	this.formPacket(EventData.convertEventToString(eData));
+    	Constants.formattedPrint("Sending Event to sched from elevator");
+    	String packetDataRead = this.rpc_send();
     }
     
-    public synchronized EventData checkWorkFromScheduler(/*int destFloor*/) //throws InterruptedException
-    {
-    	
+    public synchronized EventData checkWorkFromScheduler() {
     	//Check for any new packets from scheduler
     	// Convert string event to EventData
     	// return event, return null if there are no new packets
-    	
-    	
-    	
-    	
-//        // If there are events available, return the first one
-//        if(this.eventList.size() > 0) {
-//        	// for loop to check for any events from scheduler
-//        	for(int i = 0; i < this.eventList.size(); i++) {
-//        		if(this.eventList.size() > 0 && this.eventList.get(i).fromScheduler) {
-//        			EventData newEvent = this.eventList.remove(i);
-//                	return newEvent;
-//        		}
-//        	}
-//        } 
-        return null;
+    	this.formPacket("Read-Elevator-"+String.valueOf(this.elevatorID));
+    	String packetDataRead = this.rpc_send(); // should block until event read, might need timeout
+    	if(packetDataRead == null)
+    		return null;
+    	EventData eventRead = EventData.convertStringToEvent(packetDataRead);
+    	return eventRead;
     }
     
 	public EventData checkForSensorEvents() {
 		// TODO create simulated sensor events
 		// Check for sensor events, arriving at floor, button presses etc...
-		return null;
+       if(eventList.size() > 0) {
+        	EventData newEvent = eventList.remove(0);
+        	return newEvent;
+        } else {
+        	return null;
+        }
 	}
 	
 	public void moveUpOneFloor() {
 		if(this.currentFloor < Constants.NUMBER_OF_FLOORS) {
 			this.currentFloor++;
 			Constants.formattedPrint("Elevator moving up one floor. Now at: " + String.valueOf(this.currentFloor));
-			//EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_UP, true);
+			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_UP);
+			this.eventList.add(event);
 			//this.sendEventToScheduler(event);
 		} else {
 			Constants.formattedPrint("Elevator can't move up one floor. Still at: " + String.valueOf(this.currentFloor));
@@ -163,8 +159,8 @@ public class Elevator implements Runnable {
 		if(this.currentFloor > 1) {
 			this.currentFloor--;
 			Constants.formattedPrint("Elevator moving down one floor. Now at: " + String.valueOf(this.currentFloor));
-			//EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_DOWN, true);
-			//this.sendEventToScheduler(event);
+			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_DOWN);
+			this.eventList.add(event);
 		} else {
 			Constants.formattedPrint("Elevator can't move down one floor. Still at: " + String.valueOf(this.currentFloor));
 		}
@@ -186,13 +182,13 @@ public class Elevator implements Runnable {
     private void formPacket(String info) {
     	byte[] data = info.getBytes();
     	try {
-			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 101);
+			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
     }
     
-    private void rpc_send() {
+    private String rpc_send() {
     	// Send a packet
 		System.out.println("Elevator" + elevatorID + ": Sending packet to Scheduler...");
 		Floor.printPacketInfo(packetOut);
@@ -213,19 +209,20 @@ public class Elevator implements Runnable {
 		System.out.println("Elevator" + elevatorID + ": Waiting for response from Scheduler.");
 		
 		try {
-			System.out.println("Waiting...");		// Waiting until packet comes
+			networkSocket.setSoTimeout(100);
 			networkSocket.receive(packetIn);
+		} catch(SocketTimeoutException e) {
+			return null;
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
-		}
-		System.out.println("HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		} 
 		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
 		
 		// if len>0
 		int len = packetIn.getLength();
-		String dataString = new String(packetIn.getData(), 0, len);
-		addEvents(dataString);
+		return new String(packetIn.getData(), 0, len);
+		//addEvents(dataString);
     }
     
     private void addEvents(String rawData) {

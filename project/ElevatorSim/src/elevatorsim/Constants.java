@@ -8,6 +8,8 @@ public class Constants {
 	public static Integer NUMBER_OF_FLOORS = 5;
 	public static Integer NUMBER_OF_ELEVATORS = 1;
 	
+	public static Integer UDP_PORT_NUMBER = 110;
+	
 	public static Integer ELEVATOR_STATE_ONE = 0;
 	public static Integer ELEVATOR_STATE_TWO = 1;
 	public static Integer ELEVATOR_STATE_THREE = 2;
@@ -38,4 +40,6 @@ public class Constants {
         String threadName = Thread.currentThread().getName();
         System.out.println(threadName + ": " + toPrint + ": " + timeStamp);
     }
+    
+
 }
