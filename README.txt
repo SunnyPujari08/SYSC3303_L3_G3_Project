@@ -1,5 +1,5 @@
 SYSC 3303
-Project Iteration 2
+Project Iteration 3
 L3_G3
 
 Members:
@@ -21,6 +21,7 @@ Contents List:
 - State_Machine_Scheduler.png
 - UML_Class_Diagram.png
 - UML_Sequence_Diagram.png
+- buttonSimulator.java
 - SchedulerStateIdle.java
 - SchedulerState.java
 - SchedulerStateX.java (X: Idle, 1-8)
@@ -62,20 +63,24 @@ To test the code, run the UnitTest.java file.
 
 Breakdown of responsibilities:
 Ezra Pierce:
-	- Scheduler state machine code design and implementation
-	- Elevator state machine code design and implementation
-	- Refactoring Scheduler and Elevator classes to work with state machines
+	- Refactoring Scheduler State Machine
+	- Implementing Scheduler UDP layer
+	- Implementing buttonSimulator
 
 Cameron Chung: 
 	- Implementation of Elevator state machine code
-	- Refactoring the Class and Sequence Diagram
+	- Refactoring Scheduler and Elevator
+	- Implementing State Machine unit tests
 
 Kashish Saxena
-	- Implementation of the Elevator and Scheduler state machines
+	- Refactoring Class and Sequence Diagram
+	- Refactoring Scheduler State Machine
 
 Sunjeevani Pujari
-	- Implementation of the Elevator and Scheduler state machines
-	
+	- Refactoring Elevator State Machine
+	- Refactoring Scheduler and Elevator state Machine	
+	- Refactoring Unit tests
+
 Jeong Won Kim
-	- Implementation of Elevator state machine code
-	- Implementation of Scheduler state machine code
+	- Implementing UDP layer for Floor and Elevator
+	- Implementing UDP unit tests
