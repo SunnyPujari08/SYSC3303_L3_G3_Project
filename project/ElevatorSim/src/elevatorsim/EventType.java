@@ -1,5 +1,6 @@
 package elevatorsim;
 
+// Defines all possible event types
 public enum EventType {
 	  FLOOR_REQUEST,
 	  FLOOR_REQUEST_UP,

@@ -1,7 +1,4 @@
 package elevatorsim;
-
-import elevatorsim.elevator.Elevator;
-
 public abstract class SchedulerState {
 	public Scheduler scheduler;
 	public int elevatorID;
@@ -27,9 +24,7 @@ public abstract class SchedulerState {
 		
 		// This loop will continuously check for new events and react accordingly
 		while(!done) {
-			
-
-			
+			// Will add any new events to the corresponding floor list
 			scheduler.populateEvents();
 			
 			event = scheduler.readFromAllFloors();
@@ -40,7 +35,7 @@ public abstract class SchedulerState {
 				done = true;
 			}
 			
-			event = scheduler.readFromFloorTextFile();
+			event = scheduler.readFromUDPSocket();
 //			//event = scheduler.readFromElevator(this.elevatorID);
 
 			if(event != null) {

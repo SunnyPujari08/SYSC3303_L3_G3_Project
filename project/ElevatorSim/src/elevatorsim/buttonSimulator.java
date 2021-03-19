@@ -1,3 +1,7 @@
+/*
+ * NOT IN USE CURRENTLY, keeping in case it comes in handy later on
+ */
+
 package elevatorsim;
 
 import java.util.ArrayList;

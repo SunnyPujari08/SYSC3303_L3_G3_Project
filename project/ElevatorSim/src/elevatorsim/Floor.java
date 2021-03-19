@@ -35,19 +35,27 @@ public class Floor implements Runnable {
     private boolean DOWN_BUTTON = false;
     private int lamp;
     
+    /*
+     * Creates new Floor object with a floor number and open socket
+     */
     public Floor(int floorNum) {
     	this.floorNum = floorNum;
     	try {
-			networkSocket = new DatagramSocket();
+			this.networkSocket = new DatagramSocket();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
     }
     
     public void closeSocket() {
-    	networkSocket.close();
+    	this.networkSocket.close();
     }
 	
+    /*
+     * Reads full text file specified by input string.
+     * Returns string with all events pertaining to it's floor number
+     * Return string has events separated by the ';' character.
+     */
     public String readEventFromTextFile(String filename) {
     	String rawData = "";
         try {
@@ -70,6 +78,9 @@ public class Floor implements Runnable {
         return rawData;
     }
 
+    /*
+     * Parses input string into an EventData object, either FLOOR_REQUEST_UP or FLOOR_REQUEST_DOWN
+     */
     public static EventData[] convertTextEvent(String rawData) throws ParseException {
     	String[] eString = rawData.split(";");
     	
@@ -94,46 +105,31 @@ public class Floor implements Runnable {
     /**
      * Below: UDP functions===================================================================
      */
-    
+    /*
+     * Assigns object variable 'this.packetOut' with a new packet. Packet data is specified in input string.
+     */
     public void formPacket(String info) {
     	byte[] data = info.getBytes();
     	try {
-			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
+			this.packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
     }
     
+    /*
+     * 1. Sends 'this.packetOut' over 'this.networkSocket'
+     * 2. Waits for response on 'this.networkSocket'
+     * 3. Writes response to 'this.packetIn'
+     * 
+     * NOTE: Will block until packet is received.
+     */
     private void rpc_send() {
     	// Send a packet
-		System.out.println("Floor" + floorNum + ": Sending packet to Scheduler...");
-		printPacketInfo(packetOut);
-		
-		try {
-			networkSocket.send(packetOut);
-			packetOut = null;
-		} catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		System.out.println("Floor" + floorNum + ": Packet sent.\n");
+		this.send();
 		
 		// Receive a reply packet
-		byte data[] = new byte[MAX_MESSAGE_LEN];
-		packetIn = new DatagramPacket(data, data.length);
-		System.out.println("Floor" + floorNum + ": Waiting for response from Scheduler.");
-		
-		try {
-			System.out.println("Waiting...");		// Waiting until packet comes
-			networkSocket.receive(packetIn);
-		} catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		System.out.println("Floor" + floorNum + ": Packet received.\n");
-		printPacketInfo(packetIn);
+		this.recv(); // Ignore return string, only used in testing
     }
     
     public void send() {
@@ -179,15 +175,22 @@ public class Floor implements Runnable {
 		Constants.formattedPrint("Data in string: " + dataString);
     }
     
+/*
+ * Thread reads file once, sends all events at once
+ * TODO: Maybe send one event at a time until all events are sent? currently it sends all events at once
+ * TODO: Might need to be able to read new events from scheduler at some point...
+ */
 	public void run() {
 		String rawData = readEventFromTextFile(FILENAME);
 		if (rawData.length() > 0)
 			formPacket(rawData);
 		while (packetOut != null)
 			rpc_send();
-		// Maybe wait for reply?
 	}
 	
+	/*
+	 * Creates and starts all Floor Threads
+	 */
 	public static void main(String args[]) {
 		Thread[] floorThreads = new Thread[Constants.NUMBER_OF_FLOORS];
 		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {

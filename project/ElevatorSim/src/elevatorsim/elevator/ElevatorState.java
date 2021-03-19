@@ -35,14 +35,14 @@ public abstract class ElevatorState {
 		
 		// This loop will continuously check for new events and react accordingly
 		while(!done) {
-			event = elevator.checkWorkFromScheduler();
+			event = elevator.checkWorkFromScheduler(); // from UDP socket
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				Constants.formattedPrint("Elevator picked up event: " + String.valueOf(event.eventType));
 				nextState = handleEvent(event);
 				done = true;
 			}
-			event = elevator.checkForSensorEvents();
+			event = elevator.checkForSensorEvents(); // from eventList, should only be self-generated events like ELEVATOR_ARR_DOWN etc.
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				Constants.formattedPrint("Elevator picked up event: " + String.valueOf(event.eventType));
