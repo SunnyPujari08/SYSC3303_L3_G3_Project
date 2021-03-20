@@ -24,13 +24,13 @@ public class UnitTest extends TestCase {
 		
 		//Test time stamp
 		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
-    	Date testTimeStamp = dateFormat.parse("14:05:15.0");
+    	Date testTimeStamp = dateFormat.parse("08:07:06.0");
 		
 		String rawData = floor.readEventFromTextFile(testInputFile);
-		EventData[] eventData = Floor.convertTextEvent(rawData);
+		EventData[] eventData = floor.convertTextEvent(rawData);
 		
 		assertEquals(testTimeStamp, eventData[0].timestamp);
-		assertEquals(2, eventData[1].floorNum);
+		assertEquals(1, eventData[1].floorNum);
 		assertTrue(eventData[2].upButton);
 		assertFalse(eventData[2].downButton);
 		assertEquals(EventType.FLOOR_REQUEST, eventData[3].eventType);
@@ -134,7 +134,7 @@ public class UnitTest extends TestCase {
 		
 		Elevator elevator = new Elevator(1);
 		
-		assertEquals(elevator.startState(), 1);
+		assertEquals(0, elevator.startState());
 		assertNotNull(elevator.stateList());
 		
 		//elevator.run();

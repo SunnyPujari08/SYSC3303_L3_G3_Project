@@ -81,7 +81,7 @@ public class Floor implements Runnable {
     /*
      * Parses input string into an EventData object, either FLOOR_REQUEST_UP or FLOOR_REQUEST_DOWN
      */
-    public static EventData[] convertTextEvent(String rawData) throws ParseException {
+    public EventData[] convertTextEvent(String rawData) throws ParseException {
     	String[] eString = rawData.split(";");
     	
     	EventData[] eData = new EventData[eString.length]; 
