@@ -51,7 +51,7 @@ public class Elevator implements Runnable {
      */
     public Elevator(int elevatorID) {
     	try {
-			networkSocket = new DatagramSocket();
+			this.networkSocket = new DatagramSocket();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -62,7 +62,7 @@ public class Elevator implements Runnable {
     }
     
     public void closeSocket() {
-    	networkSocket.close();
+    	this.networkSocket.close();
     }
 
     @Override
