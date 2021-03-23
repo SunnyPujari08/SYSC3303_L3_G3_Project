@@ -99,7 +99,7 @@ public class Elevator implements Runnable {
     
     public void openElevatorDoor() {
     	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
-    	sleep(750);
+    	sleep(Constants.DOOR_TIME);
     	isDoorOpen = true;
 
     	Constants.formattedPrint("This is the action: OpenElevatorDoor");
@@ -107,10 +107,11 @@ public class Elevator implements Runnable {
     
     public void closeElevatorDoor() {
     	//CloseElevatorDoor - Close timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
-    	sleep(750);
+    	sleep(Constants.DOOR_TIME);
     	isDoorOpen = false;
     	Constants.formattedPrint("This is the action: CloseElevatorDoor");
     }
+    
     
     public static void sleep(long millies) {
     	try {
@@ -173,7 +174,7 @@ public class Elevator implements Runnable {
 			this.currentFloor++;
 			Constants.formattedPrint("Elevator moving up one floor. Now at: " + String.valueOf(this.currentFloor));
 			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_UP);
-			sleep(2880);
+			sleep(Constants.MOVE_TIME);
 			this.eventList.add(event);
 			//this.sendEventToScheduler(event);
 		} else {
@@ -191,7 +192,7 @@ public class Elevator implements Runnable {
 			this.currentFloor--;
 			Constants.formattedPrint("Elevator moving down one floor. Now at: " + String.valueOf(this.currentFloor));
 			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_DOWN);
-			sleep(2880);
+			sleep(Constants.MOVE_TIME);
 			this.eventList.add(event);
 		} else {
 			Constants.formattedPrint("Elevator can't move down one floor. Still at: " + String.valueOf(this.currentFloor));
