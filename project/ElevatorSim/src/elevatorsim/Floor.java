@@ -10,8 +10,6 @@ import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -75,31 +73,26 @@ public class Floor implements Runnable {
             Constants.formattedPrint("File does not exist!");
             e.printStackTrace();
         }
+        
         return rawData;
     }
 
-    /*
-     * Parses input string into an EventData object, either FLOOR_REQUEST_UP or FLOOR_REQUEST_DOWN
-     */
-    public EventData[] convertTextEvent(String rawData) throws ParseException {
+    public String currentEvent(String rawData) {
     	String[] eString = rawData.split(";");
     	
-    	EventData[] eData = new EventData[eString.length]; 
     	for (int i = 0; i < eString.length; i++) {
     		String[] eInfo = eString[i].split(" ");
-    		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
-        	Date timeStamp = dateFormat.parse(eInfo[0]);
-        	EventType eType = null;
-        	int floorNum = Integer.parseInt(eInfo[1]);
-        	if (eInfo[2].equals("Up"))
-        		eType = EventType.FLOOR_REQUEST_UP;
-        	else if (eInfo[2].equals("Down"))
-        		eType = EventType.FLOOR_REQUEST_DOWN;
-        	int destination = Integer.parseInt(eInfo[3]);
-        	eData[i] = new EventData(timeStamp, floorNum, eType, destination);
+    		
+    		String time = eInfo[0];
+    		//String floorNum = eInfo[1];
+    		//String direction = eInfo[2];
+    		//String destination = eInfo[3];
+
+    		if (Integer.parseInt(time) == Constants.tempTimer)
+    			return eString[i];
     	}
     	
-    	return eData;
+    	return "";
     }
     
     /**
@@ -182,19 +175,29 @@ public class Floor implements Runnable {
  */
 	public void run() {
 		String rawData = readEventFromTextFile(FILENAME);
-		if (rawData.length() > 0)
-			formPacket(rawData);
-		while (packetOut != null)
-			rpc_send();
+		String curEvent = "";
+		while (true) {
+			if (rawData.length() > 0)
+				curEvent = currentEvent(rawData);
+			if (curEvent.length() > 0) {
+				formPacket(curEvent);
+				rpc_send();
+			}
+			//TODO: handle received info here
+		}
 	}
 	
 	/*
 	 * Creates and starts all Floor Threads
 	 */
 	public static void main(String args[]) {
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Enter the number of floors");
+		Constants.NUMBER_OF_FLOORS = keyboard.nextInt();
+		
 		Thread[] floorThreads = new Thread[Constants.NUMBER_OF_FLOORS];
 		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-			floorThreads[i] = new Thread(new Floor(i+1), "Floor" + i);
+			floorThreads[i] = new Thread(new Floor(i+1), "Floor" + (i+1));
 		}
 		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 			floorThreads[i].start();

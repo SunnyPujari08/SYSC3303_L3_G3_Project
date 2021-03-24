@@ -5,15 +5,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
+import java.util.Scanner;
 import elevatorsim.Constants;
 import elevatorsim.EventData;
 import elevatorsim.EventType;
@@ -32,7 +27,6 @@ public class Elevator implements Runnable {
 	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
 	private DatagramSocket networkSocket;
 
-    private EventData eData;
     public int elevatorID;
     public int currentFloor;
     public int destFloor;
@@ -42,7 +36,6 @@ public class Elevator implements Runnable {
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
     private ElevatorState currentState;
-    private int udpTimeoutInMilliSeconds = 100;
 
 
     /*
@@ -130,10 +123,7 @@ public class Elevator implements Runnable {
      */
     public synchronized EventData checkWorkFromScheduler() {
     	this.formPacket("Read-Elevator-"+String.valueOf(this.elevatorID));
-    	String packetDataRead = this.rpc_send(); // rpc_send() will timeout and return null if there is no reply(Meaning no new events from scheduler).
-    	if(packetDataRead == null) {
-    		return null;
-    	}
+    	String packetDataRead = rpc_send(); // rpc_send() will timeout and return null if there is no reply(Meaning no new events from scheduler).
     	EventData eventRead = EventData.convertStringToEvent(packetDataRead);
     	return eventRead;
     }
@@ -246,14 +236,10 @@ public class Elevator implements Runnable {
 		System.out.println("Elevator" + elevatorID + ": Waiting for response from Scheduler.");
 		
 		try {
-			networkSocket.setSoTimeout(this.udpTimeoutInMilliSeconds);
 			networkSocket.receive(packetIn);
-		} catch(SocketTimeoutException e) {
-			return null;
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
-
 		} 
 
 		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
@@ -269,14 +255,16 @@ public class Elevator implements Runnable {
      * 4. If packet is received, assign to 'this.packetIn' and return packet data.
      */
     private String rpc_send() {
-    	this.send();
-		
-    	return this.recv();
-
+    	send();
+    	return recv();
     }
     
     
 	public static void main(String args[]) {
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Enter the number of elevators");
+		Constants.NUMBER_OF_ELEVATORS = keyboard.nextInt();
+		
 		Thread[] elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
 		Elevator[] elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {

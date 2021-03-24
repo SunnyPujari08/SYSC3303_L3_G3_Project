@@ -1,12 +1,15 @@
 package elevatorsim;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // This class contains all global constants
 public class Constants {
-	public static Integer NUMBER_OF_FLOORS = 5;
-	public static Integer NUMBER_OF_ELEVATORS = 1;
+	public static Integer tempTimer = 0; // Need to replace this to a proper timer implementation
+	public static Integer NUMBER_OF_FLOORS = 0;
+	public static Integer NUMBER_OF_ELEVATORS = 0;
 	
 	public static Integer UDP_PORT_NUMBER = 110;
 	
@@ -40,6 +43,5 @@ public class Constants {
         String threadName = Thread.currentThread().getName();
         System.out.println(threadName + ": " + toPrint + ": " + timeStamp);
     }
-    
 
 }

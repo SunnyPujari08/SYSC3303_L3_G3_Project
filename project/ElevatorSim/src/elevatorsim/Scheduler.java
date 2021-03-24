@@ -34,11 +34,8 @@ public class Scheduler {
 
 	public List<List> masterFloorEventList = new ArrayList<>();
 	public List<List> masterElevatorEventList = new ArrayList<>();
-	private Floor[] floors;
-	private Elevator[] elevators;
 
-	private Thread[] floorThreads;
-	private Thread[] elevatorThreads;
+
 	private boolean elevatorReadReq = false; // TODO: Change to array, need Read Request flag for each elevator
 	public int elevatorCurrentFloor = 1, elevatorDestinationFloor = 1;
 	// TODO: public int[] elevatorsCurrentFloors, elevatorsDestinationFloors = 1; TODO make it work with multiple elevators
@@ -49,15 +46,11 @@ public class Scheduler {
 	private int startState = Constants.SCHEDULER_STATE_ONE;
 	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
 	private List<String> futureEvents = new ArrayList<>();
-	private List<String> currentEvents = new ArrayList<>();
 	private List<String> sendQueueForElevator = new ArrayList<>(); // TODO make this into a list of lists, need one list queue for each elevator
 	public EventData currentTripEvent; // TODO need to make into list, one for each elevator
 	private SchedulerState currentState;
 	
 	public Scheduler() {
-		floors = new Floor[Constants.NUMBER_OF_FLOORS];
-		elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
-		
 		try {
 			receiveSocket = new DatagramSocket(Constants.UDP_PORT_NUMBER);
 			replySocket = new DatagramSocket();
@@ -67,9 +60,7 @@ public class Scheduler {
 		
 		this.setupFloorLists();
 		this.setupElevatorLists();
-
 		this.setupStateMachine();
-
 	}
 	
     public void closeSockets() {
@@ -239,24 +230,7 @@ public class Scheduler {
 	 * other event types need to be supported
 	 */
 	public void populateEvents() {
-		
-		String eventString;
-		String[] eventStringArgs;
-		long eventTime;
-		long currentTimeInMilliSeconds = System.currentTimeMillis();
-		for(int i = 0; i < this.futureEvents.size(); i++) {
-			eventString = this.futureEvents.get(i);
-			eventStringArgs = eventString.split(" ");
-			eventTime = Long.parseLong(eventStringArgs[0]);
-			if((eventStringArgs.length>0 && ((1000*eventTime) <= (currentTimeInMilliSeconds-this.startTimeInMilliSeconds)))) {
-				// add to corresponding list
-				Constants.formattedPrint("Event entered");
-				this.futureEvents.remove(i);
-				EventData event = new EventData(EventType.FLOOR_REQUEST, Integer.parseInt(eventStringArgs[1]), Integer.parseInt(eventStringArgs[3]));
-				this.masterFloorEventList.get(Integer.parseInt(eventStringArgs[1])).add(event);
-
-			}
-		}
+		//TODO: Jeong-won is working on this
 	}
 	
 	/*
