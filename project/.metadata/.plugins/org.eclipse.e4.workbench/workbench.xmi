@@ -2,7 +2,7 @@
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Cr2skIklEeuE0pL-41u_ag" elementId="org.eclipse.e4.legacy.ide.application" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_Cr2skYklEeuE0pL-41u_ag" bindingContexts="_Cr3WY4klEeuE0pL-41u_ag">
   <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workbench>&#xD;&#xA;&lt;mruList>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;EventData.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/EventData.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/EventData.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UnitTest.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/UnitTest.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/UnitTest.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Floor.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/Floor.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/Floor.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Scheduler.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/Scheduler.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/Scheduler.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.jdt.ui.ClassFileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.ClassFileEditorNoSource&quot; name=&quot;DateFormat.class&quot; tooltip=&quot;java.text.DateFormat&quot;>&#xD;&#xA;&lt;persistable org.eclipse.jdt.ui.ClassFileIdentifier=&quot;=ElevatorSim/C:\/Users\/Ploko\/.p2\/pool\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_14.0.2.v20200815-0932\/jre\/lib\/jrt-fs.jar`java.base=/module=/true=/=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/14\/docs\/api\/=/&amp;lt;java.text(DateFormat.class&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Elevator.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/elevator/Elevator.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/elevator/Elevator.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Floor.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\ElevatorSim\src\elevatorsim\Floor.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/project/ElevatorSim/src/elevatorsim/Floor.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Server.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\SYSC\SYSC 3303\Server.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/SYSC/SYSC%203303/Server.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;IntermediateHost.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\SYSC\SYSC 3303\IntermediateHost.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/SYSC/SYSC%203303/IntermediateHost.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Client.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\SYSC\SYSC 3303\Client.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/SYSC/SYSC%203303/Client.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;SchedulerStateOne.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/SchedulerStateOne.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/SchedulerStateOne.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;SchedulerState.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/SchedulerState.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/SchedulerState.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;ElevatorStateOne.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/elevator/ElevatorStateOne.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/elevator/ElevatorStateOne.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;ElevatorState.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/elevator/ElevatorState.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ElevatorSim/src/elevatorsim/elevator/ElevatorState.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;SchedulerState.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\ElevatorSim\src\elevatorsim\SchedulerState.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/project/ElevatorSim/src/elevatorsim/SchedulerState.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;ElevatorStateFour.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\ElevatorSim\src\elevatorsim\elevator\ElevatorStateFour.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/project/ElevatorSim/src/elevatorsim/elevator/ElevatorStateFour.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;EventData.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\ElevatorSim\src\elevatorsim\EventData.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/project/ElevatorSim/src/elevatorsim/EventData.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;EventType.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\ElevatorSim\src\elevatorsim\EventType.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/project/ElevatorSim/src/elevatorsim/EventType.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UnitTest.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\ElevatorSim\src\elevatorsim\UnitTest.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/project/ElevatorSim/src/elevatorsim/UnitTest.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;ElevatorStateTwo.java&quot; tooltip=&quot;C:\Users\Ploko\Documents\GitHub\SYSC3303_L3_G3_Project\project\ElevatorSim\src\elevatorsim\elevator\ElevatorStateTwo.java&quot;>&#xD;&#xA;&lt;persistable uri=&quot;file:/C:/Users/Ploko/Documents/GitHub/SYSC3303_L3_G3_Project/project/ElevatorSim/src/elevatorsim/elevator/ElevatorStateTwo.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;/mruList>&#xD;&#xA;&lt;/workbench>"/>
   <tags>activeSchemeId:org.eclipse.ui.defaultAcceleratorConfiguration</tags>
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_Cr2skYklEeuE0pL-41u_ag" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_Cr2skoklEeuE0pL-41u_ag" label="%trimmedwindow.label.eclipseSDK" x="0" y="0" width="1024" height="1087">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_Cr2skYklEeuE0pL-41u_ag" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_Cr2skoklEeuE0pL-41u_ag" label="%trimmedwindow.label.eclipseSDK" x="909" y="0" width="1024" height="1087">
     <persistedState key="coolBarVisible" value="true"/>
     <persistedState key="perspectiveBarVisible" value="true"/>
     <persistedState key="isRestored" value="true"/>
@@ -10,7 +10,6 @@
     <persistedState key="workingSets" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workingSets/>"/>
     <persistedState key="aggregateWorkingSetId" value="Aggregate for window 1614362449481"/>
     <tags>topLevel</tags>
-    <tags>shellMaximized</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="_Cr2skoklEeuE0pL-41u_ag" selectedElement="_Cr2sk4klEeuE0pL-41u_ag" horizontal="true">
       <children xsi:type="advanced:PerspectiveStack" xmi:id="_Cr2sk4klEeuE0pL-41u_ag" elementId="org.eclipse.ui.ide.perspectivestack" containerData="7500" selectedElement="_Cr2slIklEeuE0pL-41u_ag">
         <children xsi:type="advanced:Perspective" xmi:id="_Cr2slIklEeuE0pL-41u_ag" elementId="org.eclipse.jdt.ui.JavaPerspective" selectedElement="_Cr2slYklEeuE0pL-41u_ag" label="Java" iconURI="platform:/plugin/org.eclipse.jdt.ui/$nl$/icons/full/eview16/jperspective.png">
@@ -73,9 +72,10 @@
           <tags>persp.actionSet:org.eclipse.jdt.junit.JUnitActionSet</tags>
           <tags>persp.viewSC:org.eclipse.ant.ui.views.AntView</tags>
           <children xsi:type="basic:PartSashContainer" xmi:id="_Cr2slYklEeuE0pL-41u_ag" selectedElement="_Cr2snoklEeuE0pL-41u_ag" horizontal="true">
-            <children xsi:type="basic:PartSashContainer" xmi:id="_Cr2sloklEeuE0pL-41u_ag" containerData="1849" selectedElement="_Cr2sl4klEeuE0pL-41u_ag">
-              <children xsi:type="basic:PartStack" xmi:id="_Cr2sl4klEeuE0pL-41u_ag" elementId="left" containerData="6000" selectedElement="_Cr2sm4klEeuE0pL-41u_ag">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_Cr2sloklEeuE0pL-41u_ag" visible="false" containerData="1849" selectedElement="_Cr2sl4klEeuE0pL-41u_ag">
+              <children xsi:type="basic:PartStack" xmi:id="_Cr2sl4klEeuE0pL-41u_ag" elementId="left" visible="false" containerData="6000" selectedElement="_Cr2sm4klEeuE0pL-41u_ag">
                 <tags>org.eclipse.e4.primaryNavigationStack</tags>
+                <tags>Minimized</tags>
                 <children xsi:type="advanced:Placeholder" xmi:id="_Cr2smIklEeuE0pL-41u_ag" elementId="org.eclipse.jdt.ui.PackageExplorer" ref="_Cr2va4klEeuE0pL-41u_ag" closeable="true">
                   <tags>View</tags>
                   <tags>categoryTag:Java</tags>
@@ -102,8 +102,8 @@
             </children>
             <children xsi:type="basic:PartSashContainer" xmi:id="_Cr2snoklEeuE0pL-41u_ag" containerData="8151" selectedElement="_Cr2sn4klEeuE0pL-41u_ag">
               <children xsi:type="basic:PartSashContainer" xmi:id="_Cr2sn4klEeuE0pL-41u_ag" containerData="7500" selectedElement="_Cr2soIklEeuE0pL-41u_ag" horizontal="true">
-                <children xsi:type="advanced:Placeholder" xmi:id="_Cr2soIklEeuE0pL-41u_ag" elementId="org.eclipse.ui.editorss" containerData="7500" ref="_Cr2vXYklEeuE0pL-41u_ag"/>
-                <children xsi:type="basic:PartStack" xmi:id="_Cr2soYklEeuE0pL-41u_ag" elementId="right" containerData="2500" selectedElement="_Cr2sooklEeuE0pL-41u_ag">
+                <children xsi:type="advanced:Placeholder" xmi:id="_Cr2soIklEeuE0pL-41u_ag" elementId="org.eclipse.ui.editorss" containerData="7766" ref="_Cr2vXYklEeuE0pL-41u_ag"/>
+                <children xsi:type="basic:PartStack" xmi:id="_Cr2soYklEeuE0pL-41u_ag" elementId="right" containerData="2234" selectedElement="_Cr2sooklEeuE0pL-41u_ag">
                   <tags>org.eclipse.e4.secondaryNavigationStack</tags>
                   <children xsi:type="advanced:Placeholder" xmi:id="_Cr2sooklEeuE0pL-41u_ag" elementId="org.eclipse.ui.views.ContentOutline" ref="_Cr2vjoklEeuE0pL-41u_ag" closeable="true">
                     <tags>View</tags>
@@ -210,46 +210,42 @@
       <tags>View</tags>
       <tags>categoryTag:Help</tags>
     </sharedElements>
-    <sharedElements xsi:type="advanced:Area" xmi:id="_Cr2vXYklEeuE0pL-41u_ag" elementId="org.eclipse.ui.editorss" selectedElement="_Cr2vXoklEeuE0pL-41u_ag">
-      <children xsi:type="basic:PartSashContainer" xmi:id="_Cr2vXoklEeuE0pL-41u_ag" selectedElement="_Cr2vX4klEeuE0pL-41u_ag" horizontal="true">
-        <children xsi:type="basic:PartStack" xmi:id="_Cr2vX4klEeuE0pL-41u_ag" elementId="org.eclipse.e4.primaryDataStack" containerData="5000" selectedElement="_Cr2vZIklEeuE0pL-41u_ag">
-          <tags>org.eclipse.e4.primaryDataStack</tags>
-          <tags>EditorStack</tags>
-          <tags>active</tags>
-          <children xsi:type="basic:Part" xmi:id="_Cr2vYIklEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="UnitTest.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-            <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UnitTest.java&quot; partName=&quot;UnitTest.java&quot; title=&quot;UnitTest.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/UnitTest.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/UnitTest.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;71&quot; selectionOffset=&quot;3024&quot; selectionTopPixel=&quot;615&quot;/>&#xD;&#xA;&lt;/editor>"/>
-            <tags>Editor</tags>
-            <tags>removeOnHide</tags>
-            <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
-          </children>
-          <children xsi:type="basic:Part" xmi:id="_Cr2vZIklEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Scheduler.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-            <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Scheduler.java&quot; partName=&quot;Scheduler.java&quot; title=&quot;Scheduler.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/Scheduler.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/Scheduler.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;9&quot; selectionOffset=&quot;12885&quot; selectionTopPixel=&quot;4440&quot;/>&#xD;&#xA;&lt;/editor>"/>
-            <tags>Editor</tags>
-            <tags>removeOnHide</tags>
-            <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
-            <tags>active</tags>
-            <tags>activeOnClose</tags>
-          </children>
-          <children xsi:type="basic:Part" xmi:id="_Jb1j4IkrEeuDcpzSdqjB5Q" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="EventData.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-            <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;EventData.java&quot; partName=&quot;EventData.java&quot; title=&quot;EventData.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/EventData.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/EventData.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;0&quot; selectionTopPixel=&quot;270&quot;/>&#xD;&#xA;&lt;/editor>"/>
-            <tags>Editor</tags>
-            <tags>removeOnHide</tags>
-            <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
-          </children>
+    <sharedElements xsi:type="advanced:Area" xmi:id="_Cr2vXYklEeuE0pL-41u_ag" elementId="org.eclipse.ui.editorss" selectedElement="_Cr2vX4klEeuE0pL-41u_ag">
+      <children xsi:type="basic:PartStack" xmi:id="_Cr2vX4klEeuE0pL-41u_ag" elementId="org.eclipse.e4.primaryDataStack" selectedElement="_Cr2vZYklEeuE0pL-41u_ag">
+        <tags>org.eclipse.e4.primaryDataStack</tags>
+        <tags>EditorStack</tags>
+        <tags>active</tags>
+        <children xsi:type="basic:Part" xmi:id="_Cr2vYIklEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="UnitTest.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UnitTest.java&quot; partName=&quot;UnitTest.java&quot; title=&quot;UnitTest.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/UnitTest.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/UnitTest.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;71&quot; selectionOffset=&quot;3024&quot; selectionTopPixel=&quot;2048&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <tags>Editor</tags>
+          <tags>removeOnHide</tags>
+          <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
         </children>
-        <children xsi:type="basic:PartStack" xmi:id="_Cr2vZoklEeuE0pL-41u_ag" elementId="PartStack@7cb9f0e5" containerData="5000" selectedElement="_Cr2vZYklEeuE0pL-41u_ag">
-          <children xsi:type="basic:Part" xmi:id="_Cr2vZ4klEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Floor.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-            <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Floor.java&quot; partName=&quot;Floor.java&quot; title=&quot;Floor.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/Floor.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/Floor.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;3422&quot; selectionTopPixel=&quot;0&quot;/>&#xD;&#xA;&lt;/editor>"/>
-            <tags>Editor</tags>
-            <tags>removeOnHide</tags>
-            <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
-          </children>
-          <children xsi:type="basic:Part" xmi:id="_Cr2vZYklEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Elevator.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-            <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Elevator.java&quot; partName=&quot;Elevator.java&quot; title=&quot;Elevator.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/elevator/Elevator.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/elevator/Elevator.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;5103&quot; selectionTopPixel=&quot;3222&quot;/>&#xD;&#xA;&lt;/editor>"/>
-            <tags>Editor</tags>
-            <tags>removeOnHide</tags>
-            <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
-          </children>
+        <children xsi:type="basic:Part" xmi:id="_Cr2vZIklEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Scheduler.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Scheduler.java&quot; partName=&quot;Scheduler.java&quot; title=&quot;Scheduler.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/Scheduler.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/Scheduler.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;9&quot; selectionOffset=&quot;12885&quot; selectionTopPixel=&quot;5097&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <tags>Editor</tags>
+          <tags>removeOnHide</tags>
+          <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
+        </children>
+        <children xsi:type="basic:Part" xmi:id="_Jb1j4IkrEeuDcpzSdqjB5Q" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="EventData.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;EventData.java&quot; partName=&quot;EventData.java&quot; title=&quot;EventData.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/EventData.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/EventData.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;0&quot; selectionTopPixel=&quot;270&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <tags>Editor</tags>
+          <tags>removeOnHide</tags>
+          <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
+        </children>
+        <children xsi:type="basic:Part" xmi:id="_Cr2vZ4klEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Floor.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Floor.java&quot; partName=&quot;Floor.java&quot; title=&quot;Floor.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/Floor.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/Floor.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;3422&quot; selectionTopPixel=&quot;0&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <tags>Editor</tags>
+          <tags>removeOnHide</tags>
+          <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
+        </children>
+        <children xsi:type="basic:Part" xmi:id="_Cr2vZYklEeuE0pL-41u_ag" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Elevator.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;Elevator.java&quot; partName=&quot;Elevator.java&quot; title=&quot;Elevator.java&quot; tooltip=&quot;ElevatorSim/src/elevatorsim/elevator/Elevator.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/ElevatorSim/src/elevatorsim/elevator/Elevator.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;84&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;7126&quot; selectionTopPixel=&quot;2385&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <tags>Editor</tags>
+          <tags>removeOnHide</tags>
+          <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
+          <tags>active</tags>
+          <tags>activeOnClose</tags>
         </children>
       </children>
     </sharedElements>
@@ -428,7 +424,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Cr3T2oklEeuE0pL-41u_ag" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="__cMgYIkpEeuDcpzSdqjB5Q" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_Cr5MoIklEeuE0pL-41u_ag"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_gwJWQIv8EeuW6-by0tQCNQ" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_Cr5MoIklEeuE0pL-41u_ag"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Cr3T54klEeuE0pL-41u_ag" elementId="group.edit" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -465,7 +461,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Cr3UaoklEeuE0pL-41u_ag" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="__cOVlokpEeuDcpzSdqjB5Q" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_Cr5MHYklEeuE0pL-41u_ag"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_gwLLcIv8EeuW6-by0tQCNQ" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_Cr5MHYklEeuE0pL-41u_ag"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Cr3UeoklEeuE0pL-41u_ag" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -499,12 +495,16 @@
         <tags>Draggable</tags>
       </children>
     </trimBars>
-    <trimBars xmi:id="_Cr3UlIklEeuE0pL-41u_ag" elementId="org.eclipse.ui.trim.vertical1" contributorURI="platform:/plugin/org.eclipse.platform" toBeRendered="false" side="Left">
+    <trimBars xmi:id="_Cr3UlIklEeuE0pL-41u_ag" elementId="org.eclipse.ui.trim.vertical1" contributorURI="platform:/plugin/org.eclipse.platform" side="Left">
       <children xsi:type="menu:ToolControl" xmi:id="_Cr3UlYklEeuE0pL-41u_ag" elementId="org.eclipse.ui.ide.perspectivestack(minimized)" toBeRendered="false" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.TrimStack">
         <tags>TrimStack</tags>
         <tags>Draggable</tags>
       </children>
       <children xsi:type="menu:ToolControl" xmi:id="_Cr3UloklEeuE0pL-41u_ag" elementId="bottom(IDEWindow).(org.eclipse.jdt.ui.JavaPerspective)" toBeRendered="false" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.TrimStack">
+        <tags>TrimStack</tags>
+        <tags>Draggable</tags>
+      </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_QURu0Iv-EeuW6-by0tQCNQ" elementId="left(IDEWindow).(org.eclipse.jdt.ui.JavaPerspective)" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.TrimStack">
         <tags>TrimStack</tags>
         <tags>Draggable</tags>
       </children>
