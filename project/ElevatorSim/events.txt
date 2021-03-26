@@ -1,4 +1,4 @@
 0 2 Up 4
-600 5 Down 4
-1200 4 Down 1
-1800 3 Up 6
+5 5 Down 4
+12 4 Down 1
+18 3 Up 6

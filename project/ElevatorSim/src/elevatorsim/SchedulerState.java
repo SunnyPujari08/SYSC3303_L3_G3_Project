@@ -16,6 +16,9 @@ public abstract class SchedulerState {
 	 *  and reacting accordingly.
 	 */
 	public int run() {
+		scheduler.manageEvent();
+		return 0;
+		/*
 		entranceActions();
 		
 		int nextState = -1;
@@ -47,6 +50,7 @@ public abstract class SchedulerState {
 		}
 		exitActions();
 		return nextState;
+		*/
 	}
 	
 	

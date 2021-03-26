@@ -1,17 +1,18 @@
 package elevatorsim;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
+
 
 // This class contains all global constants
 public class Constants {
-	public static Integer tempTimer = 0; // Need to replace this to a proper timer implementation
+	private static Instant START_TIMER;
 	public static Integer NUMBER_OF_FLOORS = 0;
 	public static Integer NUMBER_OF_ELEVATORS = 0;
 	
-	public static Integer UDP_PORT_NUMBER = 110;
+	public static Integer UDP_PORT_NUMBER = 77;
 	
 	public static Integer ELEVATOR_STATE_ONE = 0;
 	public static Integer ELEVATOR_STATE_TWO = 1;
@@ -44,7 +45,16 @@ public class Constants {
 
     	String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         String threadName = Thread.currentThread().getName();
-        System.out.println(threadName + ": " + toPrint + ": " + timeStamp);
+        System.out.println(threadName + ": " + toPrint);
     }
 
+    public static void startTimer() {
+    	START_TIMER = Instant.now();
+    }
+    
+    public static int getTime() {
+    	Instant end = Instant.now();
+    	Duration interval = Duration.between(START_TIMER, end);
+    	return (int) interval.toSeconds();
+    }
 }

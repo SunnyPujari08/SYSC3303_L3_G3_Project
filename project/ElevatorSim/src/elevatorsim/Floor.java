@@ -7,11 +7,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -23,15 +20,11 @@ import java.util.Scanner;
 public class Floor implements Runnable {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
 	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
-	private DatagramSocket networkSocket;
-	
-	private Scheduler scheduler;
+	private DatagramSocket sendSocket, receiveSocket;
 	private int floorNum;
 	private final static String FILENAME = "events.txt";
-	private List<EventData> eventList;
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
-    private int lamp;
     
     /*
      * Creates new Floor object with a floor number and open socket
@@ -39,14 +32,16 @@ public class Floor implements Runnable {
     public Floor(int floorNum) {
     	this.floorNum = floorNum;
     	try {
-			this.networkSocket = new DatagramSocket();
+    		sendSocket = new DatagramSocket();
+    		receiveSocket = new DatagramSocket(100 + floorNum);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
     }
     
     public void closeSocket() {
-    	this.networkSocket.close();
+    	sendSocket.close();
+    	receiveSocket.close();
     }
 	
     /*
@@ -77,21 +72,24 @@ public class Floor implements Runnable {
         return rawData;
     }
 
-    public String currentEvent(String rawData) {
-    	String[] eString = rawData.split(";");
-    	
-    	for (int i = 0; i < eString.length; i++) {
-    		String[] eInfo = eString[i].split(" ");
+    public String currentEvent(ArrayList<String> rawData) {
+    	for (int i = 0; i < rawData.size(); i++) {
+    		String[] eInfo = rawData.get(i).split(" ");
     		
     		String time = eInfo[0];
     		//String floorNum = eInfo[1];
     		//String direction = eInfo[2];
     		//String destination = eInfo[3];
 
-    		if (Integer.parseInt(time) == Constants.tempTimer)
-    			return eString[i];
+    		if (Integer.parseInt(time) == Constants.getTime()) {
+    			String result = rawData.remove(i);
+    			if (eInfo[2].equals("Up"))
+    				UP_BUTTON = true;
+    			else
+    				DOWN_BUTTON = true;
+    			return result;
+    		}
     	}
-    	
     	return "";
     }
     
@@ -125,37 +123,36 @@ public class Floor implements Runnable {
 		this.recv(); // Ignore return string, only used in testing
     }
     
-    public void send() {
+    public synchronized void send() {
     	// Send a packet
-		System.out.println("Floor" + floorNum + ": Sending packet to Scheduler...");
+    	Constants.formattedPrint("Sending packet to Scheduler...");
 		printPacketInfo(packetOut);
 		
 		try {
-			networkSocket.send(packetOut);
+			sendSocket.send(packetOut);
 			packetOut = null;
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
-		System.out.println("Floor" + floorNum + ": Packet sent.\n");
+		Constants.formattedPrint("Packet sent.\n");
     }
     
-    public String recv() {
+    public synchronized String recv() {
 		// Receive a reply packet
 		byte data[] = new byte[MAX_MESSAGE_LEN];
 		packetIn = new DatagramPacket(data, data.length);
-		System.out.println("Floor" + floorNum + ": Waiting for response from Scheduler.");
+		Constants.formattedPrint("Waiting for response from Scheduler.");
 		
 		try {
-			System.out.println("Waiting...");		// Waiting until packet comes
-			networkSocket.receive(packetIn);
+			receiveSocket.receive(packetIn);
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
-		System.out.println("Floor" + floorNum + ": Packet received.\n");
+		Constants.formattedPrint("Packet received.");
 		printPacketInfo(packetIn);
 		int len = packetIn.getLength();
 		return new String(packetIn.getData(), 0, len);
@@ -174,13 +171,16 @@ public class Floor implements Runnable {
  * TODO: Might need to be able to read new events from scheduler at some point...
  */
 	public void run() {
-		String rawData = readEventFromTextFile(FILENAME);
-		String curEvent = "";
+		ArrayList<String> rawData = new ArrayList<>(Arrays.asList(readEventFromTextFile(FILENAME).split(";")));
+		if (rawData.get(0).equals(""))
+			rawData.remove(0);
 		while (true) {
-			if (rawData.length() > 0)
+			String curEvent = "";
+			Constants.formattedPrint("here: " + rawData.size());
+			if (rawData.size() > 0)
 				curEvent = currentEvent(rawData);
 			if (curEvent.length() > 0) {
-				formPacket(curEvent);
+				formPacket("f;" + floorNum + ";" + curEvent);
 				rpc_send();
 			}
 			//TODO: handle received info here
@@ -202,5 +202,6 @@ public class Floor implements Runnable {
 		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 			floorThreads[i].start();
 		}
+		Constants.startTimer();
 	}
 }

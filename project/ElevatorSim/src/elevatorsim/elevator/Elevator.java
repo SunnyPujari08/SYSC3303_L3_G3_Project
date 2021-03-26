@@ -25,17 +25,19 @@ import elevatorsim.Floor;
 public class Elevator implements Runnable {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
 	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
-	private DatagramSocket networkSocket;
+	private DatagramSocket sendSocket, receiveSocket;
 
-    public int elevatorID;
-    public int currentFloor;
-    public int destFloor;
-    public boolean isDoorOpen = false;
-    private int numOfStates = 12;
-    public List<EventData> eventList = new ArrayList<EventData>();;
+	private int elevatorID;
+	private int currentFloor;
+	private int direction; // -1 = going down; 0 = stop; 1 = going up  
+	private List<Integer> destFloor = new ArrayList<Integer>();
+	private boolean isDoorOpen = false;
+	private int numOfStates = 12;
+	private List<EventData> eventList = new ArrayList<EventData>();;
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
     private ElevatorState currentState;
+    private ArrayList<String> events = new ArrayList<String>();
 
 
     /*
@@ -44,18 +46,21 @@ public class Elevator implements Runnable {
      */
     public Elevator(int elevatorID) {
     	try {
-			this.networkSocket = new DatagramSocket();
+    		sendSocket = new DatagramSocket();
+    		receiveSocket = new DatagramSocket(200 + elevatorID);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
     	
         this.elevatorID = elevatorID;
-        this.currentFloor = 1;
+        currentFloor = 1;
+        direction = 0;
         setupStateMachine();
     }
     
     public void closeSocket() {
-    	this.networkSocket.close();
+    	sendSocket.close();
+    	receiveSocket.close();
     }
 
     @Override
@@ -65,13 +70,13 @@ public class Elevator implements Runnable {
         while(true){
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
-        	Constants.formattedPrint("Elevator moving to state " + String.valueOf(nextStateID + 1));
+        	//Constants.formattedPrint("Elevator moving to state " + String.valueOf(nextStateID + 1));
         	if(nextStateID < 0) { break;}
         	currentState = stateList.get(nextStateID);
         }
         Constants.formattedPrint("Elevator state machine failed, thread exiting.");
     }
-    
+    /*
     public void sendElevatorArrivingAtFloorMovingUp(int floorNum) {
     	EventData newEvent = new EventData(floorNum, EventType.ELEVATOR_ARR_FLOOR_UP);
     	sendEventToScheduler(newEvent);
@@ -89,7 +94,7 @@ public class Elevator implements Runnable {
     	sendEventToScheduler(newEvent);
     	Constants.formattedPrint("This is the action: SendElevatorPickFloor");
     }
-    
+    */
     public void openElevatorDoor() {
     	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
     	sleep(Constants.DOOR_TIME);
@@ -121,24 +126,25 @@ public class Elevator implements Runnable {
     	Constants.formattedPrint("This is the action: StartElevatorAutoCloseTimer");
     }
     
-    
+    /*
     // This method converts the event to a string and sends it over UDP
     public void sendEventToScheduler(EventData eData){
     	this.formPacket(EventData.convertEventToString(eData));
     	this.rpc_send();
     }
-    
+    */
     /*
      * This method forms a read request packet and sends it to the scheduler. Currently there is a timeout
      * in rpc_send(), so it will only wait for a response for the time specified in 'this.udpTimeoutInMilliSeconds'.
      */
+    /*
     public synchronized EventData checkWorkFromScheduler() {
     	this.formPacket("Read-Elevator-"+String.valueOf(this.elevatorID));
     	String packetDataRead = rpc_send(); // rpc_send() will timeout and return null if there is no reply(Meaning no new events from scheduler).
     	EventData eventRead = EventData.convertStringToEvent(packetDataRead);
     	return eventRead;
     }
-    
+    */
     /*
      * This method reads from the elevators event list. Currently the only event
      * that should be in the event list is the ELEVATOR_ARR_UP & ELEVATOR_ARR_DOWN events,
@@ -210,13 +216,27 @@ public class Elevator implements Runnable {
     	return(stateList);
     }
     
+    //formPacket("f;" + floorNum + ";" + curEvent);
+    //0 2 Up 4
+    public String getFloor(String event) {
+    	String eData = event.split(";")[2];
+    	return eData.split(" ")[1];
+    }
+    
+    public String getDestination(String event) {
+    	String eData = event.split(";")[2];
+    	return eData.split(" ")[3];
+    }
+    
     /**
      * Below: UDP functions===================================================================
      */
     /*
      * Forms a new packet with specified string data, assigns it to 'this.packetOut'
      */
-    public void formPacket(String info) {
+
+    public void formPacket() {
+    	String info = "e;" + elevatorID + ";" + currentFloor + ";" + direction;
     	byte[] data = info.getBytes();
     	try {
 			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
@@ -225,40 +245,36 @@ public class Elevator implements Runnable {
 		}
     }
     
-    public void send() {
-    	// Send a packet
-		System.out.println("Elevator" + elevatorID + ": Sending packet to Scheduler...");
-		Floor.printPacketInfo(packetOut);
-		
+    public synchronized void sendUpdate() {
+    	// Send a packet with current elevator state
 		try {
-			networkSocket.send(packetOut);
+			sendSocket.send(packetOut);
 			packetOut = null;
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-		System.out.println("Elevator" + elevatorID + ": Packet sent.\n");
     }
     
     // NOTE: This method has a timeout specified by 'this.udpTimeoutInMilliSeconds'
-    public String recv() {
+    public synchronized void recv() {
 		// Receive a reply packet
 		byte data[] = new byte[MAX_MESSAGE_LEN];
 		packetIn = new DatagramPacket(data, data.length);
-		System.out.println("Elevator" + elevatorID + ": Waiting for response from Scheduler.");
 		
 		try {
-			networkSocket.receive(packetIn);
+			receiveSocket.receive(packetIn);
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
-		} 
-
-		System.out.println("Elevator" + elevatorID + ": Packet received.\n");
+		}
 		
 		int len = packetIn.getLength();
-		return new String(packetIn.getData(), 0, len);
+		if (len > 0) {
+			Floor.printPacketInfo(packetIn);
+			String message = new String(packetIn.getData(), 0, len);
+			events.add(message);
+		}
     }
     
     /*
@@ -267,9 +283,10 @@ public class Elevator implements Runnable {
      * 3. If timeout expires then returns null
      * 4. If packet is received, assign to 'this.packetIn' and return packet data.
      */
-    private String rpc_send() {
-    	send();
-    	return recv();
+    public void rpc_send() {
+    	formPacket();
+    	sendUpdate();
+    	recv();
     }
     
     
@@ -281,13 +298,11 @@ public class Elevator implements Runnable {
 		Thread[] elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
 		Elevator[] elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
-			elevators[i] = new Elevator(i+1);
-			elevatorThreads[i] = new Thread(elevators[i]);
+			elevatorThreads[i] = new Thread(new Elevator(i+1), "Elevator" + (i+1));
+
 		}
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
 			elevatorThreads[i].start();
 		}
 	}
 }
-
-

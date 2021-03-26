@@ -1,13 +1,7 @@
 package elevatorsim;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-
-import elevatorsim.elevator.Elevator;
-import elevatorsim.elevator.ElevatorState;
-import elevatorsim.elevator.ElevatorStateOne;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -29,6 +23,7 @@ import java.util.Arrays;
  */
 public class Scheduler {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
+	private static final int MAX_FLOOR_NUM = 10;		// Maximum message length
 	private DatagramPacket receivePacket, replyPacket;
 	private DatagramSocket receiveSocket, replySocket;	// Socket for receiving and replying
 
@@ -39,16 +34,19 @@ public class Scheduler {
 	private boolean elevatorReadReq = false; // TODO: Change to array, need Read Request flag for each elevator
 	public int elevatorCurrentFloor = 1, elevatorDestinationFloor = 1;
 	// TODO: public int[] elevatorsCurrentFloors, elevatorsDestinationFloors = 1; TODO make it work with multiple elevators
-	private long startTimeInMilliSeconds;
 
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_ONE;
 	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
-	private List<String> futureEvents = new ArrayList<>();
 	private List<String> sendQueueForElevator = new ArrayList<>(); // TODO make this into a list of lists, need one list queue for each elevator
 	public EventData currentTripEvent; // TODO need to make into list, one for each elevator
 	private SchedulerState currentState;
+	
+	private List<String> futureEvents = new ArrayList<String>();
+	private int[] elevatorDirection = new int[MAX_FLOOR_NUM];
+	private int[] elevatorLocation = new int[MAX_FLOOR_NUM];
+	
 	
 	public Scheduler() {
 		try {
@@ -75,18 +73,15 @@ public class Scheduler {
 		// Set starting state
 	    SchedulerState currentState = scheduler.stateList.get(scheduler.startState);
     	int nextStateID;
-    	Constants.formattedPrint("Starting Scheduler SM.");
-    	scheduler.startTimeInMilliSeconds = System.currentTimeMillis();
-    	Constants.formattedPrint("Start: "+ String.valueOf(scheduler.startTimeInMilliSeconds));
+    	scheduler.formattedPrint("Starting Scheduler SM.");
         while(true){
-        	
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
-        	Constants.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
+        	//scheduler.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
         	if(nextStateID < 0) { break;}
         	currentState = scheduler.stateList.get(nextStateID);                                                                                                                                                                                                                                                                                                                                                                
 		}
-		Constants.formattedPrint("Scheduler state machine failed, thread exiting.");
+        scheduler.formattedPrint("Scheduler state machine failed, thread exiting.");
 	}
 	
 	/* Function adds eventToWrite to list specified by floorNumber
@@ -230,7 +225,7 @@ public class Scheduler {
 	 * other event types need to be supported
 	 */
 	public void populateEvents() {
-		//TODO: Jeong-won is working on this
+		
 	}
 	
 	/*
@@ -256,6 +251,7 @@ public class Scheduler {
 	 * floor text file and parses them and adds them to future events. (This should only occur at the start
 	 * of the program).
 	 */
+	/*
 	public EventData readFromUDPSocket() {
 		List<String> eventStrings;
 		EventData newEvent;
@@ -268,7 +264,7 @@ public class Scheduler {
     	}
     	return newEvent;
 	}
-
+	 */
 	public int startState() {
     	return(startState);
     }
@@ -285,6 +281,66 @@ public class Scheduler {
     /**
      * Below: UDP functions===================================================================
      */
+    public void manageEvent() {
+    	receive();
+		int len = this.receivePacket.getLength();
+		String dataString = new String(this.receivePacket.getData(), 0, len);
+		String[] newMessage = dataString.split(";");
+		
+		// If the message is from floor, save it in the event ArrayList
+		if (newMessage[0].equals("f")) {
+			formattedPrint("Message arrived from floor " + newMessage[1]);
+			futureEvents.add(dataString);
+		}
+		// If the message is from the elevator, check if the elevator is on its way to the destination or stopped.
+		// If so, send an Event to it. If not, send just an confirm message.
+		else if (newMessage[0].equals("e")) {
+			if (futureEvents.size() > 0) {
+				if (Integer.parseInt(newMessage[3]) == 0) {
+					formattedPrint(newMessage[1] + " = stopped elevator");
+					String properEvent = futureEvents.remove(0);
+					int floorNo = Integer.parseInt(properEvent.split(";")[1]);
+					formSendPacket(properEvent, 200 + Integer.parseInt(newMessage[1]));
+					send();
+					formSendPacket("Event sent to an elevator", 100 + floorNo);
+					send();
+				}
+				else if (Integer.parseInt(newMessage[3]) == -1 && Integer.parseInt(newMessage[2]) >= Integer.parseInt(newMessage[1])) {
+					formattedPrint(newMessage[1] + " = comming down elevator");
+					String properEvent = futureEvents.remove(0);
+					int floorNo = Integer.parseInt(properEvent.split(";")[1]);
+					formSendPacket(properEvent, 200 + Integer.parseInt(newMessage[1]));
+					send();
+					formSendPacket("Event sent to an elevator", 100 + floorNo);
+					send();
+				}
+				else if (Integer.parseInt(newMessage[3]) == 1 && Integer.parseInt(newMessage[2]) < Integer.parseInt(newMessage[1])) {
+					formattedPrint(newMessage[1] + " = comming up elevator");
+					String properEvent = futureEvents.remove(0);
+					int floorNo = Integer.parseInt(properEvent.split(";")[1]);
+					formSendPacket(properEvent, 200 + Integer.parseInt(newMessage[1]));
+					send();
+					formSendPacket("Event sent to an elevator", 100 + floorNo);
+					send();
+				}
+				else {
+					formSendPacket("", 200 + Integer.parseInt(newMessage[1]));
+					send();
+				}
+			}
+			else {
+				formSendPacket("", 200 + Integer.parseInt(newMessage[1]));
+				send();
+			}
+		}
+    }
+    
+    /*
+     	formPacket("f;" + floorNum + ";" + curEvent);
+    	0 2 Up 4
+    	formPacket("e;" + elevatorID + ";" + currentFloor + ";" + direction);
+    */
+    /*
 	public EventData readOverUDP() {
 		int receivePort = this.receive();
 		int len = this.receivePacket.getLength();
@@ -298,8 +354,8 @@ public class Scheduler {
 		}
 		if(this.elevatorReadReq) {
 			if(this.sendQueueForElevator.size()>0) {
-				this.formReplyPacket(this.sendQueueForElevator.remove(0), receivePort);
-				this.reply();
+				this.formSendPacket(this.sendQueueForElevator.remove(0), receivePort);
+				this.send();
 			}
 		}
 		
@@ -312,42 +368,34 @@ public class Scheduler {
 		// If neither of the above if statements are true then it must be a packet from a floor
 		// Packets from floors are added to 'this.rawEvents'
 		if(!dataString.startsWith("Read")) {
-			this.formReplyPacket("Data received from floor", receivePort);
-	    	this.reply();
+			this.formSendPacket("Data received from floor", receivePort);
+	    	this.send();
 	    	this.rawEvents.add(dataString);
 		}
 		//}
     	return null;
 	}
-	
+	*/
 	/*
 	 * Method blocks until new UDP packet is received. Packet is set to variable 'this.receivePacket'.
 	 * Port number that the packet was received on is returned.
 	 */
-	private synchronized int receive() {
+	private synchronized void receive() {
 		byte receivedData[] = new byte[MAX_MESSAGE_LEN];
 		receivePacket = new DatagramPacket(receivedData, receivedData.length);
-		System.out.println("Scheduler: Waiting for Packet...\n");
 		
 		try {
-			System.out.println("Waiting...");		// Waiting until packet comes
 			receiveSocket.receive(receivePacket);
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-		System.out.println("Scheduler: Packet received.");
-		if(new String(receivePacket.getData()).startsWith("Read-Ele"))
-			this.elevatorReadReq = true;
-		Floor.printPacketInfo(receivePacket);
-		return receivePacket.getPort();
 	}
 	
 	/*
 	 * Sets variable this.replyPacket to a new packet with the specified data string and port #
 	 */
-	private void formReplyPacket(String data, int replyPort) {
+	private void formSendPacket(String data, int replyPort) {
 		byte[] msg = data.getBytes();
 		try {
 			replyPacket = new DatagramPacket(msg, msg.length, InetAddress.getLocalHost(), replyPort);
@@ -360,17 +408,16 @@ public class Scheduler {
 	 * Sends out 'this.replyPacket' over 'this.replySocket'
 	 * NOTE: this.formReplySocket() should be called before this function
 	 */
-	private synchronized void reply() {
-		System.out.println("Scheduler: delivering reply packet");
-		Floor.printPacketInfo(replyPacket);
-		
+	private synchronized void send() {
 		try {
 			replySocket.send(replyPacket);
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-		System.out.println("Scheduler: reply packet delivered.\n");
+	}
+	
+	private void formattedPrint(String s) {
+		System.out.println("Scheduler:" + s);
 	}
 }
