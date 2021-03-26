@@ -22,7 +22,7 @@ import elevatorsim.Floor;
  * @version February 27, 2021
  */
 
-public class Elevator implements Runnable {
+public class Elevator extends Thread {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
 	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
 	private DatagramSocket sendSocket, receiveSocket;
@@ -228,6 +228,10 @@ public class Elevator implements Runnable {
     	return eData.split(" ")[3];
     }
     
+    public void shutDownThread() {
+    	this.interrupt();
+    }
+    
     /**
      * Below: UDP functions===================================================================
      */
@@ -296,7 +300,6 @@ public class Elevator implements Runnable {
 		Constants.NUMBER_OF_ELEVATORS = keyboard.nextInt();
 		
 		Thread[] elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
-		Elevator[] elevators = new Elevator[Constants.NUMBER_OF_ELEVATORS];
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
 			elevatorThreads[i] = new Thread(new Elevator(i+1), "Elevator" + (i+1));
 
