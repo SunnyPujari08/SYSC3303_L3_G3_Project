@@ -56,11 +56,11 @@ public class ElevatorStateThree extends ElevatorState {
 	 * This method should only perform actions that will happen every single time this state is exited.
 	 */
 	public void exitActions() {
-		Constants.formattedPrint("Elevator closing the door.");
+		elevator.closeElevatorDoor();
 		return;
 	}
 	public long getMaxTime() {
-		return 1000000;
+		return 100000000;
 	}
 	
 }

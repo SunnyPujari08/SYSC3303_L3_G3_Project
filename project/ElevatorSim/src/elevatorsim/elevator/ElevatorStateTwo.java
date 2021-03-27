@@ -71,6 +71,6 @@ public class ElevatorStateTwo extends ElevatorState {
 	}
 	
 	public long getMaxTime() {
-		return (Constants.MOVE_TIME+1000)/1000;
+		return (2*Constants.MOVE_TIME-1)/1000;
 	}
 }

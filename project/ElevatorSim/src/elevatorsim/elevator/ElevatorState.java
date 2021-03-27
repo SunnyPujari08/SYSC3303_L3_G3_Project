@@ -70,6 +70,12 @@ public abstract class ElevatorState {
 		}
 		
 		exitActions();
+		Instant time2 = Instant.now();
+		long end = time2.getEpochSecond();
+		
+		if((end-start) > this.getMaxTime()) {
+			return -1;
+		}
 		return nextState;
 	}
 	

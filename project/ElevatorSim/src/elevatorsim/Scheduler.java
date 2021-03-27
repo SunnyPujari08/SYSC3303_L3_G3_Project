@@ -295,6 +295,10 @@ public class Scheduler {
 		// If the message is from the elevator, check if the elevator is on its way to the destination or stopped.
 		// If so, send an Event to it. If not, send just an confirm message.
 		else if (newMessage[0].equals("e")) {
+			if(newMessage[2].equalsIgnoreCase("fault")) {
+				formattedPrint("FAULT RECEIVED FROM ELEVATOR"+ newMessage[1]);
+				return;
+			}
 			if (futureEvents.size() > 0) {
 				if (Integer.parseInt(newMessage[3]) == 0) {
 					formattedPrint(newMessage[1] + " = stopped elevator");

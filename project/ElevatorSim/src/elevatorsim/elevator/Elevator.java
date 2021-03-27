@@ -35,6 +35,7 @@ public class Elevator extends Thread {
 	public Integer pickupFloor;
 	public boolean pickedUpPassenger = false;
 	public boolean moveFaultInjected = false;
+	public boolean doorFaultInjected = false;
 	private boolean isDoorOpen = false;
 	private int numOfStates = 12;
 	public List<EventData> eventList = new ArrayList<EventData>();;
@@ -78,7 +79,19 @@ public class Elevator extends Thread {
         	if(nextStateID < 0) { break;}
         	currentState = stateList.get(nextStateID);
         }
-        Constants.formattedPrint("FAULT DETECTED: Elevator state machine failed, thread exiting.");
+        Constants.formattedPrint("FAULT DETECTED, ELEVATOR STUCK: Thread exiting.");
+        this.sendFault();
+    }
+    
+    private void sendFault() {
+    	String info = "e;" + elevatorID + ";" + "fault";
+    	byte[] data = info.getBytes();
+    	try {
+			packetOut = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.UDP_PORT_NUMBER);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+    	sendUpdate();
     }
     /*
     public void sendElevatorArrivingAtFloorMovingUp(int floorNum) {
@@ -102,16 +115,29 @@ public class Elevator extends Thread {
     public void openElevatorDoor() {
     	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
     	sleep(Constants.DOOR_TIME);
+    	if(this.doorFaultInjected) {
+    		Constants.formattedPrint("Door open timed out. Retrying.");
+    		this.doorFaultInjected = false;
+    		this.openElevatorDoor();
+    		return;
+    	}
     	isDoorOpen = true;
 
-    	Constants.formattedPrint("This is the action: OpenElevatorDoor");
+    	Constants.formattedPrint("Door Opened");
     }
     
     public void closeElevatorDoor() {
     	//CloseElevatorDoor - Close timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
     	sleep(Constants.DOOR_TIME);
+    	if(this.doorFaultInjected) {
+    		Constants.formattedPrint("Door close timed out. Retrying.");
+    		this.doorFaultInjected = false;
+    		this.closeElevatorDoor();
+    		return;
+    	}
+    	
     	isDoorOpen = false;
-    	Constants.formattedPrint("This is the action: CloseElevatorDoor");
+    	Constants.formattedPrint("Door Closed");
     }
     
     
@@ -368,6 +394,8 @@ public class Elevator extends Thread {
 		}
 		int elevatorNumber, faultType;
 		// 1: moving fault, 2: door fault
+		// Examples: Injecting a moving fault for elevator #2 : type '2 1'
+		//			 Injecting a door fault for elevator #1 : type '1 2'
 		while(true) {
 			elevatorNumber = keyboard.nextInt();
 			faultType = keyboard.nextInt();
@@ -375,6 +403,8 @@ public class Elevator extends Thread {
 				newElevator = elevators.get(elevatorNumber-1);
 				if(faultType==1) {
 					newElevator.moveFaultInjected = true;
+				} else if(faultType==2) {
+					newElevator.doorFaultInjected = true;
 				}
 			}
 		}
