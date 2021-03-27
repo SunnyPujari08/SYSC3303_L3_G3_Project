@@ -176,7 +176,7 @@ public class Floor implements Runnable {
 			rawData.remove(0);
 		while (true) {
 			String curEvent = "";
-			Constants.formattedPrint("here: " + rawData.size());
+			//Constants.formattedPrint("here: " + rawData.size());
 			if (rawData.size() > 0)
 				curEvent = currentEvent(rawData);
 			if (curEvent.length() > 0) {

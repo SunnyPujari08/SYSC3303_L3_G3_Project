@@ -27,9 +27,8 @@ public abstract class ElevatorState {
 	 *  and reacting accordingly.
 	 */
 	public int run() {
-		elevator.rpc_send();
-		return 0;
-		/*
+		
+
 		entranceActions();
 		
 		int nextState = -1;
@@ -38,8 +37,7 @@ public abstract class ElevatorState {
 		
 		// This loop will continuously check for new events and react accordingly
 		while(!done) {
-			elevator.notifyElevatorInfo();
-			event = elevator.checkWorkFromScheduler(); // from UDP socket
+			event = elevator.rpc_send();// from UDP socket
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
 				Constants.formattedPrint("Elevator picked up event: " + String.valueOf(event.eventType));
@@ -53,11 +51,15 @@ public abstract class ElevatorState {
 				nextState = handleEvent(event);
 				done = true;
 			}
+			try {
+				Thread.sleep(1000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		exitActions();
 		return nextState;
-		*/
 	}
 	
 	

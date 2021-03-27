@@ -24,12 +24,14 @@ public class ElevatorStateFour extends ElevatorState {
 		// Check state machine diagram for what state to go to and what actions to take
 		if(event.eventType == EventType.ELEVATOR_ARR_FLOOR_DOWN) {
 			elevator.currentFloor = event.floorNum;
-			elevator.sendElevatorArrivingAtFloorMovingDown(event.floorNum);
-			if(elevator.currentFloor == elevator.destFloor) {
+			if((event.floorNum == elevator.pickupFloor) || (event.floorNum == elevator.destFloor)) {
 				return Constants.ELEVATOR_STATE_THREE;
 			} else {
 				return Constants.ELEVATOR_STATE_FOUR;
 			}
+		}
+		if(event.eventType == EventType.ELEVATOR_ARRIVED) {
+			return Constants.ELEVATOR_STATE_THREE;
 		}
 		if(event.eventType == EventType.OPEN_DOOR) {
 			elevator.openElevatorDoor();
@@ -46,6 +48,10 @@ public class ElevatorStateFour extends ElevatorState {
 	 * This method should only perform actions that will happen every single time this state is entered
 	 */
 	public void entranceActions() {
+		// Already at pickup floor
+		if((elevator.currentFloor == elevator.pickupFloor) && !elevator.pickedUpPassenger) {
+			elevator.eventList.add(new EventData(EventType.ELEVATOR_ARRIVED));
+		}
 		// Perform all entrance actions
 		elevator.moveDownOneFloor();
 	}

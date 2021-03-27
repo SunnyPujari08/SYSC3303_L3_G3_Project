@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import elevatorsim.Constants;
@@ -28,12 +29,14 @@ public class Elevator extends Thread {
 	private DatagramSocket sendSocket, receiveSocket;
 
 	private int elevatorID;
-	private int currentFloor;
+	public int currentFloor;
 	private int direction; // -1 = going down; 0 = stop; 1 = going up  
-	private List<Integer> destFloor = new ArrayList<Integer>();
+	public Integer destFloor;
+	public Integer pickupFloor;
+	public boolean pickedUpPassenger = false;
 	private boolean isDoorOpen = false;
 	private int numOfStates = 12;
-	private List<EventData> eventList = new ArrayList<EventData>();;
+	public List<EventData> eventList = new ArrayList<EventData>();;
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
     private ElevatorState currentState;
@@ -194,6 +197,18 @@ public class Elevator extends Thread {
 			Constants.formattedPrint("Elevator can't move down one floor. Still at: " + String.valueOf(this.currentFloor));
 		}
 	}
+	
+	 public void pickFloor() {
+		 Constants.formattedPrint("Floor picked in elevator");
+	    	if(this.currentFloor < this.destFloor) {
+	    		EventData event = new EventData(EventType.MOVE_REQUEST_UP, this.currentFloor, this.destFloor);
+	    		this.eventList.add(event);
+	    	} else if(this.currentFloor > this.destFloor){
+	    		EventData event = new EventData(EventType.MOVE_REQUEST_DOWN, this.currentFloor, this.destFloor);
+	    		this.eventList.add(event);
+	    	}
+	    	
+	}
     
     
     private void setupStateMachine() {
@@ -230,6 +245,33 @@ public class Elevator extends Thread {
     
     public void shutDownThread() {
     	this.interrupt();
+    }
+    
+   
+    
+    public EventData parseSchedulerReply() {
+    	List<String> msgArgs = new ArrayList<String>();
+    	EventData event = null;
+    	if(events.size()>0) {
+    		msgArgs.addAll(Arrays.asList(events.remove(0).split(";")));
+    		msgArgs.addAll(Arrays.asList(msgArgs.remove(2).split(" "))); // expanding text from text file
+    		if(msgArgs.size()>=6) {
+	    		// First argument is 'f' for floor
+	    		// Second argument is floor number
+	    		// Third argument is timestamp
+	    		// Fourth argument is floor number
+	    		// Fifth argument is up/down
+	    		// Sixth argument is destination floor
+	    		if(this.currentFloor > Integer.parseInt(msgArgs.get(3))) {
+	    			event = new EventData(EventType.MOVE_REQUEST_DOWN, this.currentFloor, Integer.parseInt(msgArgs.get(3)));
+	    		} else if(this.currentFloor < Integer.parseInt(msgArgs.get(3))) {
+	    			event = new EventData(EventType.MOVE_REQUEST_UP, this.currentFloor, Integer.parseInt(msgArgs.get(3)));
+	    		} 
+	    		this.pickupFloor = Integer.parseInt(msgArgs.get(3));
+	    		this.destFloor = Integer.parseInt(msgArgs.get(5));
+    		}
+    	}
+    	return event;
     }
     
     /**
@@ -287,10 +329,11 @@ public class Elevator extends Thread {
      * 3. If timeout expires then returns null
      * 4. If packet is received, assign to 'this.packetIn' and return packet data.
      */
-    public void rpc_send() {
+    public EventData rpc_send() {
     	formPacket();
     	sendUpdate();
     	recv();
+    	return parseSchedulerReply();
     }
     
     

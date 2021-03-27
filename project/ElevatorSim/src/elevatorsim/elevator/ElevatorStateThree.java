@@ -42,6 +42,12 @@ public class ElevatorStateThree extends ElevatorState {
 	public void entranceActions() {
 		// Perform all entrance actions
 		elevator.openElevatorDoor();
+		// Pick floor
+		if(elevator.currentFloor != elevator.destFloor) {
+			elevator.pickFloor();
+		}else {
+			elevator.pickedUpPassenger = false;
+		}
 		return;
 	}
 
