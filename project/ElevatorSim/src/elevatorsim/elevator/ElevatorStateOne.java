@@ -51,4 +51,8 @@ public class ElevatorStateOne extends ElevatorState {
 		return;
 	}
 	
+	public long getMaxTime() {
+		return 100000000;
+	}
+	
 }

@@ -59,5 +59,8 @@ public class ElevatorStateThree extends ElevatorState {
 		Constants.formattedPrint("Elevator closing the door.");
 		return;
 	}
+	public long getMaxTime() {
+		return 1000000;
+	}
 	
 }

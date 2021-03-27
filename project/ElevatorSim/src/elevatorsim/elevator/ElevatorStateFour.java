@@ -64,4 +64,8 @@ public class ElevatorStateFour extends ElevatorState {
 		return;
 	}
 	
+	public long getMaxTime() {
+		return (Constants.MOVE_TIME+1000)/1000;
+	}
+	
 }

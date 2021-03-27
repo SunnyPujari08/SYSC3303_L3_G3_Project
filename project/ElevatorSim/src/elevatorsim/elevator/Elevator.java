@@ -34,6 +34,7 @@ public class Elevator extends Thread {
 	public Integer destFloor;
 	public Integer pickupFloor;
 	public boolean pickedUpPassenger = false;
+	public boolean moveFaultInjected = false;
 	private boolean isDoorOpen = false;
 	private int numOfStates = 12;
 	public List<EventData> eventList = new ArrayList<EventData>();;
@@ -77,7 +78,7 @@ public class Elevator extends Thread {
         	if(nextStateID < 0) { break;}
         	currentState = stateList.get(nextStateID);
         }
-        Constants.formattedPrint("Elevator state machine failed, thread exiting.");
+        Constants.formattedPrint("FAULT DETECTED: Elevator state machine failed, thread exiting.");
     }
     /*
     public void sendElevatorArrivingAtFloorMovingUp(int floorNum) {
@@ -173,7 +174,12 @@ public class Elevator extends Thread {
 			this.currentFloor++;
 			Constants.formattedPrint("Elevator moving up one floor. Now at: " + String.valueOf(this.currentFloor));
 			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_UP);
-			sleep(Constants.MOVE_TIME);
+			// CHECK FOR FAULT FLAG
+			if(this.moveFaultInjected) {
+				sleep(Constants.MOVE_TIME * 2);
+			} else {
+				sleep(Constants.MOVE_TIME);
+			}
 			this.eventList.add(event);
 			//this.sendEventToScheduler(event);
 		} else {
@@ -191,7 +197,12 @@ public class Elevator extends Thread {
 			this.currentFloor--;
 			Constants.formattedPrint("Elevator moving down one floor. Now at: " + String.valueOf(this.currentFloor));
 			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_DOWN);
-			sleep(Constants.MOVE_TIME);
+			// CHECK FOR FAULT FLAG
+			if(this.moveFaultInjected) {
+				sleep(Constants.MOVE_TIME * 2);
+			} else {
+				sleep(Constants.MOVE_TIME);
+			}
 			this.eventList.add(event);
 		} else {
 			Constants.formattedPrint("Elevator can't move down one floor. Still at: " + String.valueOf(this.currentFloor));
@@ -338,17 +349,34 @@ public class Elevator extends Thread {
     
     
 	public static void main(String args[]) {
+		
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter the number of elevators");
 		Constants.NUMBER_OF_ELEVATORS = keyboard.nextInt();
+		List<Elevator> elevators = new ArrayList<Elevator>();
 		
 		Thread[] elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
+		Elevator newElevator;
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
-			elevatorThreads[i] = new Thread(new Elevator(i+1), "Elevator" + (i+1));
+			newElevator = new Elevator(i+1);
+			elevators.add(newElevator);
+			elevatorThreads[i] = new Thread(newElevator, "Elevator" + (i+1));
 
 		}
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
 			elevatorThreads[i].start();
+		}
+		int elevatorNumber, faultType;
+		// 1: moving fault, 2: door fault
+		while(true) {
+			elevatorNumber = keyboard.nextInt();
+			faultType = keyboard.nextInt();
+			if((elevatorNumber <= Constants.NUMBER_OF_ELEVATORS) && (faultType < 3)) {
+				newElevator = elevators.get(elevatorNumber-1);
+				if(faultType==1) {
+					newElevator.moveFaultInjected = true;
+				}
+			}
 		}
 	}
 }

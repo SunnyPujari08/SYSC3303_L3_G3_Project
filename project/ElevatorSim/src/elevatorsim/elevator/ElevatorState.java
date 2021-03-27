@@ -5,6 +5,8 @@ import java.util.List;
 import elevatorsim.Constants;
 import elevatorsim.EventData;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -27,16 +29,25 @@ public abstract class ElevatorState {
 	 *  and reacting accordingly.
 	 */
 	public int run() {
-		
+		Instant time = Instant.now();
+		long start = time.getEpochSecond();
 
 		entranceActions();
 		
 		int nextState = -1;
 		boolean done = false;
 		EventData event = null;
+		//long startTime = 
 		
+    	
 		// This loop will continuously check for new events and react accordingly
 		while(!done) {
+			Instant time2 = Instant.now();
+			long end = time2.getEpochSecond();
+			
+			if((end-start) > this.getMaxTime()) {
+				return -1;
+			}
 			event = elevator.rpc_send();// from UDP socket
 			if(event != null) {
 				// handle event accordingly depending on state and return next state
@@ -66,6 +77,7 @@ public abstract class ElevatorState {
 	public abstract int handleEvent(EventData event);
 	public abstract void entranceActions();
 	public abstract void exitActions();
+	public abstract long getMaxTime();
 		
 	
 
