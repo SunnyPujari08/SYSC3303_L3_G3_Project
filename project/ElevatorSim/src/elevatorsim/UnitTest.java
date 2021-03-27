@@ -78,7 +78,7 @@ public class UnitTest extends TestCase {
 		elevatorEventList.add(testWriteEvent);
 		
 		Elevator elevator = new Elevator(1);
-		EventData newElevatorEvent = elevator.checkWorkFromScheduler();
+		//EventData newElevatorEvent = elevator.checkWorkFromScheduler();
 		
 		assertEquals(testWriteEvent.timestamp, newElevatorEvent.timestamp);
 		assertEquals(testWriteEvent.floorNum, newElevatorEvent.floorNum);
@@ -177,14 +177,29 @@ public class UnitTest extends TestCase {
 		Elevator elevator = new Elevator(1);
 		Scheduler scheduler = new Scheduler();
 		
-		elevator.formPacket("testing");
-		elevator.send();
+		elevator.formPacket();
+		elevator.rpc_send();
 		
-		scheduler.readOverUDP();
-		String replyMsg = elevator.recv();
+		//scheduler.readOverUDP();
+		//String replyMsg = elevator.recv();
 		assertTrue(replyMsg.equals("Data received from floor"));
 		elevator.closeSocket();
 		scheduler.closeSockets();
+	}
+	
+	public void testElevatorFault() {
+		int faultType = 1;
+		Elevator elevator = new Elevator(1);
+		
+		String[] args = {"one"};
+		Elevator.main(args);
+		
+		assertEquals(faultType, 1);
+		
+		faultType = 2;
+		Elevator.main(args);
+		
+		assertEquals(faultType, 2);
 	}
 
 
