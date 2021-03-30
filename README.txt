@@ -1,5 +1,5 @@
 SYSC 3303
-Project Iteration 3
+Project Iteration 4
 L3_G3
 
 Members:
@@ -63,24 +63,20 @@ To test the code, run the UnitTest.java file.
 
 Breakdown of responsibilities:
 Ezra Pierce:
-	- Refactoring Scheduler State Machine
-	- Implementing Scheduler UDP layer
-	- Implementing buttonSimulator
+	- Implementing Error Detection in Elevator
 
 Cameron Chung: 
-	- Implementation of Elevator state machine code
-	- Refactoring Scheduler and Elevator
-	- Implementing State Machine unit tests
+	- Implementing Error Detection Unit Tests
+	- Implemented Code time interavls
+	- Designing timing Diagram
 
 Kashish Saxena
 	- Refactoring Class and Sequence Diagram
 	- Refactoring Scheduler State Machine
 
 Sunjeevani Pujari
-	- Refactoring Elevator State Machine
-	- Refactoring Scheduler and Elevator state Machine	
 	- Refactoring Unit tests
+	- Refactoring Past Diagrams
 
 Jeong Won Kim
-	- Implementing UDP layer for Floor and Elevator
-	- Implementing UDP unit tests
+	- Implementing Error Detection in Scheduler
