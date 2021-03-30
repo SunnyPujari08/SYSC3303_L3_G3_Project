@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import elevatorsim.elevator.Elevator;
 import junit.framework.TestCase;
@@ -188,18 +189,26 @@ public class UnitTest extends TestCase {
 	}
 	
 	public void testElevatorFault() {
-		int faultType = 1;
+
 		Elevator elevator = new Elevator(1);
+		Thread t1 = new Thread(elevator, "ElevatorOne");
+		t1.run();
+		elevator.pickupFloor = 3;
+		elevator.destFloor = 5;
+		elevator.moveFaultInjected = true;
 		
-		String[] args = {"one"};
-		Elevator.main(args);
+		EventData event = new EventData(EventType.MOVE_REQUEST_UP);
 		
-		assertEquals(faultType, 1);
+		elevator.eventList.add(event);
 		
-		faultType = 2;
-		Elevator.main(args);
+		try {
+			TimeUnit.SECONDS.sleep(5);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		assertEquals(faultType, 2);
+		assertEquals(false, t1.isAlive());
+
 	}
 
 
