@@ -201,32 +201,11 @@ public class Scheduler {
 	
 	private void setupStateMachine() {
     	stateList = new ArrayList<SchedulerState>(numOfStates);
-		stateList.add(Constants.SCHEDULER_STATE_IDLE, new SchedulerStateIdle(this, 0));
+		
 		stateList.add(Constants.SCHEDULER_STATE_ONE, new SchedulerStateOne(this, 0));
-		stateList.add(Constants.SCHEDULER_STATE_TWO, new SchedulerStateTwo(this, 0));
-		stateList.add(Constants.SCHEDULER_STATE_THREE, new SchedulerStateThree(this, 0));
-		stateList.add(Constants.SCHEDULER_STATE_FOUR, new SchedulerStateFour(this, 0));
-//		stateList.add(Constants.SCHEDULER_STATE_FIVE, new SchedulerStateFive(this));
-//		stateList.add(Constants.SCHEDULER_STATE_SIX, new SchedulerStateSix(this));
-//		stateList.add(Constants.SCHEDULER_STATE_SEVEN, new SchedulerStateSeven(this));
-//		stateList.add(Constants.ELEVATOR_STATE_EIGHT, new SchedulerStateEight(this));
-
-
 	}
 
 	
-	/*
-	 * This method is used to add events into the system when the time listed in the input file has elapsed
-	 * The variable 'this.futureEvents' contains all of the events read from the Floors. Each of these
-	 * events has a time associated with it. Once that specified amount of time has passed, the event will be added 
-	 * into the system by adding the event to the list corresponding to the floor which the event originated from.
-	 * 
-	 * NOTE: currently this method can only create FLOOR_REQUEST event types, more code will be needed if any
-	 * other event types need to be supported
-	 */
-	public void populateEvents() {
-		
-	}
 	
 	/*
 	 * This method splits all the events in 'this.rawEvents' and returns them all as a list of strings.
@@ -242,29 +221,7 @@ public class Scheduler {
 		return null;
 	}
 	
-	/*
-	 * This method calls 'this.readOverUDP()'
-	 * If there is a new event received over UDP then it returns that.
-	 * (Currently only events from elevators can be read this way).
-	 * 
-	 * If there is no event then it checks if there are any new events from
-	 * floor text file and parses them and adds them to future events. (This should only occur at the start
-	 * of the program).
-	 */
-	/*
-	public EventData readFromUDPSocket() {
-		List<String> eventStrings;
-		EventData newEvent;
-    	newEvent = this.readOverUDP();
-    	if(newEvent == null) {
-	    	eventStrings = this.parseEvents();
-	    	if(eventStrings != null && (eventStrings.size()>0))
-	    		this.futureEvents = eventStrings;
-	    	return null;
-    	}
-    	return newEvent;
-	}
-	 */
+
 	public int startState() {
     	return(startState);
     }
