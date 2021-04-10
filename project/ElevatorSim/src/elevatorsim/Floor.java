@@ -50,6 +50,7 @@ public class Floor implements Runnable {
      * Return string has events separated by the ';' character.
      */
     public String readEventFromTextFile(String filename) {
+    	// TODO : read faults
     	String rawData = "";
         try {
         	File file = new File(filename);
@@ -80,6 +81,7 @@ public class Floor implements Runnable {
     		//String floorNum = eInfo[1];
     		//String direction = eInfo[2];
     		//String destination = eInfo[3];
+    		// TODO : read faults
 
     		if (Integer.parseInt(time) == Constants.getTime()) {
     			String result = rawData.remove(i);
@@ -180,6 +182,7 @@ public class Floor implements Runnable {
 			if (rawData.size() > 0)
 				curEvent = currentEvent(rawData);
 			if (curEvent.length() > 0) {
+				// TODO : send faults
 				formPacket("f;" + floorNum + ";" + curEvent);
 				rpc_send();
 			}

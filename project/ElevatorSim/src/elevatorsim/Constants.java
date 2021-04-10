@@ -9,8 +9,8 @@ import java.util.Date;
 // This class contains all global constants
 public class Constants {
 	private static Instant START_TIMER;
-	public static Integer NUMBER_OF_FLOORS = 5;
-	public static Integer NUMBER_OF_ELEVATORS = 2;
+	public static Integer NUMBER_OF_FLOORS = 22;
+	public static Integer NUMBER_OF_ELEVATORS = 4;
 	
 	public static Integer UDP_PORT_NUMBER = 78;
 	

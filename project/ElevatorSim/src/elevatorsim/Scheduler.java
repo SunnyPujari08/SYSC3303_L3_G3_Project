@@ -200,8 +200,10 @@ public class Scheduler {
 	}
 	
 	private void setupStateMachine() {
-    	stateList = new ArrayList<SchedulerState>(numOfStates);
-		
+		System.out.println(this.numOfStates);
+    	stateList = new ArrayList<SchedulerState>(this.numOfStates);
+		System.out.println(stateList.size());
+		stateList.add(0, new SchedulerStateOne(this, 0));
 		stateList.add(Constants.SCHEDULER_STATE_ONE, new SchedulerStateOne(this, 0));
 	}
 

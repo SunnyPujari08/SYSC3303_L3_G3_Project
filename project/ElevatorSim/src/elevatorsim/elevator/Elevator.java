@@ -287,6 +287,7 @@ public class Elevator extends Thread {
    
     
     public EventData parseSchedulerReply() {
+    	// TODO: add parsing for faults
     	List<String> msgArgs = new ArrayList<String>();
     	EventData event = null;
     	if(events.size()>0) {
@@ -299,6 +300,7 @@ public class Elevator extends Thread {
 	    		// Fourth argument is floor number
 	    		// Fifth argument is up/down
 	    		// Sixth argument is destination floor
+    			// Seventh is for faults
 	    		if(this.currentFloor > Integer.parseInt(msgArgs.get(3))) {
 	    			event = new EventData(EventType.MOVE_REQUEST_DOWN, this.currentFloor, Integer.parseInt(msgArgs.get(3)));
 	    		} else if(this.currentFloor < Integer.parseInt(msgArgs.get(3))) {
