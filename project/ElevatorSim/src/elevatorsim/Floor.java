@@ -177,10 +177,15 @@ public class Floor implements Runnable {
 			rawData.remove(0);
 		while (true) {
 			String curEvent = "";
-			if (rawData.size() > 0)
+			if (rawData.size() > 0) {
 				curEvent = currentEvent(rawData);
-			if (curEvent.length() > 0) {
-				formPacket("f;" + floorNum + ";" + curEvent);
+				if (curEvent.length() > 0) {
+					formPacket("f;" + floorNum + ";" + curEvent);
+					rpc_send();
+				}
+			} else {
+				// All events sent
+				formPacket("f;" + floorNum + ";" + "done");
 				rpc_send();
 			}
 			//TODO: handle received info here

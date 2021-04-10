@@ -9,6 +9,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -41,8 +43,10 @@ public class Scheduler {
 	private List<String> sendQueueForElevator = new ArrayList<>(); 
 	public EventData currentTripEvent; 
 	private SchedulerState currentState;
-	private boolean inputFileEventsDone = false;
-	private boolean lastEventCompletedByElevator = false;
+	private boolean firstEventReceived = false;
+	private int inputFileEventsDone = 0;
+	private boolean allElevatorsIdle = true;
+	private Instant START_TIME;
 	
 	private List<String> futureEvents = new ArrayList<String>();
 
@@ -74,10 +78,15 @@ public class Scheduler {
         while(true){
         	// .run() call will block until state change occurs
         	nextStateID = currentState.run();
-        	//scheduler.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
         	if(nextStateID < 0) { break;}
         	currentState = scheduler.stateList.get(nextStateID);   
-        	// TODO: Measure time
+        	if((scheduler.futureEvents.size() == 0) && (scheduler.inputFileEventsDone >= Constants.NUMBER_OF_FLOORS) && scheduler.allElevatorsIdle) {
+        		Instant end = Instant.now();
+        		Duration totalTime = Duration.between(scheduler.START_TIME, end);
+        		System.out.println("Simulation took " + String.valueOf(totalTime.toMillis()) + " milliseconds.");
+        		System.out.println("Simulation done.");
+        		return;
+        	}
         	
 		}
         scheduler.formattedPrint("Scheduler state machine failed, thread exiting.");
@@ -85,9 +94,7 @@ public class Scheduler {
 
 	
 	private void setupStateMachine() {
-		System.out.println(this.numOfStates);
     	stateList = new ArrayList<SchedulerState>(this.numOfStates);
-		System.out.println(stateList.size());
 		stateList.add(0, new SchedulerStateOne(this, 0));
 		stateList.add(Constants.SCHEDULER_STATE_ONE, new SchedulerStateOne(this, 0));
 	}
@@ -121,7 +128,16 @@ public class Scheduler {
 		// If the message is from floor, save it in the event ArrayList
 		if (newMessage[0].equals("f")) {
 			formattedPrint("Message arrived from floor " + newMessage[1]);
-			futureEvents.add(dataString);
+			if(newMessage[newMessage.length-1].equals("done")) {
+				this.inputFileEventsDone++; // Keep count of floors that are done
+			}else {
+				futureEvents.add(dataString);
+			}
+			// If first event then start timer
+			if(!this.firstEventReceived) {
+				this.START_TIME = Instant.now(); 
+				this.firstEventReceived = true;
+			}
 		}
 		// If the message is from the elevator, check if the elevator is on its way to the destination or stopped.
 		// If so, send an Event to it. If not, send just an confirm message.
@@ -130,7 +146,11 @@ public class Scheduler {
 				formattedPrint("FAULT RECEIVED FROM ELEVATOR"+ newMessage[1]);
 				return;
 			}
+			if((futureEvents.size() == 0) && (Integer.parseInt(newMessage[3]) == 0)) {
+				this.allElevatorsIdle = true;
+			}
 			if (futureEvents.size() > 0) {
+				this.allElevatorsIdle = false;
 				if (Integer.parseInt(newMessage[3]) == 0) {
 					formattedPrint(newMessage[1] + " = stopped elevator");
 					String properEvent = futureEvents.remove(0);
@@ -141,22 +161,28 @@ public class Scheduler {
 					send();
 				}
 				else if (Integer.parseInt(newMessage[3]) == -1 && Integer.parseInt(newMessage[2]) >= Integer.parseInt(newMessage[1])) {
-					formattedPrint(newMessage[1] + " = comming down elevator");
+					formattedPrint(newMessage[1] + " = coming down elevator");
+					/*
 					String properEvent = futureEvents.remove(0);
 					int floorNo = Integer.parseInt(properEvent.split(";")[1]);
+					
 					formSendPacket(properEvent, 200 + Integer.parseInt(newMessage[1]));
 					send();
 					formSendPacket("Event sent to an elevator", 100 + floorNo);
 					send();
+					*/
 				}
 				else if (Integer.parseInt(newMessage[3]) == 1 && Integer.parseInt(newMessage[2]) < Integer.parseInt(newMessage[1])) {
-					formattedPrint(newMessage[1] + " = comming up elevator");
+					formattedPrint(newMessage[1] + " = coming up elevator");
+					/*
 					String properEvent = futureEvents.remove(0);
 					int floorNo = Integer.parseInt(properEvent.split(";")[1]);
+					
 					formSendPacket(properEvent, 200 + Integer.parseInt(newMessage[1]));
 					send();
 					formSendPacket("Event sent to an elevator", 100 + floorNo);
 					send();
+					*/
 				}
 				else {
 					formSendPacket("", 200 + Integer.parseInt(newMessage[1]));
