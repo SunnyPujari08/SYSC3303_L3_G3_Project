@@ -293,7 +293,7 @@ public class Elevator extends Thread {
     	if(events.size()>0) {
     		msgArgs.addAll(Arrays.asList(events.remove(0).split(";")));
     		msgArgs.addAll(Arrays.asList(msgArgs.remove(2).split(" "))); // expanding text from text file
-    		if(msgArgs.size()>=6) {
+    		if(msgArgs.size()>=7) {
 	    		// First argument is 'f' for floor
 	    		// Second argument is floor number
 	    		// Third argument is timestamp
@@ -308,6 +308,11 @@ public class Elevator extends Thread {
 	    		} 
 	    		this.pickupFloor = Integer.parseInt(msgArgs.get(3));
 	    		this.destFloor = Integer.parseInt(msgArgs.get(5));
+	    		if(msgArgs.get(6).equalsIgnoreCase("MoveFault")) {
+	    			this.moveFaultInjected = true;
+	    		} else if(msgArgs.get(6).equalsIgnoreCase("DoorFault")) {
+	    			this.doorFaultInjected = true;
+	    		}
     		}
     	}
     	return event;
