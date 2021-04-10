@@ -31,21 +31,21 @@ public class Scheduler {
 	public List<List> masterElevatorEventList = new ArrayList<>();
 
 
-	private boolean elevatorReadReq = false; // TODO: Change to array, need Read Request flag for each elevator
 	public int elevatorCurrentFloor = 1, elevatorDestinationFloor = 1;
-	// TODO: public int[] elevatorsCurrentFloors, elevatorsDestinationFloors = 1; TODO make it work with multiple elevators
+
 
 	private int numOfStates = 9;
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_ONE;
 	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
-	private List<String> sendQueueForElevator = new ArrayList<>(); // TODO make this into a list of lists, need one list queue for each elevator
-	public EventData currentTripEvent; // TODO need to make into list, one for each elevator
+	private List<String> sendQueueForElevator = new ArrayList<>(); 
+	public EventData currentTripEvent; 
 	private SchedulerState currentState;
+	private boolean inputFileEventsDone = false;
+	private boolean lastEventCompletedByElevator = false;
 	
 	private List<String> futureEvents = new ArrayList<String>();
-	private int[] elevatorDirection = new int[MAX_FLOOR_NUM];
-	private int[] elevatorLocation = new int[MAX_FLOOR_NUM];
+
 	
 	
 	public Scheduler() {
@@ -55,9 +55,6 @@ public class Scheduler {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		
-		this.setupFloorLists();
-		this.setupElevatorLists();
 		this.setupStateMachine();
 	}
 	
@@ -79,125 +76,13 @@ public class Scheduler {
         	nextStateID = currentState.run();
         	//scheduler.formattedPrint("Scheduler moving to state " + String.valueOf(nextStateID));
         	if(nextStateID < 0) { break;}
-        	currentState = scheduler.stateList.get(nextStateID);                                                                                                                                                                                                                                                                                                                                                                
+        	currentState = scheduler.stateList.get(nextStateID);   
+        	// TODO: Measure time
+        	
 		}
         scheduler.formattedPrint("Scheduler state machine failed, thread exiting.");
 	}
-	
-	/* Function adds eventToWrite to list specified by floorNumber
-	 * Arguments:
-	 * floorNumber - Specifies which floor to write to
-	 * eventToWrite - Event object to be added to list
-	 */
-	public void writeToFloor(Integer floorNumber, EventData eventToWrite) {
-		eventToWrite.fromScheduler = true;
-		(this.masterFloorEventList.get(floorNumber-1)).add(eventToWrite);
-	}
-	
-	/* Function converts eventToWrite into String,
-	 * Adds it to the outgoing event queue for specified elevator.
-	 * 
-	 * Arguments:
-	 * elevatorNumber - Specifies which elevator to write to
-	 * eventToWrite - Event object to be added to list
-	 */
-	public void writeToElevator(Integer elevatorNumber, EventData eventToWrite) {
-		// Convert to string
-		// Send over UDP To elevator
-		String eventString = EventData.convertEventToString(eventToWrite);
-		// Add string to a list
-		this.sendQueueForElevator.add(eventString); // TODO: will need to add to specific queue for elevatorNumber
-	}
-	
-	public void sendUpRequestToElevator(int elevatorID, int destinationFloor) {
-		EventData reqEvent = new EventData(EventType.MOVE_REQUEST_UP, destinationFloor);
-		this.writeToElevator(elevatorID, reqEvent);
-		Constants.formattedPrint("MOVE_UP_REQUEST sent to elevator.");
-	}
-	
-	public void sendDownRequestToElevator(int elevatorID, int destinationFloor) {
-		// TODO Create event and add it to the elevator's event list
-		EventData reqEvent = new EventData(EventType.MOVE_REQUEST_DOWN, destinationFloor);
-		this.writeToElevator(elevatorID, reqEvent);
-		Constants.formattedPrint("This is the action: SendDownRequestToElevator: " + String.valueOf(destinationFloor));
-	}
-	
-	public void sendResponseToFloor(int floorNum) {
-		// TODO Create event and add it to floor list
-		EventData reqEvent = new EventData(EventType.ELEVATOR_ARRIVED);
-		this.writeToFloor(floorNum, reqEvent);
-		Constants.formattedPrint("This is the action: SendResponseToFloor");
-	}
-	
-	private void setupFloorLists() {
-		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-			List<EventData> floorEventList = Collections.synchronizedList(new ArrayList<>());
-			this.masterFloorEventList.add(floorEventList);
-		}
-	}
-	
-	private void setupElevatorLists() {
-		for(int i = 0; i <= Constants.NUMBER_OF_ELEVATORS; i++) {
-			List<EventData> elevatorEventList = Collections.synchronizedList(new ArrayList<>());
-			this.masterElevatorEventList.add(elevatorEventList);
-		}
-	}
-	
-	
-	/*
-	 * Function reads from list related to specified floor
-	 * 
-	 * Arguments:
-	 * floorNumber - Specifies which floor to read from
-	 * Returns:
-	 * EventData - Returns one event if one exists or null if none exist
-	 */
-	public synchronized EventData readFromFloor(Integer floorNumber) {
-		//read from index of listOfLists
-		// Just one floor for iteration 1
-		if((this.masterFloorEventList.get(floorNumber-1)).size()>0) {
-			for(int i = 0; i < (this.masterFloorEventList.get(floorNumber-1)).size(); i++){
-				if(!((EventData)(this.masterFloorEventList.get(0)).get(i)).fromScheduler){
-					EventData newEvent = (EventData)(this.masterFloorEventList.get(0)).remove(i);
-					return newEvent;
-				}
-			}
-		}
-		return null;
-	}
-	
-	/*
-	 * Function converts datastring from UDP packet into a new event.
-	 * 
-	 * Arguments:
-	 * dataString - String from UDP packet sent by elevator
-	 * Returns:
-	 * EventData - Returns one event if one exists and it has been acknowledged by the elevator or null if none exist
-	 */
-	public synchronized EventData readFromElevator( String dataString) {
-		Constants.formattedPrint("Reading event from elevator...");
-	
-		EventData newEvent = EventData.convertStringToEvent(dataString);
-		if(newEvent != null) {
-			return newEvent;
-		}
-	
-		return null;
-	}
-	
-	public synchronized EventData readFromAllFloors() {
-		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-			if((this.masterFloorEventList.get(i)).size()>0) {
-				for(int j = 0; j < (this.masterFloorEventList.get(i)).size(); j++){
-					//if(!((EventData)(this.masterFloorEventList.get(i)).get(j)).fromScheduler){
-						EventData newEvent = (EventData)(this.masterFloorEventList.get(i)).remove(j);
-						return newEvent;
-					//}
-				}
-			}
-		}
-		return null;
-	}
+
 	
 	private void setupStateMachine() {
 		System.out.println(this.numOfStates);
@@ -209,19 +94,6 @@ public class Scheduler {
 
 	
 	
-	/*
-	 * This method splits all the events in 'this.rawEvents' and returns them all as a list of strings.
-	 */
-	public List<String> parseEvents() {
-		List<String> eventStrings = new ArrayList<String>();
-		if(this.rawEvents.size() > 0) {
-			for(int i =0; i< this.rawEvents.size(); i++) {
-				eventStrings.addAll(Arrays.asList(this.rawEvents.remove(i).split(";")));
-			}
-			return eventStrings;
-		}
-		return null;
-	}
 	
 
 	public int startState() {
@@ -298,47 +170,7 @@ public class Scheduler {
 		}
     }
     
-    /*
-     	formPacket("f;" + floorNum + ";" + curEvent);
-    	0 2 Up 4
-    	formPacket("e;" + elevatorID + ";" + currentFloor + ";" + direction);
-    */
-    /*
-	public EventData readOverUDP() {
-		int receivePort = this.receive();
-		int len = this.receivePacket.getLength();
-		String dataString = new String(this.receivePacket.getData(), 0, len);
-		
-		// If the packet being read is a read request(Elevator) then set read request flag
-		// If flag is set then reply with the first event in the outgoing elevator event queue.
-		// TODO: Will need to check which elevator is sending the request and respond accordingly
-		if(dataString.startsWith("Read")) {
-			this.elevatorReadReq = true;
-		}
-		if(this.elevatorReadReq) {
-			if(this.sendQueueForElevator.size()>0) {
-				this.formSendPacket(this.sendQueueForElevator.remove(0), receivePort);
-				this.send();
-			}
-		}
-		
-		// TODO: Need to come up with better way to check if it's an event other than underscores
-		// This if statement is for when the elevator has sent an event to the scheduler
-		if(dataString.contains("_")) { // Underscore means event
-			return this.readFromElevator(dataString);
-		}
-		
-		// If neither of the above if statements are true then it must be a packet from a floor
-		// Packets from floors are added to 'this.rawEvents'
-		if(!dataString.startsWith("Read")) {
-			this.formSendPacket("Data received from floor", receivePort);
-	    	this.send();
-	    	this.rawEvents.add(dataString);
-		}
-		//}
-    	return null;
-	}
-	*/
+
 	/*
 	 * Method blocks until new UDP packet is received. Packet is set to variable 'this.receivePacket'.
 	 * Port number that the packet was received on is returned.

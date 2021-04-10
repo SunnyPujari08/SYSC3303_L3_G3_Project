@@ -15,11 +15,6 @@ public class SchedulerStateOne extends SchedulerState {
 		scheduler.currentTripEvent = event;
 		if(event.eventType == EventType.FLOOR_REQUEST || event.eventType == EventType.FLOOR_REQUEST_UP ||event.eventType == EventType.FLOOR_REQUEST_DOWN) {
 			Constants.formattedPrint("Scheduler got FR.");
-			// scheduler.sendResponseToFloor(event.floorNum);
-			if(scheduler.elevatorCurrentFloor < event.floorNum)
-				scheduler.sendUpRequestToElevator(0, event.floorNum);
-			else
-				scheduler.sendDownRequestToElevator(0, event.floorNum);
 			return Constants.SCHEDULER_STATE_TWO;
 		}
 		

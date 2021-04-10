@@ -93,25 +93,7 @@ public class Elevator extends Thread {
 		}
     	sendUpdate();
     }
-    /*
-    public void sendElevatorArrivingAtFloorMovingUp(int floorNum) {
-    	EventData newEvent = new EventData(floorNum, EventType.ELEVATOR_ARR_FLOOR_UP);
-    	sendEventToScheduler(newEvent);
-    	Constants.formattedPrint("This is the action: SendElevatorArrivingAtFloorMovingUp");
-    }
-    
-    public void sendElevatorArrivingAtFloorMovingDown(int floorNum) {
-    	EventData newEvent = new EventData(floorNum, EventType.ELEVATOR_ARR_FLOOR_DOWN);
-    	sendEventToScheduler(newEvent);
-    	Constants.formattedPrint("This is the action: SendElevatorArrivingAtFloorMovingDown");
-    }
-    
-    public void sendElevatorPickFloor(int floorNum, int destinationFloor) {
-    	EventData newEvent = new EventData(EventType.ELEVATOR_PICK_FLOOR, floorNum, destinationFloor);
-    	sendEventToScheduler(newEvent);
-    	Constants.formattedPrint("This is the action: SendElevatorPickFloor");
-    }
-    */
+
     public void openElevatorDoor() {
     	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
     	sleep(Constants.DOOR_TIME);
@@ -150,31 +132,7 @@ public class Elevator extends Thread {
 		}
     }
 
-    // NOT IN USE
-    public void startElevatorAutoCloseTimer() {
-    	//StartElevatorAutoCloseTimer
-    	Constants.formattedPrint("This is the action: StartElevatorAutoCloseTimer");
-    }
-    
-    /*
-    // This method converts the event to a string and sends it over UDP
-    public void sendEventToScheduler(EventData eData){
-    	this.formPacket(EventData.convertEventToString(eData));
-    	this.rpc_send();
-    }
-    */
-    /*
-     * This method forms a read request packet and sends it to the scheduler. Currently there is a timeout
-     * in rpc_send(), so it will only wait for a response for the time specified in 'this.udpTimeoutInMilliSeconds'.
-     */
-    /*
-    public synchronized EventData checkWorkFromScheduler() {
-    	this.formPacket("Read-Elevator-"+String.valueOf(this.elevatorID));
-    	String packetDataRead = rpc_send(); // rpc_send() will timeout and return null if there is no reply(Meaning no new events from scheduler).
-    	EventData eventRead = EventData.convertStringToEvent(packetDataRead);
-    	return eventRead;
-    }
-    */
+
     /*
      * This method reads from the elevators event list. Currently the only event
      * that should be in the event list is the ELEVATOR_ARR_UP & ELEVATOR_ARR_DOWN events,
@@ -398,22 +356,6 @@ public class Elevator extends Thread {
 		}
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
 			elevatorThreads[i].start();
-		}
-		int elevatorNumber, faultType;
-		// 1: moving fault, 2: door fault
-		// Examples: Injecting a moving fault for elevator #2 : type '2 1'
-		//			 Injecting a door fault for elevator #1 : type '1 2'
-		while(true) {
-			elevatorNumber = keyboard.nextInt();
-			faultType = keyboard.nextInt();
-			if((elevatorNumber <= Constants.NUMBER_OF_ELEVATORS) && (faultType < 3)) {
-				newElevator = elevators.get(elevatorNumber-1);
-				if(faultType==1) {
-					newElevator.moveFaultInjected = true;
-				} else if(faultType==2) {
-					newElevator.doorFaultInjected = true;
-				}
-			}
 		}
 	}
 }
