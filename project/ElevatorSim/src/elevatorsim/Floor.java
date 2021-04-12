@@ -11,13 +11,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+
 /**
  * This class represent a floor thread
  * 
  * @author Jeong Won Kim, Sunjeevani Pujari - 101110032
  *
  */
-public class Floor implements Runnable {
+public class Floor extends JFrame implements Runnable {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
 	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
 	private DatagramSocket sendSocket, receiveSocket;

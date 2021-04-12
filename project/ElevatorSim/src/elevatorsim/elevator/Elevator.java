@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.swing.JFrame;
+
 import elevatorsim.Constants;
 import elevatorsim.EventData;
 import elevatorsim.EventType;
@@ -23,7 +26,7 @@ import elevatorsim.Floor;
  * @version February 27, 2021
  */
 
-public class Elevator extends Thread {
+public class Elevator extends JFrame implements Runnable {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
 	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
 	private DatagramSocket sendSocket, receiveSocket;
@@ -237,13 +240,7 @@ public class Elevator extends Thread {
     	String eData = event.split(";")[2];
     	return eData.split(" ")[3];
     }
-    
-    public void shutDownThread() {
-    	this.interrupt();
-    }
-    
-   
-    
+        
     public EventData parseSchedulerReply() {
     	// TODO: add parsing for faults
     	List<String> msgArgs = new ArrayList<String>();
