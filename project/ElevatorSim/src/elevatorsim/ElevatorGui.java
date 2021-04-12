@@ -8,7 +8,8 @@ public class ElevatorGui {
 		//Creating the Frame
         JFrame frame = new JFrame("Elevator Frame");
         JPanel ePanel = new JPanel();
-        JLabel timeLabel = new JLabel("Time: ");
+        Constants.startTimer();
+        JLabel timeLabel = new JLabel("Time: " + Constants.getTime());
         timeLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,6 +26,16 @@ public class ElevatorGui {
         frame.getContentPane().add(BorderLayout.NORTH, timeLabel);
         frame.getContentPane().add(BorderLayout.SOUTH, ePanel);
         frame.setVisible(true);
+        
+        while (true) {
+        	timeLabel.setText("Time: " + Constants.getTime());
+        	try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
 	}
 	// 5 elevators
 	// label.setText(now);

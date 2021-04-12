@@ -10,9 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.swing.JFrame;
-
+import javax.swing.*;
+import java.awt.*;
 import elevatorsim.Constants;
 import elevatorsim.EventData;
 import elevatorsim.EventType;
@@ -46,13 +45,17 @@ public class Elevator extends JFrame implements Runnable {
     private int startState = Constants.ELEVATOR_STATE_ONE;
     private ElevatorState currentState;
     private ArrayList<String> events = new ArrayList<String>();
-
+    private JPanel elevatorPanel;
+    private JLabel nameLabel;
+    private JLabel dirLabel;
+    private JLabel locLabel;
+    private JLabel doorLabel;
 
     /*
      * Creates new Elevator with corresponding elevator ID. Also opens a socket.
      * NOTE: Elevators are created at floor 1.
      */
-    public Elevator(int elevatorID) {
+    public Elevator(int elevatorID, JPanel panel) {
     	try {
     		sendSocket = new DatagramSocket();
     		receiveSocket = new DatagramSocket(200 + elevatorID);
@@ -61,8 +64,10 @@ public class Elevator extends JFrame implements Runnable {
 		}
     	
         this.elevatorID = elevatorID;
+        elevatorPanel = panel;
         currentFloor = 1;
         direction = 0;
+        initPanel();
         setupStateMachine();
     }
     
@@ -81,6 +86,7 @@ public class Elevator extends JFrame implements Runnable {
         	//Constants.formattedPrint("Elevator moving to state " + String.valueOf(nextStateID + 1));
         	if(nextStateID < 0) { break;}
         	currentState = stateList.get(nextStateID);
+        	updatePanel();
         }
         Constants.formattedPrint("FAULT DETECTED, ELEVATOR STUCK: Thread exiting.");
         this.sendFault();
@@ -158,6 +164,7 @@ public class Elevator extends JFrame implements Runnable {
 	 */
 	public void moveUpOneFloor() {
 		if(this.currentFloor < Constants.NUMBER_OF_FLOORS) {
+			direction = 1;
 			this.currentFloor++;
 			Constants.formattedPrint("Elevator moving up one floor. Now at: " + String.valueOf(this.currentFloor));
 			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_UP);
@@ -170,6 +177,7 @@ public class Elevator extends JFrame implements Runnable {
 			this.eventList.add(event);
 			//this.sendEventToScheduler(event);
 		} else {
+			direction = 0;
 			Constants.formattedPrint("Elevator can't move up one floor. Still at: " + String.valueOf(this.currentFloor));
 		}
 	}
@@ -181,6 +189,7 @@ public class Elevator extends JFrame implements Runnable {
 	 */
 	public void moveDownOneFloor() {
 		if(this.currentFloor > 1) {
+			direction = -1;
 			this.currentFloor--;
 			Constants.formattedPrint("Elevator moving down one floor. Now at: " + String.valueOf(this.currentFloor));
 			EventData event = new EventData(this.currentFloor, EventType.ELEVATOR_ARR_FLOOR_DOWN);
@@ -192,6 +201,7 @@ public class Elevator extends JFrame implements Runnable {
 			}
 			this.eventList.add(event);
 		} else {
+			direction = 0;
 			Constants.formattedPrint("Elevator can't move down one floor. Still at: " + String.valueOf(this.currentFloor));
 		}
 	}
@@ -334,10 +344,62 @@ public class Elevator extends JFrame implements Runnable {
     	recv();
     	return parseSchedulerReply();
     }
+        
+    private void initPanel() {
+    	elevatorPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+    	elevatorPanel.setLayout(new BoxLayout(elevatorPanel, BoxLayout.Y_AXIS));
+    	elevatorPanel.setPreferredSize(new Dimension(150, 120));
+    	
+    	String dir, door;
+    	if (direction == 1)
+    		dir = "UP";
+    	else if (direction == -1)
+    		dir = "DOWN";
+    	else
+    		dir = "STOP";
+    	
+    	if (isDoorOpen)
+    		door = "Open";
+    	else
+    		door = "Closed";
+    	
+		
+        nameLabel = new JLabel("Elevator" + elevatorID);
+        nameLabel.setFont(new Font("Serif", Font.BOLD, 28));
+        dirLabel = new JLabel("Direction: " + dir);
+        dirLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
+        locLabel = new JLabel("Location: " + currentFloor);
+        locLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
+        doorLabel = new JLabel("Door: " + door);
+        doorLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
+        
+        elevatorPanel.add(nameLabel);
+        elevatorPanel.add(dirLabel);
+        elevatorPanel.add(locLabel);
+        elevatorPanel.add(doorLabel);
+    }
+    
+    //update the panel for elevator
+    private void updatePanel() {
+    	String dir = "STOP";
+    	String door = "Closed";
+    	if (direction == 1)
+    		dir = "UP";
+    	else if (direction == -1)
+    		dir = "DOWN";
+    	else
+    		dir = "STOP";
+    	
+    	if (isDoorOpen)
+    		door = "Open";
+    	
+    	dirLabel.setText("Direction: " + dir);
+    	locLabel.setText("Location: " + currentFloor);
+    	doorLabel.setText("Door: " + door);
+  	}
     
     
 	public static void main(String args[]) {
-		
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter the number of elevators");
 		Constants.NUMBER_OF_ELEVATORS = keyboard.nextInt();
@@ -345,12 +407,29 @@ public class Elevator extends JFrame implements Runnable {
 		
 		Thread[] elevatorThreads = new Thread[Constants.NUMBER_OF_ELEVATORS];
 		Elevator newElevator;
+		
+		//Creating the Frame
+        JFrame frame = new JFrame("Elevator Frame");
+        JPanel ePanel = new JPanel();
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 200);
+        frame.setResizable(false);
+        frame.setLayout(new FlowLayout());
+        
+        JPanel[] elevatorPanels = new JPanel[Constants.NUMBER_OF_ELEVATORS];
+        
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
-			newElevator = new Elevator(i+1);
+			elevatorPanels[i] = new JPanel();
+			newElevator = new Elevator(i+1, elevatorPanels[i]);
 			elevators.add(newElevator);
 			elevatorThreads[i] = new Thread(newElevator, "Elevator" + (i+1));
-
+			ePanel.add(BorderLayout.CENTER, elevatorPanels[i]);
 		}
+		
+        frame.getContentPane().add(BorderLayout.SOUTH, ePanel);
+        frame.setVisible(true);
+		
 		for(int i = 0; i < Constants.NUMBER_OF_ELEVATORS; i++) {
 			elevatorThreads[i].start();
 		}

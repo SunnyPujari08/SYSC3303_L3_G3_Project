@@ -1,4 +1,10 @@
 package elevatorsim;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,7 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import elevatorsim.elevator.Elevator;
 
 /**
  * This class represent a floor thread
@@ -27,18 +39,23 @@ public class Floor extends JFrame implements Runnable {
 	private final static String FILENAME = "events.txt";
     private boolean UP_BUTTON = false;
     private boolean DOWN_BUTTON = false;
+    private JPanel floorPanel;
+    private JLabel nameLabel;
+    private JLabel dirLabel;
     
     /*
      * Creates new Floor object with a floor number and open socket
      */
-    public Floor(int floorNum) {
+    public Floor(int floorNum, JPanel panel) {
     	this.floorNum = floorNum;
+    	floorPanel = panel;
     	try {
     		sendSocket = new DatagramSocket();
     		receiveSocket = new DatagramSocket(100 + floorNum);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+    	initPanel();
     }
     
     public void closeSocket() {
@@ -178,6 +195,7 @@ public class Floor extends JFrame implements Runnable {
 		if (rawData.get(0).equals(""))
 			rawData.remove(0);
 		while (true) {
+			updatePanel();
 			String curEvent = "";
 			if (rawData.size() > 0) {
 				curEvent = currentEvent(rawData);
@@ -194,6 +212,38 @@ public class Floor extends JFrame implements Runnable {
 		}
 	}
 	
+	//Creating the panel for floor
+	private void initPanel() {
+		floorPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		floorPanel.setLayout(new BoxLayout(floorPanel, BoxLayout.Y_AXIS));
+		floorPanel.setPreferredSize(new Dimension(70, 200));
+		
+		String button = "---";
+		if (UP_BUTTON)
+			button = "UP";
+		else if (DOWN_BUTTON)
+			button = "DOWN";
+		
+        nameLabel = new JLabel("Floor" + floorNum);
+        nameLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        dirLabel = new JLabel("Button: " + button);
+        dirLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
+
+        floorPanel.add(nameLabel);
+        floorPanel.add(dirLabel);
+	}
+	
+	private void updatePanel() {
+		String button = "---";
+		if (UP_BUTTON)
+			button = "UP";
+		else if (DOWN_BUTTON)
+			button = "DOWN";
+		
+		nameLabel.setText("Floor" + floorNum);
+		dirLabel.setText("Button: " + button);
+	}
+	
 	/*
 	 * Creates and starts all Floor Threads
 	 */
@@ -202,10 +252,25 @@ public class Floor extends JFrame implements Runnable {
 		System.out.println("Enter the number of floors");
 		Constants.NUMBER_OF_FLOORS = keyboard.nextInt();
 		
+		//Creating the Frame
+        JFrame frame = new JFrame("Floor Frame");
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(250, 800);
+        frame.setResizable(false);
+        frame.setLayout(new GridLayout(11, 2));
+		
 		Thread[] floorThreads = new Thread[Constants.NUMBER_OF_FLOORS];
-		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
-			floorThreads[i] = new Thread(new Floor(i+1), "Floor" + (i+1));
+		JPanel[] floorPanels = new JPanel[Constants.NUMBER_OF_FLOORS];
+		for(int i = Constants.NUMBER_OF_FLOORS-1; i >= 0; i--) {
+			floorPanels[i] = new JPanel();
+			floorThreads[i] = new Thread(new Floor(i+1, floorPanels[i]), "Floor" + (i+1));
+			frame.add(BorderLayout.CENTER, floorPanels[i]);
 		}
+		
+		//frame.getContentPane().add(BorderLayout.SOUTH, ePanel);
+        frame.setVisible(true);
+        
 		for(int i = 0; i < Constants.NUMBER_OF_FLOORS; i++) {
 			floorThreads[i].start();
 		}
