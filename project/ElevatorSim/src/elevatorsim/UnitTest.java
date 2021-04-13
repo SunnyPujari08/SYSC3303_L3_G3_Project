@@ -88,33 +88,6 @@ public class UnitTest extends TestCase {
 		assertEquals(testWriteEvent.eventType, newElevatorEvent.eventType);
 	}
 	
-	/**
-	 * Test if elevator sending new event to eventlist by changing the eventType of the event received
-	 * @throws ParseException
-	 */
-	/**
-	public void testSchedulerReadingFromElevator() throws ParseException {
-		Scheduler scheduler = new Scheduler();
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
-		Date testTimeStamp = dateFormat.parse("14:05:15.0");
-		int testFloorNum = 1;
-		boolean testUpButton = true;
-		boolean testDownButton = false;
-		EventType testEventType = EventType.ACK_FLOOR_BUTTON_PRESSED;
-		
-		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
-		scheduler.writeToElevator(1, testWriteEvent);
-		EventData testReadEvent = scheduler.readFromElevator(1);
-		
-		assertEquals(testWriteEvent.timestamp, testReadEvent.timestamp);
-		assertEquals(testWriteEvent.floorNum, testReadEvent.floorNum);
-		assertEquals(testWriteEvent.upButton, testReadEvent.upButton);
-		assertEquals(testWriteEvent.downButton, testReadEvent.downButton);
-		assertEquals(testWriteEvent.eventType, testReadEvent.eventType);
-		
-	}
-	**/
-	
 	//UDP test (message between floor and scheduler
 	
 	//udp test (message between scheduler and elevator
