@@ -38,6 +38,7 @@ public class ElevatorStateOne extends ElevatorState {
 	 * This method should only perform actions that will happen every single time this state is entered
 	 */
 	public void entranceActions() {
+		elevator.direction = 0;
 		// Perform all entrance actions
 		return;
 	}

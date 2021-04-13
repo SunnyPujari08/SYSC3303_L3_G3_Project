@@ -32,7 +32,7 @@ public class Elevator extends JFrame implements Runnable {
 
 	private int elevatorID;
 	public int currentFloor;
-	private int direction; // -1 = going down; 0 = stop; 1 = going up  
+	public int direction; // -1 = going down; 0 = stop; 1 = going up  
 	public Integer destFloor;
 	public Integer pickupFloor;
 	public boolean pickedUpPassenger = false;
@@ -89,6 +89,7 @@ public class Elevator extends JFrame implements Runnable {
         	currentState = stateList.get(nextStateID);
         	updatePanel();
         }
+        this.moveFaultInjected = true;
         Constants.formattedPrint("FAULT DETECTED, ELEVATOR STUCK: Thread exiting.");
         this.sendFault();
     }
@@ -108,12 +109,14 @@ public class Elevator extends JFrame implements Runnable {
     	//OpenElevatorDoor - Open timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
     	sleep(Constants.DOOR_TIME);
     	if(this.doorFaultInjected) {
+    		this.updatePanel();
     		Constants.formattedPrint("Door open timed out. Retrying.");
     		this.doorFaultInjected = false;
     		this.openElevatorDoor();
     		return;
     	}
     	isDoorOpen = true;
+    	this.updatePanel();
 
     	Constants.formattedPrint("Door Opened");
     }
@@ -122,6 +125,7 @@ public class Elevator extends JFrame implements Runnable {
     	//CloseElevatorDoor - Close timer starts (Occurs when OpenDoor event is true && CloseDoor event is false)
     	sleep(Constants.DOOR_TIME);
     	if(this.doorFaultInjected) {
+    		this.updatePanel();
     		Constants.formattedPrint("Door close timed out. Retrying.");
     		this.doorFaultInjected = false;
     		this.closeElevatorDoor();
@@ -129,6 +133,7 @@ public class Elevator extends JFrame implements Runnable {
     	}
     	
     	isDoorOpen = false;
+    	this.updatePanel();
     	Constants.formattedPrint("Door Closed");
     }
     

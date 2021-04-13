@@ -161,9 +161,13 @@ public class Scheduler {
 					formSendPacket("Event sent to an elevator", 100 + floorNo);
 					send();
 				}
-				else if (Integer.parseInt(newMessage[3]) == -1 && Integer.parseInt(newMessage[2]) >= Integer.parseInt(newMessage[1])) {
+				else if (Integer.parseInt(newMessage[3]) == -1 ) {
 					formattedPrint(newMessage[1] + " = coming down elevator");
 					
+					formSendPacket("", 200 + Integer.parseInt(newMessage[1]));
+					send();
+				
+					/*
 					String properEvent = futureEvents.remove(0);
 					int floorNo = Integer.parseInt(properEvent.split(";")[1]);
 					
@@ -171,11 +175,16 @@ public class Scheduler {
 					send();
 					formSendPacket("Event sent to an elevator", 100 + floorNo);
 					send();
+					*/
 					
 				}
-				else if (Integer.parseInt(newMessage[3]) == 1 && Integer.parseInt(newMessage[2]) < Integer.parseInt(newMessage[1])) {
+				else if (Integer.parseInt(newMessage[3]) == 1 ) {
 					formattedPrint(newMessage[1] + " = coming up elevator");
 					
+					formSendPacket("", 200 + Integer.parseInt(newMessage[1]));
+					send();
+			
+					/*
 					String properEvent = futureEvents.remove(0);
 					int floorNo = Integer.parseInt(properEvent.split(";")[1]);
 					
@@ -183,9 +192,11 @@ public class Scheduler {
 					send();
 					formSendPacket("Event sent to an elevator", 100 + floorNo);
 					send();
+					*/
 					
 				}
 				else {
+					System.out.println("Rcvd blank: " + dataString);
 					formSendPacket("", 200 + Integer.parseInt(newMessage[1]));
 					send();
 				}

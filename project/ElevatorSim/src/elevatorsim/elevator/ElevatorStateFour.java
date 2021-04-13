@@ -48,6 +48,7 @@ public class ElevatorStateFour extends ElevatorState {
 	 * This method should only perform actions that will happen every single time this state is entered
 	 */
 	public void entranceActions() {
+		elevator.direction = -1;
 		// Already at pickup floor
 		if((elevator.currentFloor == elevator.pickupFloor) && !elevator.pickedUpPassenger) {
 			elevator.eventList.add(new EventData(EventType.ELEVATOR_ARRIVED));
