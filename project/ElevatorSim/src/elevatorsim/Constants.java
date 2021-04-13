@@ -38,7 +38,7 @@ public class Constants {
 	public static Integer SCHEDULER_STATE_EIGHT = 8;
 	
 	public static Integer MOVE_TIME = 2880;
-	public static Integer DOOR_TIME = 750;
+	public static Integer DOOR_TIME = 1500;
 	
 	
     public static void formattedPrint(String toPrint) {
