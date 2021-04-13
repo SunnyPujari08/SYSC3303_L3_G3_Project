@@ -55,11 +55,14 @@ public class ElevatorGui {
         locLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
         JLabel doorLabel = new JLabel("Door: ");
         doorLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
+        JLabel faultLabel = new JLabel("Fault: ");
+        faultLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
         
         panel.add(nameLabel);
         panel.add(dirLabel);
         panel.add(locLabel);
         panel.add(doorLabel);
+        panel.add(faultLabel);
         
         return panel;
 	}

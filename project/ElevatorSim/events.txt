@@ -1,4 +1,4 @@
-0 2 Up 17 MoveFault
+0 2 Up 17 None
 15 5 Down 4 DoorFault
 25 4 Down 1 None
 35 3 Up 5 None
@@ -6,3 +6,15 @@
 55 2 Down 1 None
 65 2 Up 20 MoveFault
 75 1 Up 12 None
+85 2 Up 4 None
+95 7 Down 3 None
+105 9 Up 11 None
+115 2 Up 10 None
+125 3 Up 5 None
+135 8 Down 6 None
+145 6 Up 15 None
+155 7 Down 1 None
+165 1 Up 14 DoorFault
+175 8 Up 9 None
+185 4 Up 8 None
+195 5 Down 2 None

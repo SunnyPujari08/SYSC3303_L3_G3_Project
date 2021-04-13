@@ -50,6 +50,7 @@ public class Elevator extends JFrame implements Runnable {
     private JLabel dirLabel;
     private JLabel locLabel;
     private JLabel doorLabel;
+    private JLabel faultLabel;
 
     /*
      * Creates new Elevator with corresponding elevator ID. Also opens a socket.
@@ -350,7 +351,7 @@ public class Elevator extends JFrame implements Runnable {
     	elevatorPanel.setLayout(new BoxLayout(elevatorPanel, BoxLayout.Y_AXIS));
     	elevatorPanel.setPreferredSize(new Dimension(150, 120));
     	
-    	String dir, door;
+    	String dir, door, fault;
     	if (direction == 1)
     		dir = "UP";
     	else if (direction == -1)
@@ -363,6 +364,13 @@ public class Elevator extends JFrame implements Runnable {
     	else
     		door = "Closed";
     	
+    	if (this.moveFaultInjected)
+    		fault = "Moving Fault";
+    	else if (this.doorFaultInjected)
+    		fault = "Door Fault";
+    	else
+    		fault = "None";
+    	
 		
         nameLabel = new JLabel("Elevator" + elevatorID);
         nameLabel.setFont(new Font("Serif", Font.BOLD, 28));
@@ -372,17 +380,21 @@ public class Elevator extends JFrame implements Runnable {
         locLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
         doorLabel = new JLabel("Door: " + door);
         doorLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
+        faultLabel = new JLabel("Fault: " + fault);
+        faultLabel.setFont(new Font("Ariel", Font.PLAIN, 15));
         
         elevatorPanel.add(nameLabel);
         elevatorPanel.add(dirLabel);
         elevatorPanel.add(locLabel);
         elevatorPanel.add(doorLabel);
+        elevatorPanel.add(faultLabel);
     }
     
     //update the panel for elevator
     private void updatePanel() {
     	String dir = "STOP";
     	String door = "Closed";
+    	String fault = "None";
     	if (direction == 1)
     		dir = "UP";
     	else if (direction == -1)
@@ -393,9 +405,16 @@ public class Elevator extends JFrame implements Runnable {
     	if (isDoorOpen)
     		door = "Open";
     	
+    	if (this.moveFaultInjected)
+    		fault = "Moving Fault";
+    	else if (this.doorFaultInjected)
+    		fault = "Door Fault";
+
+    	
     	dirLabel.setText("Direction: " + dir);
     	locLabel.setText("Location: " + currentFloor);
     	doorLabel.setText("Door: " + door);
+    	faultLabel.setText("Fault :" + fault);
   	}
     
     
