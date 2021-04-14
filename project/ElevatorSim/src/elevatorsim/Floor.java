@@ -58,6 +58,17 @@ public class Floor extends JFrame implements Runnable {
     	initPanel();
     }
     
+    // seperate constructor just for the unit tests
+    public Floor(int floorNum) {
+    	this.floorNum = floorNum;
+    	try {
+    		sendSocket = new DatagramSocket();
+    		receiveSocket = new DatagramSocket(100 + floorNum);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+    }
+    
     public void closeSocket() {
     	sendSocket.close();
     	receiveSocket.close();

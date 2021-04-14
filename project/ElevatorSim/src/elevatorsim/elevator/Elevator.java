@@ -40,7 +40,7 @@ public class Elevator extends JFrame implements Runnable {
 	public boolean doorFaultInjected = false;
 	private boolean isDoorOpen = false;
 	private int numOfStates = 12;
-	public List<EventData> eventList = new ArrayList<EventData>();;
+	public List<EventData> eventList = new ArrayList<EventData>();
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
     private ElevatorState currentState;
@@ -69,6 +69,20 @@ public class Elevator extends JFrame implements Runnable {
         currentFloor = 1;
         direction = 0;
         initPanel();
+        setupStateMachine();
+    }
+    
+    public Elevator(int elevatorID) {
+    	try {
+    		sendSocket = new DatagramSocket();
+    		receiveSocket = new DatagramSocket(200 + elevatorID);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+    	
+        this.elevatorID = elevatorID;
+        currentFloor = 1;
+        direction = 0;
         setupStateMachine();
     }
     
@@ -334,7 +348,7 @@ public class Elevator extends JFrame implements Runnable {
 		if (len > 0) {
 			Floor.printPacketInfo(packetIn);
 			String message = new String(packetIn.getData(), 0, len);
-			events.add(message);
+			events().add(message);
 		}
     }
     
@@ -458,4 +472,5 @@ public class Elevator extends JFrame implements Runnable {
 			elevatorThreads[i].start();
 		}
 	}
+
 }

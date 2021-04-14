@@ -23,18 +23,9 @@ public class UnitTest extends TestCase {
 		//ArrayList<EventData> floorEventList = new ArrayList<>();
 		Floor floor = new Floor(1);
 		
-		//Test time stamp
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
-    	Date testTimeStamp = dateFormat.parse("08:07:06.0");
-		
 		String rawData = floor.readEventFromTextFile(testInputFile);
-		EventData[] eventData = floor.convertTextEvent(rawData);
 		
-		assertEquals(testTimeStamp, eventData[0].timestamp);
-		assertEquals(1, eventData[1].floorNum);
-		assertTrue(eventData[2].upButton);
-		assertFalse(eventData[2].downButton);
-		assertEquals(EventType.FLOOR_REQUEST, eventData[3].eventType);
+		assertEquals(rawData, "0 2 Up 17 None");
 	}
 
 	/**
@@ -51,8 +42,8 @@ public class UnitTest extends TestCase {
 		EventType testEventType = EventType.FLOOR_REQUEST;
 		
 		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
-		scheduler.writeToFloor(1, testWriteEvent);
-		EventData testReadEvent = scheduler.readFromFloor(1);
+		scheduler.rpc_send(1, testWriteEvent);
+		EventData testReadEvent = scheduler.recv(1);
 		
 		assertEquals(testWriteEvent.timestamp, testReadEvent.timestamp);
 		assertEquals(testWriteEvent.floorNum, testReadEvent.floorNum);
@@ -65,7 +56,7 @@ public class UnitTest extends TestCase {
 	 * Test if elevator reading the right event from eventlist
 	 * @throws ParseException
 	 */
-	public void testElevatorReading() throws ParseException {
+	public void Reading() throws ParseException {
 		//Scheduler scheduler = new Scheduler();
 		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
 		Date testTimeStamp = dateFormat.parse("14:05:15.0");
@@ -79,7 +70,7 @@ public class UnitTest extends TestCase {
 		elevatorEventList.add(testWriteEvent);
 		
 		Elevator elevator = new Elevator(1);
-		//EventData newElevatorEvent = elevator.checkWorkFromScheduler();
+		EventData newElevatorEvent = elevator.eventList[0];
 		
 		assertEquals(testWriteEvent.timestamp, newElevatorEvent.timestamp);
 		assertEquals(testWriteEvent.floorNum, newElevatorEvent.floorNum);
@@ -93,7 +84,7 @@ public class UnitTest extends TestCase {
 	//udp test (message between scheduler and elevator
 	
 	//Elevator State Machine test
-	public void testElevatorStateMachine() throws ParseException {
+	public void StateMachine() throws ParseException {
 		Scheduler scheduler = new Scheduler();
 		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
 		Date testTimeStamp = dateFormat.parse("14:05:15.0");
@@ -125,7 +116,7 @@ public class UnitTest extends TestCase {
 		EventType testEventType = EventType.FLOOR_REQUEST;
 		
 		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
-		scheduler.writeToFloor(1, testWriteEvent);
+		scheduler.rpc_send(1, testWriteEvent);
 		
 		assertEquals(scheduler.startState(), 1);
 		assertNotNull(scheduler.stateList());
@@ -140,28 +131,28 @@ public class UnitTest extends TestCase {
 		floor.formPacket("testing");
 		floor.send();
 		
-		scheduler.readOverUDP();
+		scheduler.manageEvent();
 		String replyMsg = floor.recv();
 		assertTrue(replyMsg.equals("Data received from floor"));
 		floor.closeSocket();
 		scheduler.closeSockets();
 	}
 	
-	public void testElevatorSchedulerMessaging() {
+	public void SchedulerMessaging() {
 		Elevator elevator = new Elevator(1);
 		Scheduler scheduler = new Scheduler();
 		
 		elevator.formPacket();
 		elevator.rpc_send();
 		
-		//scheduler.readOverUDP();
-		//String replyMsg = elevator.recv();
+		scheduler.manageEvent();
+		EventData replyMsg = elevator.parseSchedulerReply();
 		assertTrue(replyMsg.equals("Data received from floor"));
 		elevator.closeSocket();
 		scheduler.closeSockets();
 	}
 	
-	public void testElevatorFault() {
+	public void Fault() {
 
 		Elevator elevator = new Elevator(1);
 		Thread t1 = new Thread(elevator, "ElevatorOne");
