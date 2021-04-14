@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 import elevatorsim.elevator.Elevator;
 import junit.framework.TestCase;
 
+
+
 public class UnitTest extends TestCase {
 
 	
@@ -19,7 +21,7 @@ public class UnitTest extends TestCase {
 	 * @throws ParseException
 	 */
 	public void testDataConversion() throws ParseException {
-		String testInputFile = "test_input.rtf";
+		String testInputFile = "events.txt";
 		//ArrayList<EventData> floorEventList = new ArrayList<>();
 		Floor floor = new Floor(1);
 		
@@ -157,6 +159,4 @@ public class UnitTest extends TestCase {
 		assertEquals(false, t1.isAlive());
 
 	}
-
-
 }
