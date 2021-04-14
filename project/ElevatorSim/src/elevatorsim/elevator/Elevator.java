@@ -348,7 +348,7 @@ public class Elevator extends JFrame implements Runnable {
 		if (len > 0) {
 			Floor.printPacketInfo(packetIn);
 			String message = new String(packetIn.getData(), 0, len);
-			events().add(message);
+			events.add(message);
 		}
     }
     
