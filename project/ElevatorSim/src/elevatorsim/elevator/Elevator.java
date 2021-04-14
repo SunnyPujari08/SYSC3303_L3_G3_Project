@@ -27,7 +27,7 @@ import elevatorsim.Floor;
 
 public class Elevator extends JFrame implements Runnable {
 	private static final int MAX_MESSAGE_LEN = 100;		// Maximum message length
-	private DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
+	public DatagramPacket packetOut, packetIn;			// Packet going out and packet coming in
 	private DatagramSocket sendSocket, receiveSocket;
 
 	private int elevatorID;
