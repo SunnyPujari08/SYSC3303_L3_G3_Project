@@ -213,7 +213,7 @@ public class Scheduler {
 	 * Method blocks until new UDP packet is received. Packet is set to variable 'this.receivePacket'.
 	 * Port number that the packet was received on is returned.
 	 */
-	private synchronized void receive() {
+	public synchronized void receive() {
 		byte receivedData[] = new byte[MAX_MESSAGE_LEN];
 		receivePacket = new DatagramPacket(receivedData, receivedData.length);
 		
@@ -228,7 +228,7 @@ public class Scheduler {
 	/*
 	 * Sets variable this.replyPacket to a new packet with the specified data string and port #
 	 */
-	private void formSendPacket(String data, int replyPort) {
+	public void formSendPacket(String data, int replyPort) {
 		byte[] msg = data.getBytes();
 		try {
 			replyPacket = new DatagramPacket(msg, msg.length, InetAddress.getLocalHost(), replyPort);
@@ -241,7 +241,7 @@ public class Scheduler {
 	 * Sends out 'this.replyPacket' over 'this.replySocket'
 	 * NOTE: this.formReplySocket() should be called before this function
 	 */
-	private synchronized void send() {
+	public synchronized void send() {
 		try {
 			replySocket.send(replyPacket);
 		} catch(IOException e) {

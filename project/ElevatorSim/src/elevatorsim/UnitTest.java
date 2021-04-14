@@ -42,8 +42,7 @@ public class UnitTest extends TestCase {
 		EventType testEventType = EventType.FLOOR_REQUEST;
 		
 		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
-		scheduler.rpc_send(1, testWriteEvent);
-		EventData testReadEvent = scheduler.recv(1);
+		scheduler.manageEvent();
 		
 		assertEquals(testWriteEvent.timestamp, testReadEvent.timestamp);
 		assertEquals(testWriteEvent.floorNum, testReadEvent.floorNum);
@@ -65,12 +64,10 @@ public class UnitTest extends TestCase {
 		boolean testDownButton = false;
 		EventType testEventType = EventType.FLOOR_REQUEST;
 		
-		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType);
-		ArrayList<EventData> elevatorEventList = new ArrayList<>();
-		elevatorEventList.add(testWriteEvent);
-		
 		Elevator elevator = new Elevator(1);
-		EventData newElevatorEvent = elevator.eventList[0];
+		
+		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType);
+		eventList.add(testWriteEvent);
 		
 		assertEquals(testWriteEvent.timestamp, newElevatorEvent.timestamp);
 		assertEquals(testWriteEvent.floorNum, newElevatorEvent.floorNum);
@@ -116,7 +113,7 @@ public class UnitTest extends TestCase {
 		EventType testEventType = EventType.FLOOR_REQUEST;
 		
 		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
-		scheduler.rpc_send(1, testWriteEvent);
+		scheduler.manageEvent();
 		
 		assertEquals(scheduler.startState(), 1);
 		assertNotNull(scheduler.stateList());
