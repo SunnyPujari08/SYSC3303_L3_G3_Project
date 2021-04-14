@@ -41,7 +41,7 @@ public class Scheduler {
 	private ArrayList<SchedulerState> stateList;
 	private int startState = Constants.SCHEDULER_STATE_ONE;
 	public List<String> rawEvents = Collections.synchronizedList(new ArrayList<>());
-	private List<String> sendQueueForElevator = new ArrayList<>(); 
+	private List<String> sendQueueForElevator = new ArrayList<>();
 	public EventData currentTripEvent; 
 	private SchedulerState currentState;
 	private boolean firstEventReceived = false;
@@ -49,7 +49,7 @@ public class Scheduler {
 	private boolean allElevatorsIdle = true;
 	private Instant START_TIME;
 	
-	private List<String> futureEvents = new ArrayList<String>();
+	public List<String> futureEvents = new ArrayList<String>();
 
 	
 	

@@ -34,21 +34,15 @@ public class UnitTest extends TestCase {
 	 */
 	public void testSchedulerReadingFromFloor() throws ParseException {
 		Scheduler scheduler = new Scheduler();
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
-		Date testTimeStamp = dateFormat.parse("14:05:15.0");
-		int testFloorNum = 1;
-		boolean testUpButton = true;
-		boolean testDownButton = false;
-		EventType testEventType = EventType.FLOOR_REQUEST;
+		Floor floor = new Floor(1);
 		
-		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType); 
+		String testWriteEvent = "0 2 Up 17 None";
+		
+		floor.formPacket(testWriteEvent); 
+		floor.send();
 		scheduler.manageEvent();
 		
-		assertEquals(testWriteEvent.timestamp, testReadEvent.timestamp);
-		assertEquals(testWriteEvent.floorNum, testReadEvent.floorNum);
-		assertEquals(testWriteEvent.upButton, testReadEvent.upButton);
-		assertEquals(testWriteEvent.downButton, testReadEvent.downButton);
-		assertEquals(testWriteEvent.eventType, testReadEvent.eventType);
+		assertEquals(scheduler.futureEvents.get(0), testWriteEvent);
 	}
 	
 	/**
@@ -56,24 +50,16 @@ public class UnitTest extends TestCase {
 	 * @throws ParseException
 	 */
 	public void Reading() throws ParseException {
-		//Scheduler scheduler = new Scheduler();
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.mmm");
-		Date testTimeStamp = dateFormat.parse("14:05:15.0");
-		int testFloorNum = 1;
-		boolean testUpButton = true;
-		boolean testDownButton = false;
-		EventType testEventType = EventType.FLOOR_REQUEST;
-		
+		Scheduler scheduler = new Scheduler();
 		Elevator elevator = new Elevator(1);
 		
-		EventData testWriteEvent = new EventData(testTimeStamp, testFloorNum, testUpButton, testDownButton, testEventType);
-		eventList.add(testWriteEvent);
+		String testWriteEvent = "0 2 Up 17 None";
 		
-		assertEquals(testWriteEvent.timestamp, newElevatorEvent.timestamp);
-		assertEquals(testWriteEvent.floorNum, newElevatorEvent.floorNum);
-		assertEquals(testWriteEvent.upButton, newElevatorEvent.upButton);
-		assertEquals(testWriteEvent.downButton, newElevatorEvent.downButton);
-		assertEquals(testWriteEvent.eventType, newElevatorEvent.eventType);
+		scheduler.formSendPacket(testWriteEvent, 200); 
+		scheduler.send();
+		elevator.recv();
+		
+		assertEquals(elevator.events.get(0), testWriteEvent);
 	}
 	
 	//UDP test (message between floor and scheduler

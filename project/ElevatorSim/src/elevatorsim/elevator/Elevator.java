@@ -44,7 +44,7 @@ public class Elevator extends JFrame implements Runnable {
     private ArrayList<ElevatorState> stateList;
     private int startState = Constants.ELEVATOR_STATE_ONE;
     private ElevatorState currentState;
-    private ArrayList<String> events = new ArrayList<String>();
+    public ArrayList<String> events = new ArrayList<String>();
     private JPanel elevatorPanel;
     private JLabel nameLabel;
     private JLabel dirLabel;
